@@ -60,7 +60,9 @@ page.onError = function(msg, trace) {
 //
 //console.log(x);
 
-var r2 = phantom.injectJs("elm.js") ? "... done injecting elm.js!" : "... fail! Check the $PWD?!";
+//TODO: make this an argument ...
+//TODO: make the .html of the app an an argument too ... (actually be separate)
+var r2 = phantom.injectJs("tests.js") ? "... done injecting elm.js!" : "... fail! Check the $PWD?!";
 console.log(r2);
 
 //var x2 = page.evaluate(function() {
