@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=4gdbeq596v9rghv8r1vt6jv42f'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=9jvu2n9lr30lg3fm479scplt3q'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -61,6 +61,7 @@ app.ports.check.subscribe(function(word) {
   if (word.command == "click") { click(word.id, '"' + word.arg + '"'); }
   else if (word.command == "goto") { goto(word.id, url); }
   else if (word.command == "textContains") { textContains(word.id, '"' + word.arg + '"'); }
+  else if (word.command == "close") { close(word.id); }
 
   //TODO: report(id, [""]) if command not found ...
 });
@@ -76,6 +77,7 @@ function report(id, result) {
 goto("1001", url);
 click("1002", "#refreshButton");
 textContains("1003", "#messageList");
+//close("1004");
 
 //TODO: have the app call back (via port) when ready .... or just assert something instead ...
 
@@ -91,6 +93,11 @@ function goto(id, url) {
       report(id, [])
     }
   });
+}
+
+function close(id) {
+  page.close()
+  report(id, [])
 }
 
 function click(id, selector) {
