@@ -49,19 +49,20 @@ page.onError = function(msg, trace) {
 };
 */
 
-var r = page.injectJs("tests.js") ? "... done injecting tests.js!" : "... fail! Check the $PWD?!";
-console.log(r);
+//var r = page.injectJs("tests.js") ? "... done injecting tests.js!" : "... fail! Check the $PWD?!";
+//console.log(r);
+
+//var x = page.evaluate(function() {
+//  var result = test();
+//  console.log(result);
+//  return result;
+//});
+//
+//console.log(x);
 
 var r2 = phantom.injectJs("elm.js") ? "... done injecting elm.js!" : "... fail! Check the $PWD?!";
 console.log(r2);
 
-var x = page.evaluate(function() {
-  var result = test();
-  console.log(result);
-  return result;
-});
-
-console.log(x);
 
 //var x2 = page.evaluate(function() {
   var app = Elm.Spelling.fullscreen();
