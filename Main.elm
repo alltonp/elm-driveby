@@ -33,7 +33,7 @@ type alias Model =
 
 init : (Model, Cmd Msg)
 init =
-  (Model "z" [], asFx Check )
+  (Model "z" [], asFx Start )
 
 
 -- UPDATE
@@ -50,7 +50,8 @@ type alias Response =
 
 
 type Msg
-  = Change String
+  = Start
+  | Change String
   | Check
   | Suggest Response
 
@@ -62,6 +63,11 @@ port check : Request -> Cmd msg
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
+    Start ->
+      let
+        d = Debug.log "elm sent" model.word
+      in ( model, check (Request "" model.word) )
+
     Change newWord ->
       ( Model newWord [], Cmd.none )
 

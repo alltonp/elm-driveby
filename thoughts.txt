@@ -42,6 +42,7 @@ writing native code:
 
 testing ports and effects:
 - https://github.com/rogeriochaves/elm-testable
+- https://gist.github.com/evancz/8521339
 
 
 TIPS:
