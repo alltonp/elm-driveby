@@ -43,11 +43,16 @@ type alias Request =
   , command: String
   }
 
+type alias Response =
+  { id: String
+  , failures: List String
+  }
+
 
 type Msg
   = Change String
   | Check
-  | Suggest (List String)
+  | Suggest Response
 
 
 {-| blah
@@ -69,12 +74,12 @@ update msg model =
       let
         d = Debug.log "elm received" newSuggestions
       in
-      ( Model model.word newSuggestions, Cmd.none )
+      ( Model model.word newSuggestions.failures, Cmd.none )
 
 
 -- SUBSCRIPTIONS
 
-port suggestions : (List String -> msg) -> Sub msg
+port suggestions : (Response -> msg) -> Sub msg
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
