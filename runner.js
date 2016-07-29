@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=fefmvemc17jbl9tgglsqidshvf'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=a208hphns47olen25ip77ej7js'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -102,7 +102,7 @@ function report(id, result) {
 
         //STEP 3 - Assert(TextContains(id, value))
         console.log("### Assert(TextContains(id, value))");
-        waitFor(function() {
+        waitFor("", function() {
           //condition
           return page.evaluate(function() {
               //TODO: need to check unique etc
@@ -124,7 +124,7 @@ function report(id, result) {
 function click(id) {
     //STEP 2 - Click(id)
     console.log("### Click(id)");
-    var r = waitFor(id, function() {
+    waitFor(id, function() {
       //condition
       return page.evaluate(function() {
           //TODO: need to check unique etc
