@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=g93b61efavt6221sft5epqfte7'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=kejj06aep25epanng5dsf15ugt'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -76,6 +76,12 @@ console.log(r2);
       console.log(word.id);
       console.log(word.command);
 
+      if (word.command == "click") {
+        console.log("clicking");
+        click();
+        console.log("clicked");
+      }
+
 //      app.ports.suggestions.send({id = '"' ++ word.id + '"'});
 //      app.ports.suggestions.send("{id = ''}");
       app.ports.suggestions.send({
@@ -118,27 +124,7 @@ console.log(r2);
           //   console.log("url should be visible now.");
           //});
 
-
-        //STEP 2 - Click(id)
-        console.log("### Click(id)");
-        waitFor(function() {
-          //condition
-          return page.evaluate(function() {
-              //TODO: need to check unique etc
-              return $("#refreshButton").is(":visible");
-          });
-
-          //action
-          }, function() {
-//             console.log("Element should be visible now.");
-             page.evaluate(function() {
-                $("#refreshButton").click();
-             });
-             page.render('step-2.png')
-             console.log("--> I clicked it");
-             //console.log(page.plainText);
-             //phantom.exit();
-          });
+        click();
 
         //STEP 3 - Assert(TextContains(id, value))
         console.log("### Assert(TextContains(id, value))");
@@ -159,4 +145,27 @@ console.log(r2);
 //});
 
 //TODO: have the app call back (via port) when ready .... or just assert something instead ...
+
+function click() {
+    //STEP 2 - Click(id)
+    console.log("### Click(id)");
+    waitFor(function() {
+      //condition
+      return page.evaluate(function() {
+          //TODO: need to check unique etc
+          return $("#refreshButton").is(":visible");
+      });
+
+      //action
+      }, function() {
+    //             console.log("Element should be visible now.");
+         page.evaluate(function() {
+            $("#refreshButton").click();
+         });
+         page.render('step-2.png')
+         console.log("--> I clicked it");
+         //console.log(page.plainText);
+         //phantom.exit();
+      });
+}
 

@@ -66,7 +66,7 @@ update msg model =
     Start ->
       let
         d = Debug.log "elm sent" model.word
-      in ( model, check (Request "" model.word) )
+      in ( model, check (Request "" "click") )
 
     Change newWord ->
       ( Model newWord [], Cmd.none )
