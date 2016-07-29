@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=a208hphns47olen25ip77ej7js'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=h50cuj3t97kurhqken0680nuqu'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -57,14 +57,16 @@ var app = Elm.Spelling.fullscreen();
 app.ports.check.subscribe(function(word) {
   console.log("Message in: " + JSON.stringify(word));
 
-  if (word.command == "click") {
-    click(word.id);
-  }
+  if (word.command == "click") { click(word.id); }
+  else if (word.command == "goto") { goto(word.id); }
+
   //TODO: report(id, [""]) if command not found ...
 });
 
 function report(id, result) {
-    app.ports.suggestions.send({ id:id, failures:result });
+  var result = { id:id, failures:result }
+  console.log("Message out: " + JSON.stringify(result));
+  app.ports.suggestions.send(result);
 }
 
 
@@ -79,23 +81,24 @@ function report(id, result) {
           //condition
           //return
           //val r =
-          console.log("### Goto(url)");
-          page.open(url, function(status) {
-              if (status !== 'success') {
-                console.log('Unable to access network');
-                //return false
-              } else {
-                console.log('--> I went to ...');
-                //return true
-              }
-          });
-          page.render('step-1.png')
+//          console.log("### Goto(url)");
+//          page.open(url, function(status) {
+//              if (status !== 'success') {
+//                console.log('Unable to access network');
+//                //return false
+//              } else {
+//                console.log('--> I went to ...');
+//                //return true
+//              }
+//          });
+//          page.render('step-1.png')
 
           //action
           //}, function() {
           //   console.log("url should be visible now.");
           //});
 
+        goto("");
         click("");
 //        console.log("click was called in inlne")
 //        console.log(c.length)
@@ -120,6 +123,20 @@ function report(id, result) {
 //});
 
 //TODO: have the app call back (via port) when ready .... or just assert something instead ...
+
+function goto(id) {
+  console.log("### Goto(url)");
+  page.open(url, function(status) {
+      if (status !== 'success') {
+        console.log('Unable to access network');
+        //return false
+      } else {
+        console.log('--> I went to ...');
+        //return true
+      }
+  });
+  page.render('step-1.png')
+}
 
 function click(id) {
     //STEP 2 - Click(id)
