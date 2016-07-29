@@ -1,16 +1,16 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=t320451facqhn3vf7c14cpg8ic'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=7907mq6us5333khruhm9nfpj21'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
 function waitFor(testFx, onReady, timeOutMillis) {
-    var result = []
+    //var result = []
 
     var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //< Default Max Timout is 3s
         start = new Date().getTime(),
         condition = false,
-        timeout = false,
+        //timeout = false,
         interval = setInterval(function() {
             console.log("looping...")
             if ( (new Date().getTime() - start < maxtimeOutMillis) && !condition ) {
@@ -23,9 +23,9 @@ function waitFor(testFx, onReady, timeOutMillis) {
                     //phantom.exit(1);
                     clearInterval(interval); //< Stop this interval
                     report(["timeout"])
-                    result = ["timeout"]
-                    timeout = true
-                    return result
+                    //result = ["timeout"]
+                    //timeout = true
+                    //return result
                 } else {
                     // Condition fulfilled (timeout and/or condition is 'true')
                     console.log("'waitFor()' finished in " + (new Date().getTime() - start) + "ms.");
@@ -33,19 +33,19 @@ function waitFor(testFx, onReady, timeOutMillis) {
                     clearInterval(interval); //< Stop this interval
                     report(["success"])
                     //result = []
-                    return result
+                    //return result
                 }
             }
         }, 250); //< repeat check every 250ms
 
 //    maxtimeOutMillis(callback);
-    console.log("waitFor result:");
-    console.log(result.length);
+//    console.log("waitFor result:");
+//    console.log(result.length);
 
 //    interval()
 //    while (!timeout) {
 //    }
-    return result
+//    return result
 };
 
 
@@ -99,17 +99,17 @@ console.log(r2);
 
       if (word.command == "click") {
 //        console.log("clicking");
-        var result = click();
-        console.log("click was called by elm")
-        console.log(result.length);
+        click();
+//        console.log("click was called by elm")
+//        console.log(result.length);
       }
 
 //      app.ports.suggestions.send({id = '"' ++ word.id + '"'});
 //      app.ports.suggestions.send("{id = ''}");
-      app.ports.suggestions.send({
-      id:word.id,
-      failures:[]
-      });
+//      app.ports.suggestions.send({
+//      id:word.id,
+//      failures:[]
+//      });
   });
 
 function report(result) {
@@ -202,14 +202,14 @@ function click() {
 //         ["good"]
          //console.log(page.plainText);
          //phantom.exit();
-         []
+//         []
       });
 
-  console.log("click() returning")
-  console.log(r.length)
+//  console.log("click() returning")
+//  console.log(r.length)
 //  return r(function (x) {
 //             console.log(x);
 //           });
-    return r;
+//    return r;
 }
 
