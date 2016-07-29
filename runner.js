@@ -1,16 +1,13 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=trdsckp7eu4gfed736rvckb8r3'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=fefmvemc17jbl9tgglsqidshvf'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
 function waitFor(id, testFx, onReady, timeOutMillis) {
-    //var result = []
-
     var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //< Default Max Timout is 3s
         start = new Date().getTime(),
         condition = false,
-        //timeout = false,
         interval = setInterval(function() {
             console.log("looping...")
             if ( (new Date().getTime() - start < maxtimeOutMillis) && !condition ) {
@@ -20,55 +17,22 @@ function waitFor(id, testFx, onReady, timeOutMillis) {
                 if(!condition) {
                     // If condition still not fulfilled (timeout but condition is 'false')
                     console.log("'waitFor()' timeout");
-                    //phantom.exit(1);
                     clearInterval(interval); //< Stop this interval
                     report(id, ["timeout"])
-                    //result = ["timeout"]
-                    //timeout = true
-                    //return result
                 } else {
                     // Condition fulfilled (timeout and/or condition is 'true')
                     console.log("'waitFor()' finished in " + (new Date().getTime() - start) + "ms.");
                     typeof(onReady) === "string" ? eval(onReady) : onReady(); //< Do what it's supposed to do once the condition is fulfilled
                     clearInterval(interval); //< Stop this interval
                     report(id, [])
-                    //result = []
-                    //return result
                 }
             }
         }, 250); //< repeat check every 250ms
-
-//    maxtimeOutMillis(callback);
-//    console.log("waitFor result:");
-//    console.log(result.length);
-
-//    interval()
-//    while (!timeout) {
-//    }
-//    return result
 };
-
 
 page.onConsoleMessage = function(msg, lineNum, sourceId) {
   console.log('CONSOLE: ' + msg + ' (from line #' + lineNum + ' in "' + sourceId + '")');
 };
-
-/*
-page.onError = function(msg, trace) {
-
-  var msgStack = ['ERROR: ' + msg];
-
-  if (trace && trace.length) {
-    msgStack.push('TRACE:');
-    trace.forEach(function(t) {
-      msgStack.push(' -> ' + t.file + ': ' + t.line + (t.function ? ' (in function "' + t.function +'")' : ''));
-    });
-  }
-
-  console.error(msgStack.join('\n'));
-
-};
-*/
 
 //var r = page.injectJs("tests.js") ? "... done injecting tests.js!" : "... fail! Check the $PWD?!";
 //console.log(r);
@@ -86,40 +50,22 @@ page.onError = function(msg, trace) {
 var r2 = phantom.injectJs("tests.js") ? "... done injecting elm.js!" : "... fail! Check the $PWD?!";
 console.log(r2);
 
-//var x2 = page.evaluate(function() {
-  var app = Elm.Spelling.fullscreen();
+var app = Elm.Spelling.fullscreen();
 
-  console.log("Running elm ...");
+//console.log("Running elm ...");
 
-  app.ports.check.subscribe(function(word) {
-      //var suggestions = spellCheck(word);
-      console.log("Message in: " + JSON.stringify(word));
-//      console.log(word.id);
-//      console.log(word.command);
+app.ports.check.subscribe(function(word) {
+  console.log("Message in: " + JSON.stringify(word));
 
-      if (word.command == "click") {
-//        console.log("clicking");
-        click(word.id);
-//        console.log("click was called by elm")
-//        console.log(result.length);
-      }
-
-//      app.ports.suggestions.send({id = '"' ++ word.id + '"'});
-//      app.ports.suggestions.send("{id = ''}");
-//      app.ports.suggestions.send({
-//      id:word.id,
-//      failures:[]
-//      });
-  });
+  if (word.command == "click") {
+    click(word.id);
+  }
+  //TODO: report(id, [""]) if command not found ...
+});
 
 function report(id, result) {
     app.ports.suggestions.send({ id:id, failures:result });
 }
-
-//  return "elmed it";
-//});
-
-//console.log(x2);
 
 
 
