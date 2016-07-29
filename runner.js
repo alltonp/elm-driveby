@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=tlhi3gt4odl60m55ldomau69t9'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=fv99c263kvc20ratc0p0gci17i'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -35,14 +35,33 @@ page.evaluate(function() {
 });
 
 
-page.open(url, function(status) {
-  if (status !== 'success') {
-    console.log('Unable to access network');
-  } else {
+//page.open(url, function(status) {
+//  if (status !== 'success') {
+//    console.log('Unable to access network');
+//  } else {
 
-        page.render('step-0.png')
+        //STEP 1 - Goto(url)
+        //waitFor(function() {
+          //condition
+          //return
+          //val r =
+          page.open(url, function(status) {
+              if (status !== 'success') {
+                console.log('Unable to access network');
+                //return false
+              } else {
+                console.log('I went to ...');
+                //return true
+              }
+          });
 
-        //STEP 1 - Click(id)
+          //action
+          //}, function() {
+          //   console.log("url should be visible now.");
+          //});
+
+
+        //STEP 2 - Click(id)
         waitFor(function() {
           //condition
           return page.evaluate(function() {
@@ -56,13 +75,13 @@ page.open(url, function(status) {
              page.evaluate(function() {
                 $("#refreshButton").click();
              });
-             page.render('step-1.png')
+             page.render('step-2.png')
              console.log("I clicked it");
              console.log(page.plainText);
              //phantom.exit();
           });
 
-        //STEP 2 - Assert(TextContains(id))
+        //STEP 3 - Assert(TextContains(id))
         waitFor(function() {
           //condition
           return page.evaluate(function() {
@@ -73,11 +92,11 @@ page.open(url, function(status) {
           //action
           }, function() {
              console.log("Text did contain it now.");
-             page.render('step-2.png')
+             page.render('step-3.png')
              phantom.exit();
           });
-    }
-});
+//    }
+//});
 
 //TODO: have the app call back (via port) when ready .... or just assert something instead ...
 
