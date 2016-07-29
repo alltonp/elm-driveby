@@ -41,6 +41,7 @@ init =
 type alias Request =
   { id: String
   , command: String
+  , arg: String
   }
 
 type alias Response =
@@ -67,15 +68,17 @@ update msg model =
 --      let
 --        d = Debug.log "elm sent" model.word
 --      in
-      ( model, check (Request "" "click") )
+--      ( model, check (Request "1" "click" "#refreshButton") )
+      ( model, check (Request "1" "goto" "url") )
 
     Change newWord ->
       ( Model newWord [], Cmd.none )
 
     Check ->
-      let
-        d = Debug.log "elm sent" model.word
-      in ( model, check (Request "" model.word) )
+--      let
+--        d = Debug.log "elm sent" model.word
+--      in
+      ( model, check (Request "1" "click" "#refreshButton") )
 
     Suggest newSuggestions ->
       let

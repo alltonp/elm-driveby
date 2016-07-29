@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=h50cuj3t97kurhqken0680nuqu'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=nhatktcdvqjgtek41iajgaau6m'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -47,6 +47,7 @@ page.onConsoleMessage = function(msg, lineNum, sourceId) {
 
 //TODO: make this an argument ...
 //TODO: make the .html of the app an an argument too ... (actually be separate)
+//TODO: inject jquery ...
 var r2 = phantom.injectJs("tests.js") ? "... done injecting elm.js!" : "... fail! Check the $PWD?!";
 console.log(r2);
 
@@ -57,8 +58,8 @@ var app = Elm.Spelling.fullscreen();
 app.ports.check.subscribe(function(word) {
   console.log("Message in: " + JSON.stringify(word));
 
-  if (word.command == "click") { click(word.id); }
-  else if (word.command == "goto") { goto(word.id); }
+  if (word.command == "click") { click(word.id, '"' + word.arg + '"'); }
+  else if (word.command == "goto") { goto(word.id, url); }
 
   //TODO: report(id, [""]) if command not found ...
 });
@@ -98,14 +99,14 @@ function report(id, result) {
           //   console.log("url should be visible now.");
           //});
 
-        goto("");
-        click("");
+        goto("1001", url);
+        click("1002", "#refreshButton");
 //        console.log("click was called in inlne")
 //        console.log(c.length)
 
         //STEP 3 - Assert(TextContains(id, value))
         console.log("### Assert(TextContains(id, value))");
-        waitFor("", function() {
+        waitFor("1003", function() {
           //condition
           return page.evaluate(function() {
               //TODO: need to check unique etc
@@ -124,36 +125,55 @@ function report(id, result) {
 
 //TODO: have the app call back (via port) when ready .... or just assert something instead ...
 
-function goto(id) {
+function goto(id, url) {
   console.log("### Goto(url)");
+  console.log(url);
   page.open(url, function(status) {
       if (status !== 'success') {
         console.log('Unable to access network');
-        //return false
+        report(id, ['Unable to access network'])
       } else {
         console.log('--> I went to ...');
+        report(id, [])
         //return true
       }
   });
   page.render('step-1.png')
 }
 
-function click(id) {
+function click(id, selector) {
     //STEP 2 - Click(id)
     console.log("### Click(id)");
+    console.log(selector);
+    console.log("### got here");
+
     waitFor(id, function() {
+//       var theSelector = '\"' + selector + '\"'
+//       var theSelector = '"' + "#refreshButton" + '"'
+//       console.log("### and here");
+//       console.log(selector);
+//       console.log("### not here");
+
       //condition
-      return page.evaluate(function() {
+      return page.evaluate(function(theSelector) {
           //TODO: need to check unique etc
-          return $("#refreshButton").is(":visible");
-      });
+//          return $(JSON.stringify(theSelector)).is(":visible");
+//       console.log("### and here 2");
+//       console.log(theSelector);
+//       console.log("### not here 2");
+
+          return $(theSelector).is(":visible");
+      }, selector);
 
       //action
       }, function() {
+        //var theSelector = '"' + selector + '"'
+
     //             console.log("Element should be visible now.");
-         page.evaluate(function() {
-            $("#refreshButton").click();
-         });
+         page.evaluate(function(theSelector) {
+            $(theSelector).click();
+         }, selector);
+
          page.render('step-2.png')
          console.log("--> I clicked it");
 
