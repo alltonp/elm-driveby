@@ -1,8 +1,14 @@
 TODO:
 - integrate with elm-test
 - serve the app.js under test
-- include and execute the test.js
-- consider natice wrapper of phantom as a separate thing ...
+- consider making wrapper of phantom as a separate thing ...
+- ports or native or both
+- how to sequence the steps ...
+- so tests will contain the Elm.embed/worker of the test suite ...
+- when we execute a command, we send it to JS (with a uid)
+- when js responds we reply (with the uid) and update the elm model
+- we want these things to be tests ..
+
 
 useful for parallel launching:
 - https://github.com/ariya/phantomjs/blob/master/examples/child_process-examples.js
@@ -12,3 +18,7 @@ useful for reporting:
 
 useful for server/stubbing:
 - https://github.com/ariya/phantomjs/blob/master/examples/server.js
+
+links:
+- https://github.com/deadfoxygrandpa/elm-test
+- https://github.com/laszlopandy/elm-console
