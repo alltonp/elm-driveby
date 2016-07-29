@@ -2,3 +2,13 @@ TODO:
 - integrate with elm-test
 - serve the app.js under test
 - include and execute the test.js
+- consider natice wrapper of phantom as a separate thing ...
+
+useful for parallel launching:
+- https://github.com/ariya/phantomjs/blob/master/examples/child_process-examples.js
+
+useful for reporting:
+- https://github.com/ariya/phantomjs/blob/master/examples/echoToFile.js
+
+useful for server/stubbing:
+- https://github.com/ariya/phantomjs/blob/master/examples/server.js

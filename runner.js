@@ -34,7 +34,7 @@ var x = page.evaluate(function() {
   console.log("### checking we can call injected");
   var result = test();
   console.log(result);
-  return result
+  return result;
 });
 
 console.log(x);
