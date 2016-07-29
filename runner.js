@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=epon8ul8evbco448leh88bq4bp'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=97h9u3q7v324g4er8qtpotlf73'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -73,7 +73,7 @@ console.log(x);
       console.log("Elm got a message in ...");
       console.log(word);
 
-      //app.ports.suggestions.send(suggestions);
+      app.ports.suggestions.send("suggestions");
   });
 
 //  return "elmed it";

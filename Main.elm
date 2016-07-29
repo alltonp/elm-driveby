@@ -56,10 +56,13 @@ update msg model =
 
     Check ->
       let
-        d = Debug.log "elm-check" "???"
+        d = Debug.log "elm sent" model.word
       in ( model, check model.word )
 
     Suggest newSuggestions ->
+      let
+        d = Debug.log "elm received" newSuggestions
+      in
       ( Model model.word newSuggestions, Cmd.none )
 
 
