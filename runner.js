@@ -81,10 +81,10 @@ textContains("1003", "#messageList");
 
 function goto(id, url) {
 //  console.log("### Goto(url)");
-  console.log(url);
+//  console.log(url);
   page.open(url, function(status) {
-    console.log(url);
-    console.log(status);
+//    console.log(url);
+//    console.log(status);
     if (status !== 'success') {
       report(id, ['Unable to access network'])
     } else {
@@ -113,7 +113,7 @@ function click(id, selector) {
 
 function textContains(id, selector) {
 //  console.log("### Assert(TextContains(id, value))");
-  waitFor("1003", function() {
+  waitFor(id, function() {
     //condition
     return page.evaluate(function(theSelector) {
       //TODO: need to check unique etc
@@ -122,7 +122,7 @@ function textContains(id, selector) {
 
     //action
     }, function() {
-      console.log("--> Text did contain it now.");
+      //console.log("--> Text did contain it now.");
       //TODO: need an end test of something, but this should not be here ...
       //phantom.exit();
     }
