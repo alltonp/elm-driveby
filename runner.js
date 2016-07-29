@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=taag851irfdlpfk39u21o03v5p'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=91icvtf1lk5kcg6a3c9unf6k79'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -30,9 +30,14 @@ function waitFor(testFx, onReady, timeOutMillis) {
 var r = page.injectJs("tests.js") ? "... done injecting itself!" : "... fail! Check the $PWD?!";
 console.log(r);
 
-page.evaluate(function() {
-  test();
+var x = page.evaluate(function() {
+  console.log("### checking we can call injected");
+  var result = test();
+  console.log(result);
+  return result
 });
+
+console.log(x);
 
 
 //page.open(url, function(status) {
@@ -45,12 +50,13 @@ page.evaluate(function() {
           //condition
           //return
           //val r =
+          console.log("### Goto(url)");
           page.open(url, function(status) {
               if (status !== 'success') {
                 console.log('Unable to access network');
                 //return false
               } else {
-                console.log('I went to ...');
+                console.log('--> I went to ...');
                 //return true
               }
           });
@@ -63,6 +69,7 @@ page.evaluate(function() {
 
 
         //STEP 2 - Click(id)
+        console.log("### Click(id)");
         waitFor(function() {
           //condition
           return page.evaluate(function() {
@@ -72,17 +79,18 @@ page.evaluate(function() {
 
           //action
           }, function() {
-             console.log("Element should be visible now.");
+//             console.log("Element should be visible now.");
              page.evaluate(function() {
                 $("#refreshButton").click();
              });
              page.render('step-2.png')
-             console.log("I clicked it");
-             console.log(page.plainText);
+             console.log("--> I clicked it");
+             //console.log(page.plainText);
              //phantom.exit();
           });
 
-        //STEP 3 - Assert(TextContains(id))
+        //STEP 3 - Assert(TextContains(id, value))
+        console.log("### Assert(TextContains(id, value))");
         waitFor(function() {
           //condition
           return page.evaluate(function() {
@@ -92,7 +100,7 @@ page.evaluate(function() {
 
           //action
           }, function() {
-             console.log("Text did contain it now.");
+             console.log("--> Text did contain it now.");
              page.render('step-3.png')
              phantom.exit();
           });
