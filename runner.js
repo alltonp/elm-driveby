@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=mpmg58318adfce9v1gu2lmmsh0'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=ombphbah617tn7adocjdm5gskf'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -77,7 +77,7 @@ console.log(r2);
 //      app.ports.suggestions.send({id = '"' ++ word.id + '"'});
 //      app.ports.suggestions.send("{id = ''}");
       app.ports.suggestions.send({
-      id:'',
+      id:word.id,
       failures:[]
       });
   });
