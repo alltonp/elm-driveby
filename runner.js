@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=kejj06aep25epanng5dsf15ugt'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=b1l7447hgqevc64sbi3u762grb'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -16,12 +16,14 @@ function waitFor(testFx, onReady, timeOutMillis) {
                 if(!condition) {
                     // If condition still not fulfilled (timeout but condition is 'false')
                     console.log("'waitFor()' timeout");
-                    phantom.exit(1);
+                    //phantom.exit(1);
+                    return ["timeout"]
                 } else {
                     // Condition fulfilled (timeout and/or condition is 'true')
                     console.log("'waitFor()' finished in " + (new Date().getTime() - start) + "ms.");
                     typeof(onReady) === "string" ? eval(onReady) : onReady(); //< Do what it's supposed to do once the condition is fulfilled
                     clearInterval(interval); //< Stop this interval
+                    return []
                 }
             }
         }, 250); //< repeat check every 250ms
@@ -78,8 +80,9 @@ console.log(r2);
 
       if (word.command == "click") {
         console.log("clicking");
-        click();
+        var result = click();
         console.log("clicked");
+        console.log(result);
       }
 
 //      app.ports.suggestions.send({id = '"' ++ word.id + '"'});
@@ -149,7 +152,7 @@ console.log(r2);
 function click() {
     //STEP 2 - Click(id)
     console.log("### Click(id)");
-    waitFor(function() {
+    var r = waitFor(function() {
       //condition
       return page.evaluate(function() {
           //TODO: need to check unique etc
@@ -167,5 +170,9 @@ function click() {
          //console.log(page.plainText);
          //phantom.exit();
       });
+
+  console.log("click() returning")
+  console.log(r)
+  return r
 }
 
