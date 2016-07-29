@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=kjigfqmfjpoqf8rra1ltc5aqtk'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=3h2eqfnn8ualu85h9trr8md9ga'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -27,6 +27,13 @@ function waitFor(testFx, onReady, timeOutMillis) {
         }, 250); //< repeat check every 250ms
 };
 
+
+page.onConsoleMessage = function(msg, lineNum, sourceId) {
+  console.log('CONSOLE: ' + msg + ' (from line #' + lineNum + ' in "' + sourceId + '")');
+};
+
+
+
 var r = page.injectJs("tests.js") ? "... done injecting tests.js!" : "... fail! Check the $PWD?!";
 console.log(r);
 
@@ -43,9 +50,12 @@ console.log(x);
 
 var x2 = page.evaluate(function() {
   var app = Elm.Spelling.fullscreen();
+  console.log("Running elm ...")
 
   app.ports.check.subscribe(function(word) {
       var suggestions = spellCheck(word);
+      console.log("Elm got a suggestion")
+
       app.ports.suggestions.send(suggestions);
   });
 
@@ -53,6 +63,7 @@ var x2 = page.evaluate(function() {
 });
 
 console.log(x2);
+
 
 
 //page.open(url, function(status) {
