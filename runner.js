@@ -63,7 +63,6 @@ page.onError = function(msg, trace) {
 var r2 = phantom.injectJs("elm.js") ? "... done injecting elm.js!" : "... fail! Check the $PWD?!";
 console.log(r2);
 
-
 //var x2 = page.evaluate(function() {
   var app = Elm.Spelling.fullscreen();
 
