@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=ecp78cukv89j0i366sh9jlemip'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=tlhi3gt4odl60m55ldomau69t9'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -29,6 +29,11 @@ function waitFor(testFx, onReady, timeOutMillis) {
 
 var r = page.injectJs("tests.js") ? "... done injecting itself!" : "... fail! Check the $PWD?!";
 console.log(r);
+
+page.evaluate(function() {
+  test();
+});
+
 
 page.open(url, function(status) {
   if (status !== 'success') {
