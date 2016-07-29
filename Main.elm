@@ -44,6 +44,7 @@ type alias Request =
   , arg: String
   }
 
+
 type alias Response =
   { id: String
   , failures: List String
@@ -80,11 +81,11 @@ update msg model =
 --      in
       ( model, check (Request "1" "click" "#refreshButton") )
 
-    Suggest newSuggestions ->
+    Suggest response ->
       let
-        d = Debug.log "> elm received" newSuggestions
+        d = Debug.log "> elm received" response
       in
-      ( Model model.word newSuggestions.failures, Cmd.none )
+      ( Model model.word response.failures, Cmd.none )
 
 
 -- SUBSCRIPTIONS

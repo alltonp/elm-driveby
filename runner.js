@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=38a0qnctdoam3465qub9evn9jr'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=nu517roeaavklcg5bigdujsg0p'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -16,12 +16,12 @@ function waitFor(id, testFx, onReady, timeOutMillis) {
             } else {
                 if(!condition) {
                     // If condition still not fulfilled (timeout but condition is 'false')
-                    console.log("'waitFor()' timeout");
+//                    console.log("'waitFor()' timeout");
                     clearInterval(interval); //< Stop this interval
                     report(id, ["timeout"])
                 } else {
                     // Condition fulfilled (timeout and/or condition is 'true')
-                    console.log("'waitFor()' finished in " + (new Date().getTime() - start) + "ms.");
+//                    console.log("'waitFor()' finished in " + (new Date().getTime() - start) + "ms.");
                     typeof(onReady) === "string" ? eval(onReady) : onReady(); //< Do what it's supposed to do once the condition is fulfilled
                     clearInterval(interval); //< Stop this interval
                     report(id, [])
@@ -51,15 +51,16 @@ page.onConsoleMessage = function(msg, lineNum, sourceId) {
 var r2 = phantom.injectJs("tests.js") ? "... done injecting elm.js!" : "... fail! Check the $PWD?!";
 console.log(r2);
 
+//TODO: ultimately replace with worker();
 var app = Elm.Spelling.fullscreen();
-
-//console.log("Running elm ...");
 
 app.ports.check.subscribe(function(word) {
   console.log("> js received: " + JSON.stringify(word));
 
+  //TODO: use JSON.stringify instead ...
   if (word.command == "click") { click(word.id, '"' + word.arg + '"'); }
   else if (word.command == "goto") { goto(word.id, url); }
+  else if (word.command == "textContains") { textContains(word.id, '"' + word.arg + '"'); }
 
   //TODO: report(id, [""]) if command not found ...
 });
@@ -72,73 +73,24 @@ function report(id, result) {
   app.ports.suggestions.send(result);
 }
 
-
-
-//page.open(url, function(status) {
-//  if (status !== 'success') {
-//    console.log('Unable to access network');
-//  } else {
-
-        //STEP 1 - Goto(url)
-        //waitFor(function() {
-          //condition
-          //return
-          //val r =
-//          console.log("### Goto(url)");
-//          page.open(url, function(status) {
-//              if (status !== 'success') {
-//                console.log('Unable to access network');
-//                //return false
-//              } else {
-//                console.log('--> I went to ...');
-//                //return true
-//              }
-//          });
-//          page.render('step-1.png')
-
-          //action
-          //}, function() {
-          //   console.log("url should be visible now.");
-          //});
-
-        goto("1001", url);
-        click("1002", "#refreshButton");
-
-        //STEP 3 - Assert(TextContains(id, value))
-        console.log("### Assert(TextContains(id, value))");
-        waitFor("1003", function() {
-
-          //condition
-          return page.evaluate(function() {
-              //TODO: need to check unique etc
-              return $("#messageList").is(":contains('ManualMetaDataRefresh')");
-          });
-
-          //action
-          }, function() {
-             console.log("--> Text did contain it now.");
-             //TODO: need an end test of something, but this should not be here ...
-             //phantom.exit();
-          });
-//    }
-//});
+goto("1001", url);
+click("1002", "#refreshButton");
+textContains("1003", "#messageList");
 
 //TODO: have the app call back (via port) when ready .... or just assert something instead ...
 
 function goto(id, url) {
-  console.log("### Goto(url)");
+//  console.log("### Goto(url)");
   console.log(url);
   page.open(url, function(status) {
-      if (status !== 'success') {
-        //console.log('Unable to access network');
-        report(id, ['Unable to access network'])
-      } else {
-        //console.log('--> I went to ...');
-        report(id, [])
-        //return true
-      }
+    console.log(url);
+    console.log(status);
+    if (status !== 'success') {
+      report(id, ['Unable to access network'])
+    } else {
+      report(id, [])
+    }
   });
-  //page.render('step-1.png')
 }
 
 function click(id, selector) {
@@ -155,6 +107,24 @@ function click(id, selector) {
         $(theSelector).click();
       }, selector);
       //console.log("--> I clicked it");
+    }
+  );
+}
+
+function textContains(id, selector) {
+//  console.log("### Assert(TextContains(id, value))");
+  waitFor("1003", function() {
+    //condition
+    return page.evaluate(function(theSelector) {
+      //TODO: need to check unique etc
+      return $(theSelector).is(":contains('ManualMetaDataRefresh')");
+    }, selector);
+
+    //action
+    }, function() {
+      console.log("--> Text did contain it now.");
+      //TODO: need an end test of something, but this should not be here ...
+      //phantom.exit();
     }
   );
 }
