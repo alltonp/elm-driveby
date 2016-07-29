@@ -1,0 +1,4 @@
+TODO:
+- integrate with elm-test
+- serve the app.js under test
+- include and execute the test.js
