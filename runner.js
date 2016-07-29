@@ -1,14 +1,18 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=b1l7447hgqevc64sbi3u762grb'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=t320451facqhn3vf7c14cpg8ic'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
 function waitFor(testFx, onReady, timeOutMillis) {
+    var result = []
+
     var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //< Default Max Timout is 3s
         start = new Date().getTime(),
         condition = false,
+        timeout = false,
         interval = setInterval(function() {
+            console.log("looping...")
             if ( (new Date().getTime() - start < maxtimeOutMillis) && !condition ) {
                 // If not time-out yet and condition not yet fulfilled
                 condition = (typeof(testFx) === "string" ? eval(testFx) : testFx()); //< defensive code
@@ -17,16 +21,31 @@ function waitFor(testFx, onReady, timeOutMillis) {
                     // If condition still not fulfilled (timeout but condition is 'false')
                     console.log("'waitFor()' timeout");
                     //phantom.exit(1);
-                    return ["timeout"]
+                    clearInterval(interval); //< Stop this interval
+                    report(["timeout"])
+                    result = ["timeout"]
+                    timeout = true
+                    return result
                 } else {
                     // Condition fulfilled (timeout and/or condition is 'true')
                     console.log("'waitFor()' finished in " + (new Date().getTime() - start) + "ms.");
                     typeof(onReady) === "string" ? eval(onReady) : onReady(); //< Do what it's supposed to do once the condition is fulfilled
                     clearInterval(interval); //< Stop this interval
-                    return []
+                    report(["success"])
+                    //result = []
+                    return result
                 }
             }
         }, 250); //< repeat check every 250ms
+
+//    maxtimeOutMillis(callback);
+    console.log("waitFor result:");
+    console.log(result.length);
+
+//    interval()
+//    while (!timeout) {
+//    }
+    return result
 };
 
 
@@ -79,10 +98,10 @@ console.log(r2);
       console.log(word.command);
 
       if (word.command == "click") {
-        console.log("clicking");
+//        console.log("clicking");
         var result = click();
-        console.log("clicked");
-        console.log(result);
+        console.log("click was called by elm")
+        console.log(result.length);
       }
 
 //      app.ports.suggestions.send({id = '"' ++ word.id + '"'});
@@ -92,6 +111,14 @@ console.log(r2);
       failures:[]
       });
   });
+
+function report(result) {
+      app.ports.suggestions.send({
+      //id:word.id,
+      id:"word.id",
+      failures:result
+      });
+}
 
 //  return "elmed it";
 //});
@@ -127,7 +154,9 @@ console.log(r2);
           //   console.log("url should be visible now.");
           //});
 
-        click();
+        var c = click();
+        console.log("click was called in inlne")
+        console.log(c.length)
 
         //STEP 3 - Assert(TextContains(id, value))
         console.log("### Assert(TextContains(id, value))");
@@ -142,6 +171,7 @@ console.log(r2);
           }, function() {
              console.log("--> Text did contain it now.");
              page.render('step-3.png')
+             //TODO: need an end test of something, but this should not be here ...
              phantom.exit();
           });
 //    }
@@ -167,12 +197,19 @@ function click() {
          });
          page.render('step-2.png')
          console.log("--> I clicked it");
+
+         //TODO: could just call the outgoing port here?
+//         ["good"]
          //console.log(page.plainText);
          //phantom.exit();
+         []
       });
 
   console.log("click() returning")
-  console.log(r)
-  return r
+  console.log(r.length)
+//  return r(function (x) {
+//             console.log(x);
+//           });
+    return r;
 }
 
