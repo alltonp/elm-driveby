@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=gbae7miskvtl30n805macnlt3t'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=ecp78cukv89j0i366sh9jlemip'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -27,10 +27,14 @@ function waitFor(testFx, onReady, timeOutMillis) {
         }, 250); //< repeat check every 250ms
 };
 
+var r = page.injectJs("tests.js") ? "... done injecting itself!" : "... fail! Check the $PWD?!";
+console.log(r);
+
 page.open(url, function(status) {
   if (status !== 'success') {
     console.log('Unable to access network');
   } else {
+
         page.render('step-0.png')
 
         //STEP 1 - Click(id)
