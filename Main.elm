@@ -12,6 +12,7 @@ import Html.App as App
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import String
+import Task
 
 
 main =
@@ -32,7 +33,7 @@ type alias Model =
 
 init : (Model, Cmd Msg)
 init =
-  (Model "z" [], Cmd.none)
+  (Model "z" [], asFx Check )
 
 
 -- UPDATE
@@ -54,7 +55,9 @@ update msg model =
       ( Model newWord [], Cmd.none )
 
     Check ->
-      ( model, check model.word )
+      let
+        d = Debug.log "elm-check" "???"
+      in ( model, check model.word )
 
     Suggest newSuggestions ->
       ( Model model.word newSuggestions, Cmd.none )
@@ -78,3 +81,11 @@ view model =
     , button [ onClick Check ] [ text "Check" ]
     , div [] [ text (String.join ", " model.suggestions) ]
     ]
+
+
+---
+
+asFx : msg -> Cmd msg
+asFx msg =
+  --Task.Extra.performFailproof identity |> msg
+  Task.perform (\_ -> Debug.crash "This failure cannot happen.") identity (Task.succeed msg)

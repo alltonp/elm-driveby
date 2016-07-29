@@ -12,6 +12,13 @@ TODO:
 - how about wrapping phantomjs in a restful server and have elm call it ...
   ... would that then mean that it could be a package?
 
+evan hacking focus:
+- https://github.com/evancz/elm-todomvc/blob/bc37c9b97db9e1c1d5db9debf0d900c77461e584/index.html#L19
+
+useful for a ui-less worker:
+- https://groups.google.com/forum/#!topic/elm-discuss/xPIFPRzXNSQ
+- http://package.elm-lang.org/packages/lukewestby/worker/2.0.0/
+
 useful for parallel launching:
 - https://github.com/ariya/phantomjs/blob/master/examples/child_process-examples.js
 
@@ -24,3 +31,9 @@ useful for server/stubbing:
 links:
 - https://github.com/deadfoxygrandpa/elm-test
 - https://github.com/laszlopandy/elm-console
+
+writing native code:
+- https://github.com/NoRedInk/take-home/wiki/Writing-your-first-impure-Elm-Native-module
+
+testing ports and effects:
+- https://github.com/rogeriochaves/elm-testable

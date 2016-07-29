@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=nrcv4clkqfvvhjj6t44q1i0igh'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=epon8ul8evbco448leh88bq4bp'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -32,6 +32,7 @@ page.onConsoleMessage = function(msg, lineNum, sourceId) {
   console.log('CONSOLE: ' + msg + ' (from line #' + lineNum + ' in "' + sourceId + '")');
 };
 
+/*
 page.onError = function(msg, trace) {
 
   var msgStack = ['ERROR: ' + msg];
@@ -46,11 +47,12 @@ page.onError = function(msg, trace) {
   console.error(msgStack.join('\n'));
 
 };
+*/
 
 var r = page.injectJs("tests.js") ? "... done injecting tests.js!" : "... fail! Check the $PWD?!";
 console.log(r);
 
-var r2 = page.injectJs("elm.js") ? "... done injecting elm.js!" : "... fail! Check the $PWD?!";
+var r2 = phantom.injectJs("elm.js") ? "... done injecting elm.js!" : "... fail! Check the $PWD?!";
 console.log(r2);
 
 var x = page.evaluate(function() {
@@ -61,21 +63,23 @@ var x = page.evaluate(function() {
 
 console.log(x);
 
-var x2 = page.evaluate(function() {
+//var x2 = page.evaluate(function() {
   var app = Elm.Spelling.fullscreen();
-  console.log("Running elm ...")
+
+  console.log("Running elm ...");
 
   app.ports.check.subscribe(function(word) {
-      var suggestions = spellCheck(word);
-      console.log("Elm got a suggestion")
+      //var suggestions = spellCheck(word);
+      console.log("Elm got a message in ...");
+      console.log(word);
 
-      app.ports.suggestions.send(suggestions);
+      //app.ports.suggestions.send(suggestions);
   });
 
-  return "elmed it"
-});
+//  return "elmed it";
+//});
 
-console.log(x2);
+//console.log(x2);
 
 
 
