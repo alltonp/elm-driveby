@@ -2,16 +2,20 @@ TODO:
 - integrate with elm-test
 - serve the app.js under test
 - consider making wrapper of phantom as a separate thing ...
-- ports or native or both
+- ports or native or both or neither
 - how to sequence the steps ...
 - so tests will contain the Elm.embed/worker of the test suite ...
 - when we execute a command, we send it to JS (with a uid)
 - when js responds we reply (with the uid) and update the elm model
 - we want these things to be tests ..
-- port modules not permitted in the port repository
 - how about wrapping phantomjs in a restful server and have elm call it ...
   ... would that then mean that it could be a package?
+- make mounting the app be a command, giving us back a url to use for the test run (put in come context)
+- is using rest a way around the ports/native restrictions?
+- aim for a single js artifact, and the phantomjs
 
+
+USEFUL:
 
 evan hacking focus:
 - https://github.com/evancz/elm-todomvc/blob/bc37c9b97db9e1c1d5db9debf0d900c77461e584/index.html#L19
@@ -38,3 +42,7 @@ writing native code:
 
 testing ports and effects:
 - https://github.com/rogeriochaves/elm-testable
+
+
+TIPS:
+- port modules not permitted in the port repository
