@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=91icvtf1lk5kcg6a3c9unf6k79'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=kjigfqmfjpoqf8rra1ltc5aqtk'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -27,17 +27,32 @@ function waitFor(testFx, onReady, timeOutMillis) {
         }, 250); //< repeat check every 250ms
 };
 
-var r = page.injectJs("tests.js") ? "... done injecting itself!" : "... fail! Check the $PWD?!";
+var r = page.injectJs("tests.js") ? "... done injecting tests.js!" : "... fail! Check the $PWD?!";
 console.log(r);
 
+var r2 = page.injectJs("elm.js") ? "... done injecting elm.js!" : "... fail! Check the $PWD?!";
+console.log(r2);
+
 var x = page.evaluate(function() {
-  console.log("### checking we can call injected");
   var result = test();
   console.log(result);
   return result;
 });
 
 console.log(x);
+
+var x2 = page.evaluate(function() {
+  var app = Elm.Spelling.fullscreen();
+
+  app.ports.check.subscribe(function(word) {
+      var suggestions = spellCheck(word);
+      app.ports.suggestions.send(suggestions);
+  });
+
+  return "elmed it"
+});
+
+console.log(x2);
 
 
 //page.open(url, function(status) {
