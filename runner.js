@@ -1,10 +1,10 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=7907mq6us5333khruhm9nfpj21'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=i4r6gdkvij6s7cg6mpu7cdbta3'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
-function waitFor(testFx, onReady, timeOutMillis) {
+function waitFor(id, testFx, onReady, timeOutMillis) {
     //var result = []
 
     var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //< Default Max Timout is 3s
@@ -22,7 +22,7 @@ function waitFor(testFx, onReady, timeOutMillis) {
                     console.log("'waitFor()' timeout");
                     //phantom.exit(1);
                     clearInterval(interval); //< Stop this interval
-                    report(["timeout"])
+                    report(id, ["timeout"])
                     //result = ["timeout"]
                     //timeout = true
                     //return result
@@ -31,7 +31,7 @@ function waitFor(testFx, onReady, timeOutMillis) {
                     console.log("'waitFor()' finished in " + (new Date().getTime() - start) + "ms.");
                     typeof(onReady) === "string" ? eval(onReady) : onReady(); //< Do what it's supposed to do once the condition is fulfilled
                     clearInterval(interval); //< Stop this interval
-                    report(["success"])
+                    report(id, [])
                     //result = []
                     //return result
                 }
@@ -99,7 +99,7 @@ console.log(r2);
 
       if (word.command == "click") {
 //        console.log("clicking");
-        click();
+        click(word.id);
 //        console.log("click was called by elm")
 //        console.log(result.length);
       }
@@ -112,12 +112,8 @@ console.log(r2);
 //      });
   });
 
-function report(result) {
-      app.ports.suggestions.send({
-      //id:word.id,
-      id:"word.id",
-      failures:result
-      });
+function report(id, result) {
+    app.ports.suggestions.send({ id:id, failures:result });
 }
 
 //  return "elmed it";
@@ -154,7 +150,7 @@ function report(result) {
           //   console.log("url should be visible now.");
           //});
 
-        var c = click();
+        var c = click("");
         console.log("click was called in inlne")
         console.log(c.length)
 
@@ -179,10 +175,10 @@ function report(result) {
 
 //TODO: have the app call back (via port) when ready .... or just assert something instead ...
 
-function click() {
+function click(id) {
     //STEP 2 - Click(id)
     console.log("### Click(id)");
-    var r = waitFor(function() {
+    var r = waitFor(id, function() {
       //condition
       return page.evaluate(function() {
           //TODO: need to check unique etc
@@ -197,6 +193,7 @@ function click() {
          });
          page.render('step-2.png')
          console.log("--> I clicked it");
+
 
          //TODO: could just call the outgoing port here?
 //         ["good"]
