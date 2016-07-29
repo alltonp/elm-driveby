@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=i4r6gdkvij6s7cg6mpu7cdbta3'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=trdsckp7eu4gfed736rvckb8r3'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -93,9 +93,9 @@ console.log(r2);
 
   app.ports.check.subscribe(function(word) {
       //var suggestions = spellCheck(word);
-      console.log("Elm got a message in ...");
-      console.log(word.id);
-      console.log(word.command);
+      console.log("Message in: " + JSON.stringify(word));
+//      console.log(word.id);
+//      console.log(word.command);
 
       if (word.command == "click") {
 //        console.log("clicking");
@@ -150,9 +150,9 @@ function report(id, result) {
           //   console.log("url should be visible now.");
           //});
 
-        var c = click("");
-        console.log("click was called in inlne")
-        console.log(c.length)
+        click("");
+//        console.log("click was called in inlne")
+//        console.log(c.length)
 
         //STEP 3 - Assert(TextContains(id, value))
         console.log("### Assert(TextContains(id, value))");

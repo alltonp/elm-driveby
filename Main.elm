@@ -64,9 +64,10 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     Start ->
-      let
-        d = Debug.log "elm sent" model.word
-      in ( model, check (Request "" "click") )
+--      let
+--        d = Debug.log "elm sent" model.word
+--      in
+      ( model, check (Request "" "click") )
 
     Change newWord ->
       ( Model newWord [], Cmd.none )
