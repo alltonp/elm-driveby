@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=h3moocbtvst5imfp2uj59n2fs7'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=38a0qnctdoam3465qub9evn9jr'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -56,7 +56,7 @@ var app = Elm.Spelling.fullscreen();
 //console.log("Running elm ...");
 
 app.ports.check.subscribe(function(word) {
-  console.log("Message in: " + JSON.stringify(word));
+  console.log("> js received: " + JSON.stringify(word));
 
   if (word.command == "click") { click(word.id, '"' + word.arg + '"'); }
   else if (word.command == "goto") { goto(word.id, url); }
@@ -64,9 +64,10 @@ app.ports.check.subscribe(function(word) {
   //TODO: report(id, [""]) if command not found ...
 });
 
+//TODO: add start time, to capture duration ...
 function report(id, result) {
   var result = { id:id, failures:result }
-  console.log("Message out: " + JSON.stringify(result));
+  console.log("> js sent: " + JSON.stringify(result));
   page.render('step-' + id + '.png')
   app.ports.suggestions.send(result);
 }
@@ -102,12 +103,11 @@ function report(id, result) {
 
         goto("1001", url);
         click("1002", "#refreshButton");
-//        console.log("click was called in inlne")
-//        console.log(c.length)
 
         //STEP 3 - Assert(TextContains(id, value))
         console.log("### Assert(TextContains(id, value))");
         waitFor("1003", function() {
+
           //condition
           return page.evaluate(function() {
               //TODO: need to check unique etc
@@ -117,7 +117,6 @@ function report(id, result) {
           //action
           }, function() {
              console.log("--> Text did contain it now.");
-             //page.render('step-3.png')
              //TODO: need an end test of something, but this should not be here ...
              //phantom.exit();
           });
@@ -131,10 +130,10 @@ function goto(id, url) {
   console.log(url);
   page.open(url, function(status) {
       if (status !== 'success') {
-        console.log('Unable to access network');
+        //console.log('Unable to access network');
         report(id, ['Unable to access network'])
       } else {
-        console.log('--> I went to ...');
+        //console.log('--> I went to ...');
         report(id, [])
         //return true
       }
@@ -143,28 +142,19 @@ function goto(id, url) {
 }
 
 function click(id, selector) {
-    waitFor(id, function() {
+  waitFor(id, function() {
+    //condition
+    return page.evaluate(function(theSelector) {
+      //TODO: need to check unique etc
+      return $(theSelector).is(":visible");
+    }, selector);
 
-      //condition
-      return page.evaluate(function(theSelector) {
-          //TODO: need to check unique etc
-          return $(theSelector).is(":visible");
+    //action
+    }, function() {
+      page.evaluate(function(theSelector) {
+        $(theSelector).click();
       }, selector);
-
-      //action
-      }, function() {
-         page.evaluate(function(theSelector) {
-            $(theSelector).click();
-         }, selector);
-
-         console.log("--> I clicked it");
-      });
-
-//  console.log("click() returning")
-//  console.log(r.length)
-//  return r(function (x) {
-//             console.log(x);
-//           });
-//    return r;
+      //console.log("--> I clicked it");
+    }
+  );
 }
-

@@ -82,7 +82,7 @@ update msg model =
 
     Suggest newSuggestions ->
       let
-        d = Debug.log "elm received" newSuggestions
+        d = Debug.log "> elm received" newSuggestions
       in
       ( Model model.word newSuggestions.failures, Cmd.none )
 
