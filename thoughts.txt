@@ -8,7 +8,9 @@ TODO:
 - when we execute a command, we send it to JS (with a uid)
 - when js responds we reply (with the uid) and update the elm model
 - we want these things to be tests ..
-
+- port modules not permitted in the port repository
+- how about wrapping phantomjs in a restful server and have elm call it ...
+  ... would that then mean that it could be a package?
 
 useful for parallel launching:
 - https://github.com/ariya/phantomjs/blob/master/examples/child_process-examples.js
