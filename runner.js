@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=ombphbah617tn7adocjdm5gskf'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=lqrn5iviu9q8qpneu9uup6lc8l'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
