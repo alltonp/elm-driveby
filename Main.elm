@@ -38,6 +38,12 @@ init =
 
 -- UPDATE
 
+type alias Request =
+  { id: String
+  , command: String
+  }
+
+
 type Msg
   = Change String
   | Check
@@ -46,7 +52,7 @@ type Msg
 
 {-| blah
 -}
-port check : String -> Cmd msg
+port check : Request -> Cmd msg
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -57,7 +63,7 @@ update msg model =
     Check ->
       let
         d = Debug.log "elm sent" model.word
-      in ( model, check model.word )
+      in ( model, check (Request "" model.word) )
 
     Suggest newSuggestions ->
       let
