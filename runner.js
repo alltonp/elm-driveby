@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=fv99c263kvc20ratc0p0gci17i'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=taag851irfdlpfk39u21o03v5p'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -54,6 +54,7 @@ page.evaluate(function() {
                 //return true
               }
           });
+          page.render('step-1.png')
 
           //action
           //}, function() {
