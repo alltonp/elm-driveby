@@ -61,7 +61,7 @@ var app = Elm.Spelling.fullscreen();
 app.ports.check.subscribe(function(word) {
 //  console.log("> js received: " + JSON.stringify(word));
   if (word.request.command == "click") { click(word.id, word.request.arg); }
-  else if (word.request.command == "goto") { goto(word.id, 'http://localhost:8080'); }
+  else if (word.request.command == "goto") { goto(word.id, 'http://localhost:8080/elm.html'); }
   else if (word.request.command == "textContains") { textContains(word.id, word.request.arg, "ManualMetaDataRefresh"); }
   else if (word.request.command == "close") { close(word.id); }
   else if (word.request.command == "serve") { serve(word.id, word.request.arg); }
@@ -131,12 +131,13 @@ function close(id) {
   phantom.exit()
 }
 
-function serve(id, html) {
+function serve(id, path) {
     port = "8080";
     server = require('webserver').create();
     var fs = require('fs')
-    filedata = fs.read(html)
-    console.log(filedata)
+//    filedata = fs.read(html)
+//    console.log(filedata)
+    console.log(path)
 
     service = server.listen(port, { keepAlive: true }, function (request, response) {
         console.log('Request at ' + new Date());
@@ -151,6 +152,15 @@ function serve(id, html) {
             'Keep-Alive': 'timeout=5, max=100',
             'Content-Length': body.length
         };
+
+//        console.log(path)
+        fqn = path + request.url;
+        console.log(fqn);
+        filedata = fs.read(fqn);
+        console.log(filedata);
+
+//        filedate = "hello"
+
         response.write(filedata);
         response.close();
     });

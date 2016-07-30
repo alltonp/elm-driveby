@@ -36,7 +36,7 @@ init =
 
 commands : List Step
 commands =
-    [ Request "serve" "../shoreditch-ui-chrome/chrome/elm.html"
+    [ Request "serve" "../shoreditch-ui-chrome/chrome"
     , Request "goto" "url"
     , Request "click" "#refreshButton"
     , Request "textContains" "#messageList"
