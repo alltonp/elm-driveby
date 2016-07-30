@@ -134,6 +134,9 @@ function close(id) {
 function serve(id, html) {
     port = "8080";
     server = require('webserver').create();
+    var fs = require('fs')
+    filedata = fs.read(html)
+    console.log(filedata)
 
     service = server.listen(port, { keepAlive: true }, function (request, response) {
         console.log('Request at ' + new Date());
@@ -143,12 +146,12 @@ function serve(id, html) {
         response.statusCode = 200;
         response.headers = {
             'Cache': 'no-cache',
-            'Content-Type': 'text/plain',
+            'Content-Type': 'text/html',
             'Connection': 'Keep-Alive',
             'Keep-Alive': 'timeout=5, max=100',
             'Content-Length': body.length
         };
-        response.write(body);
+        response.write(filedata);
         response.close();
     });
 
