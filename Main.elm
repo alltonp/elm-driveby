@@ -105,8 +105,10 @@ update msg model =
     Suggest response ->
       let
         d = Debug.log "> elm received" response
+        steps' = List.map (\s -> if s.id == response.id then Step s.id s.request True else s ) model.commands
+        model' = { model | commands = steps' }
       in
-      ( model, Cmd.none )
+      ( model', Cmd.none )
 
 
 -- SUBSCRIPTIONS
