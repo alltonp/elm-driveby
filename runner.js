@@ -136,23 +136,15 @@ function serve(id, path) {
     port = "8080";
     server = require('webserver').create();
     var fs = require('fs')
-//    filedata = fs.read(html)
-//    console.log(filedata)
-    console.log(path)
 
     service = server.listen(port, { keepAlive: true }, function (request, response) {
+        fqn = path + request.url;
         console.log('Request at ' + new Date());
         console.log('### ' + request.url);
-
-        fqn = path + request.url;
         console.log(fqn);
 
+        //TODO: if file doesnt exist then 404 instead ...
         body = fs.read(fqn);
-
-//        console.log(JSON.stringify(request, null, 4));
-
-//        var body = JSON.stringify(request, null, 4);
-
         response.statusCode = 200;
         response.headers = {
             'Cache': 'no-cache',
@@ -162,16 +154,13 @@ function serve(id, path) {
             'Content-Length': body.length
         };
 
-//        console.log(filedata);
-
-//        filedate = "hello"
-
         response.write(body);
         response.close();
     });
 
     if (service) {
         console.log('Web server running on port ' + port);
+        //    console.log(path)
     } else {
         console.log('Error: Could not create web server listening on port ' + port);
         phantom.exit();
