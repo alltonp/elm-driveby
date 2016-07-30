@@ -30,7 +30,7 @@ main =
 type alias Model =
   { word : String
   , suggestions : List String
-  , commands : List Request
+  , commands : List Step
   }
 
 init : (Model, Cmd Msg)
@@ -38,13 +38,19 @@ init =
   (Model "z" [] commands, asFx Start )
 
 
-commands : List Request
+commands : List Step
 commands =
     [ Request "1" "goto" "url"
     , Request "1" "click" "#refreshButton"
-    ]
+    ] |> List.map (\r -> Step r False)
 
 -- UPDATE
+
+type alias Step =
+  { request: Request
+  , executed: Bool
+  }
+
 
 --TODO: make command: Command
 type alias Request =
@@ -78,7 +84,7 @@ update msg model =
       let
         next = List.head model.commands
         cmd = case next of
-            Just c -> check c
+            Just c -> check c.request
             Nothing -> Cmd.none
         d = Debug.log "elm sending" (toString cmd)
       in
