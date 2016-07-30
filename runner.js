@@ -4,6 +4,9 @@ var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=jiuq
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
+//TODO: remove the String support for functions ...
+//TODO: rename id to stepId
+//TODO: have a runId (and maybe stick all id's on context)
 function waitFor(id, testFx, onReady, timeOutMillis) {
     var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //< Default Max Timout is 3s
         start = new Date().getTime(),
@@ -47,7 +50,7 @@ page.onConsoleMessage = function(msg, lineNum, sourceId) {
 
 //TODO: make this an argument ...
 //TODO: make the .html of the app an an argument too ... (actually be separate)
-//TODO: inject jquery ...
+//TODO: inject jquery ... (don't rely on being in the page itself ... or make it optional at least)
 var r2 = phantom.injectJs("tests.js") ? "... done injecting elm.js!" : "... fail! Check the $PWD?!";
 console.log(r2);
 
