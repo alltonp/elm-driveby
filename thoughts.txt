@@ -1,4 +1,6 @@
 TODO:
+- rename autobuild -> autocompile
+- make an autotest.js which compiles and runs tests if compile succeeds ...
 - integrate with elm-test
 - serve the app.js under test
 - consider making wrapper of phantom as a separate thing ...
