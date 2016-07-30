@@ -61,6 +61,7 @@ var app = Elm.Spelling.fullscreen();
 app.ports.check.subscribe(function(word) {
 //  console.log("> js received: " + JSON.stringify(word));
   if (word.request.command == "click") { click(word.id, word.request.arg); }
+  //TODO: return the port in the response ... (or specify it on the way in)
   else if (word.request.command == "goto") { goto(word.id, 'http://localhost:8080/elm.html'); }
   else if (word.request.command == "textContains") { textContains(word.id, word.request.arg, "ManualMetaDataRefresh"); }
   else if (word.request.command == "close") { close(word.id); }
@@ -141,9 +142,17 @@ function serve(id, path) {
 
     service = server.listen(port, { keepAlive: true }, function (request, response) {
         console.log('Request at ' + new Date());
-        console.log(JSON.stringify(request, null, 4));
+        console.log('### ' + request.url);
 
-        var body = JSON.stringify(request, null, 4);
+        fqn = path + request.url;
+        console.log(fqn);
+
+        body = fs.read(fqn);
+
+//        console.log(JSON.stringify(request, null, 4));
+
+//        var body = JSON.stringify(request, null, 4);
+
         response.statusCode = 200;
         response.headers = {
             'Cache': 'no-cache',
@@ -153,15 +162,11 @@ function serve(id, path) {
             'Content-Length': body.length
         };
 
-//        console.log(path)
-        fqn = path + request.url;
-        console.log(fqn);
-        filedata = fs.read(fqn);
-        console.log(filedata);
+//        console.log(filedata);
 
 //        filedate = "hello"
 
-        response.write(filedata);
+        response.write(body);
         response.close();
     });
 
