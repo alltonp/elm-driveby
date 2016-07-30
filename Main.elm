@@ -40,8 +40,8 @@ init =
 
 commands : List Step
 commands =
-    [ Request "1" "goto" "url"
-    , Request "1" "click" "#refreshButton"
+    [ Request "goto" "url"
+    , Request "click" "#refreshButton"
     ]
     |> List.indexedMap (,)
     |> List.map (\(i,r) -> Step (toString i) r False)
@@ -57,8 +57,7 @@ type alias Step =
 
 --TODO: make command: Command
 type alias Request =
-  { id: String
-  , command: String
+  { command: String
   , arg: String
   }
 
@@ -78,7 +77,7 @@ type Msg
 
 {-| blah
 -}
-port check : Request -> Cmd msg
+port check : Step -> Cmd msg
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -87,7 +86,7 @@ update msg model =
       let
         next = List.head model.commands
         cmd = case next of
-            Just c -> check c.request
+            Just c -> check c
             Nothing -> Cmd.none
         d = Debug.log "elm sending" (toString cmd)
       in

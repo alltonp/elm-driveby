@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=hlfrrcl42dlavq099ptj6o301d'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=g98sdp60vfrjbkujao0n5joas0'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -58,10 +58,10 @@ app.ports.check.subscribe(function(word) {
   console.log("> js received: " + JSON.stringify(word));
 
   //TODO: use JSON.stringify instead ...
-  if (word.command == "click") { click(word.id, '"' + word.arg + '"'); }
-  else if (word.command == "goto") { goto(word.id, url); }
-  else if (word.command == "textContains") { textContains(word.id, '"' + word.arg + '"'); }
-  else if (word.command == "close") { close(word.id); }
+  if (word.request.command == "click") { click(word.id, '"' + word.request.arg + '"'); }
+  else if (word.request.command == "goto") { goto(word.id, url); }
+  else if (word.request.command == "textContains") { textContains(word.id, '"' + word.request.arg + '"'); }
+  else if (word.request.command == "close") { close(word.id); }
 
   //TODO: report(id, [""]) if command not found ...
 });
