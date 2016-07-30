@@ -40,8 +40,8 @@ init =
 
 commands : List Request
 commands =
-    [
-    (Request "1" "goto" "url")
+    [ Request "1" "goto" "url"
+    , Request "1" "click" "#refreshButton"
     ]
 
 -- UPDATE
@@ -75,11 +75,15 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     Start ->
---      let
---        d = Debug.log "elm sent" model.word
---      in
+      let
+        next = List.head model.commands
+        cmd = case next of
+            Just c -> check c
+            Nothing -> Cmd.none
+        d = Debug.log "elm sending" (toString cmd)
+      in
 --      ( model, check (Request "1" "click" "#refreshButton") )
-      ( model, check (Request "1" "goto" "url") )
+      ( model, cmd)
 
 --    Change newWord ->
 --      ( Model newWord [], Cmd.none )
@@ -88,7 +92,7 @@ update msg model =
 --      let
 --        d = Debug.log "elm sent" model.word
 --      in
-      ( model, check (Request "1" "click" "#refreshButton") )
+      ( model, Cmd.none )
 
     Suggest response ->
       let

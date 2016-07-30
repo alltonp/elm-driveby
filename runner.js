@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=9jvu2n9lr30lg3fm479scplt3q'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=hlfrrcl42dlavq099ptj6o301d'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -74,9 +74,9 @@ function report(id, result) {
   app.ports.suggestions.send(result);
 }
 
-goto("1001", url);
-click("1002", "#refreshButton");
-textContains("1003", "#messageList");
+//goto("1001", url);
+//click("1002", "#refreshButton");
+//textContains("1003", "#messageList");
 //close("1004");
 
 //TODO: have the app call back (via port) when ready .... or just assert something instead ...
