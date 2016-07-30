@@ -24,18 +24,14 @@ main =
     }
 
 
--- MODEL
-
 --TODO: make script: List Command
 type alias Model =
-  { word : String
-  , suggestions : List String
-  , commands : List Step
+  { commands : List Step
   }
 
 init : (Model, Cmd Msg)
 init =
-  (Model "z" [] commands, asFx Start )
+  (Model commands, asFx Start )
 
 
 commands : List Step
@@ -48,7 +44,6 @@ commands =
     |> List.indexedMap (,)
     |> List.map (\(i,r) -> Step (toString i) r False)
 
--- UPDATE
 
 type alias Step =
   { id: String
@@ -72,14 +67,13 @@ type alias Response =
 
 type Msg
   = Start
---  | Change String
---  | Check
   | Suggest Response
 
 
 {-| blah
 -}
 port check : Step -> Cmd msg
+
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -92,17 +86,7 @@ update msg model =
             Nothing -> Cmd.none
         d = Debug.log "> elm sending next: " next
       in
---      ( model, check (Request "1" "click" "#refreshButton") )
       ( model, cmd)
-
---    Change newWord ->
---      ( Model newWord [], Cmd.none )
-
---    Check ->
---      let
---        d = Debug.log "elm sent" model.word
---      in
---      ( model, Cmd.none )
 
     Suggest response ->
       let
@@ -112,12 +96,9 @@ update msg model =
         --TODO: send ExampleFailure if response has failures
         --TODO: Start should be NextStep
         next = if List.isEmpty response.failures then asFx Start else Cmd.none
---        d2 = Debug.log "> next command" next
       in
       ( model', next )
 
-
--- SUBSCRIPTIONS
 
 port suggestions : (Response -> msg) -> Sub msg
 
@@ -126,23 +107,11 @@ subscriptions model =
   suggestions Suggest
 
 
--- VIEW
-
 view : Model -> Html Msg
 view model =
-  div []
-    [
---    input [ onInput Change ] []
---    ,
---    button [ onClick Check ] [ text "Check" ]
---    ,
-    div [] [ text (String.join ", " model.suggestions) ]
-    ]
+  div [ ] [ ]
 
-
----
 
 asFx : msg -> Cmd msg
 asFx msg =
-  --Task.Extra.performFailproof identity |> msg
   Task.perform (\_ -> Debug.crash "This failure cannot happen.") identity (Task.succeed msg)
