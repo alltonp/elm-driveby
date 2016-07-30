@@ -68,6 +68,7 @@ type alias Response =
 type Msg
   = Start
   | Suggest Response
+  | Exit String
 
 
 {-| blah
@@ -95,9 +96,12 @@ update msg model =
         model' = { model | commands = steps' }
         --TODO: send ExampleFailure if response has failures
         --TODO: Start should be NextStep
-        next = if List.isEmpty response.failures then asFx Start else Cmd.none
+        next = if List.isEmpty response.failures then asFx Start else asFx (Exit "Spec Failed")
       in
       ( model', next )
+
+    Exit message ->
+      ( model, check (Step "999" (Request "close" "") False) )
 
 
 port suggestions : (Response -> msg) -> Sub msg

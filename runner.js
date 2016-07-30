@@ -64,6 +64,7 @@ app.ports.check.subscribe(function(word) {
   else if (word.request.command == "goto") { goto(word.id, url); }
   else if (word.request.command == "textContains") { textContains(word.id, word.request.arg, "ManualMetaDataRefresh"); }
   else if (word.request.command == "close") { close(word.id); }
+  else { report(word.id, ["don't know how to process: " + word.request.command] ); }
 
   //TODO: report(id, ["failure"]) if command not found ...
 });
