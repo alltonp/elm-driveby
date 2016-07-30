@@ -8,6 +8,8 @@ var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=kkdd
 //TODO: remove the String support for functions ...
 //TODO: rename id to stepId
 //TODO: have a runId (and maybe stick all id's on context)
+//TODO: should screenshot be before the action - might be more useful for debug
+//TODO: might be nice highlight the interactable element (like watir) before we do the action ...
 function waitFor(id, testFx, onReady, timeOutMillis) {
     var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //< Default Max Timout is 3s
         start = new Date().getTime(),
