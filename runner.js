@@ -139,15 +139,18 @@ function serve(id, path) {
 
     service = server.listen(port, { keepAlive: true }, function (request, response) {
         fqn = path + request.url;
-        console.log('Request at ' + new Date());
-        console.log('### ' + request.url);
-        console.log(fqn);
+//        console.log('Request at ' + new Date());
+//        console.log('### ' + request.url);
+//        console.log(fqn);
 
         //TODO: if file doesnt exist then 404 instead ...
+//        if (fs.exists(path))
+
         body = fs.read(fqn);
         response.statusCode = 200;
         response.headers = {
             'Cache': 'no-cache',
+            //TODO: should probably base this on filetype ..
             'Content-Type': 'text/html',
             'Connection': 'Keep-Alive',
             'Keep-Alive': 'timeout=5, max=100',
