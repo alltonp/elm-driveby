@@ -1,8 +1,5 @@
 var page = require('webpage').create();
 
-//TODO: this needs to not be here obv
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=cka9ro5pnjq9j90l4t7aphbvm'
-
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
 //TODO: remove the String support for functions ...
