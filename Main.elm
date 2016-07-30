@@ -90,7 +90,7 @@ update msg model =
         cmd = case next of
             Just c -> check c
             Nothing -> Cmd.none
-        d = Debug.log "elm sending" (toString cmd)
+        d = Debug.log "> elm sending next: " next
       in
 --      ( model, check (Request "1" "click" "#refreshButton") )
       ( model, cmd)
@@ -106,13 +106,13 @@ update msg model =
 
     Suggest response ->
       let
-        d = Debug.log "> elm received" response
+        d = Debug.log "> elm received response: " response
         steps' = List.map (\s -> if s.id == response.id then Step s.id s.request True else s ) model.commands
         model' = { model | commands = steps' }
         --TODO: send ExampleFailure if response has failures
         --TODO: Start should be NextStep
         next = if List.isEmpty response.failures then asFx Start else Cmd.none
-        d2 = Debug.log "> next command" next
+--        d2 = Debug.log "> next command" next
       in
       ( model', next )
 

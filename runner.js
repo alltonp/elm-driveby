@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=nqkv4km453ui0toqi57be0914f'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=1pi0c1c9ib8mgccb4h8vn1o4mp'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -33,9 +33,9 @@ function waitFor(id, testFx, onReady, timeOutMillis) {
         }, 250); //< repeat check every 250ms
 };
 
-page.onConsoleMessage = function(msg, lineNum, sourceId) {
-  console.log('CONSOLE: [' + msg + '] (from line #' + lineNum + ' in "' + sourceId + '")');
-};
+//page.onConsoleMessage = function(msg, lineNum, sourceId) {
+//  console.log('CONSOLE: [' + msg + '] (from line #' + lineNum + ' in "' + sourceId + '")');
+//};
 
 //var r = page.injectJs("tests.js") ? "... done injecting tests.js!" : "... fail! Check the $PWD?!";
 //console.log(r);
@@ -58,9 +58,7 @@ console.log(r2);
 var app = Elm.Spelling.fullscreen();
 
 app.ports.check.subscribe(function(word) {
-  console.log("> js received: " + JSON.stringify(word));
-
-  //TODO: use JSON.stringify instead ...
+//  console.log("> js received: " + JSON.stringify(word));
   if (word.request.command == "click") { click(word.id, word.request.arg); }
   else if (word.request.command == "goto") { goto(word.id, url); }
   else if (word.request.command == "textContains") { textContains(word.id, word.request.arg); }
@@ -72,7 +70,7 @@ app.ports.check.subscribe(function(word) {
 //TODO: add start time, to capture duration ...
 function report(id, result) {
   var result = { id:id, failures:result }
-  console.log("> js sent: " + JSON.stringify(result));
+//  console.log("> js sent: " + JSON.stringify(result));
   page.render('step-' + id + '.png')
   app.ports.suggestions.send(result);
 }
