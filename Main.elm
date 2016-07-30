@@ -42,6 +42,8 @@ commands : List Step
 commands =
     [ Request "goto" "url"
     , Request "click" "#refreshButton"
+    , Request "textContains" "#messageList"
+    , Request "close" ""
     ]
     |> List.indexedMap (,)
     |> List.map (\(i,r) -> Step (toString i) r False)
