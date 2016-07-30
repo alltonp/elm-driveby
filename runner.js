@@ -63,7 +63,7 @@ app.ports.check.subscribe(function(word) {
   //TODO: use JSON.stringify instead ...
   if (word.request.command == "click") { click(word.id, word.request.arg); }
   else if (word.request.command == "goto") { goto(word.id, url); }
-  else if (word.request.command == "textContains") { textContains(word.id, '"' + word.request.arg + '"'); }
+  else if (word.request.command == "textContains") { textContains(word.id, word.request.arg); }
   else if (word.request.command == "close") { close(word.id); }
 
   //TODO: report(id, [""]) if command not found ...
@@ -99,8 +99,9 @@ function goto(id, url) {
 }
 
 function close(id) {
-  page.close()
   report(id, [])
+  page.close()
+  phantom.exit()
 }
 
 function click(id, selector) {
