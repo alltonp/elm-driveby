@@ -73,7 +73,7 @@ type alias Response =
 type Msg
   = Start
 --  | Change String
-  | Check
+--  | Check
   | Suggest Response
 
 
@@ -98,11 +98,11 @@ update msg model =
 --    Change newWord ->
 --      ( Model newWord [], Cmd.none )
 
-    Check ->
+--    Check ->
 --      let
 --        d = Debug.log "elm sent" model.word
 --      in
-      ( model, Cmd.none )
+--      ( model, Cmd.none )
 
     Suggest response ->
       let
@@ -134,8 +134,9 @@ view model =
     [
 --    input [ onInput Change ] []
 --    ,
-    button [ onClick Check ] [ text "Check" ]
-    , div [] [ text (String.join ", " model.suggestions) ]
+--    button [ onClick Check ] [ text "Check" ]
+--    ,
+    div [] [ text (String.join ", " model.suggestions) ]
     ]
 
 

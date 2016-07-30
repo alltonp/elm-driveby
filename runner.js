@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=1pi0c1c9ib8mgccb4h8vn1o4mp'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=j7jupt60l7pada6hhok204p91g'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -61,7 +61,7 @@ app.ports.check.subscribe(function(word) {
 //  console.log("> js received: " + JSON.stringify(word));
   if (word.request.command == "click") { click(word.id, word.request.arg); }
   else if (word.request.command == "goto") { goto(word.id, url); }
-  else if (word.request.command == "textContains") { textContains(word.id, word.request.arg); }
+  else if (word.request.command == "textContains") { textContains(word.id, word.request.arg, "ManualMetaDataRefresh"); }
   else if (word.request.command == "close") { close(word.id); }
 
   //TODO: report(id, ["failure"]) if command not found ...
@@ -112,14 +112,14 @@ function click(id, selector) {
   );
 }
 
-function textContains(id, selector) {
+function textContains(id, selector, expected) {
   waitFor(id, function() {
     //condition
-    return page.evaluate(function(theSelector) {
+    return page.evaluate(function(theSelector, theExpected) {
       //TODO: need to check unique etc
       //TODO: pull out as findUnique
-      return $(theSelector).is(":contains('ManualMetaDataRefresh')");
-    }, selector);
+      return $(theSelector).is(":contains('" + theExpected + "')");
+    }, selector, expected);
 
     //action
     }, function() {
