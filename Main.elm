@@ -111,8 +111,10 @@ update msg model =
         model' = { model | commands = steps' }
         --TODO: send ExampleFailure if response has failures
         --TODO: Start should be NextStep
+        next = if List.isEmpty response.failures then asFx Start else Cmd.none
+        d2 = Debug.log "> next command" next
       in
-      ( model', asFx Start )
+      ( model', next )
 
 
 -- SUBSCRIPTIONS
