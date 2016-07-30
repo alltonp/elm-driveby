@@ -84,7 +84,7 @@ update msg model =
   case msg of
     Start ->
       let
-        next = List.head model.commands
+        next = List.filter (\s -> not s.executed) model.commands |> List.head
         cmd = case next of
             Just c -> check c
             Nothing -> Cmd.none
@@ -107,8 +107,10 @@ update msg model =
         d = Debug.log "> elm received" response
         steps' = List.map (\s -> if s.id == response.id then Step s.id s.request True else s ) model.commands
         model' = { model | commands = steps' }
+        --TODO: send ExampleFailure if response has failures
+        --TODO: Start should be NextStep
       in
-      ( model', Cmd.none )
+      ( model', asFx Start )
 
 
 -- SUBSCRIPTIONS

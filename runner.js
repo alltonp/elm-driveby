@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=g98sdp60vfrjbkujao0n5joas0'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=ag9jh73skl7e1s2cp375srr9m'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -105,6 +105,7 @@ function click(id, selector) {
     //condition
     return page.evaluate(function(theSelector) {
       //TODO: need to check unique etc
+      console.log(theSelector)
       return $(theSelector).is(":visible");
     }, selector);
 
