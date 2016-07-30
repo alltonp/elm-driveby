@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=jiuq7cnppgrfkfuaenja9lc6ep'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=vtho1l6n4ofds75nmh22hbrhtp'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -34,7 +34,7 @@ function waitFor(id, testFx, onReady, timeOutMillis) {
 };
 
 page.onConsoleMessage = function(msg, lineNum, sourceId) {
-  console.log('CONSOLE: ' + msg + ' (from line #' + lineNum + ' in "' + sourceId + '")');
+  console.log('CONSOLE: [' + msg + '] (from line #' + lineNum + ' in "' + sourceId + '")');
 };
 
 //var r = page.injectJs("tests.js") ? "... done injecting tests.js!" : "... fail! Check the $PWD?!";
@@ -61,7 +61,7 @@ app.ports.check.subscribe(function(word) {
   console.log("> js received: " + JSON.stringify(word));
 
   //TODO: use JSON.stringify instead ...
-  if (word.request.command == "click") { click(word.id, '"' + word.request.arg + '"'); }
+  if (word.request.command == "click") { click(word.id, word.request.arg); }
   else if (word.request.command == "goto") { goto(word.id, url); }
   else if (word.request.command == "textContains") { textContains(word.id, '"' + word.request.arg + '"'); }
   else if (word.request.command == "close") { close(word.id); }
