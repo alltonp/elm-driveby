@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=vtho1l6n4ofds75nmh22hbrhtp'
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=nqkv4km453ui0toqi57be0914f'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -66,7 +66,7 @@ app.ports.check.subscribe(function(word) {
   else if (word.request.command == "textContains") { textContains(word.id, word.request.arg); }
   else if (word.request.command == "close") { close(word.id); }
 
-  //TODO: report(id, [""]) if command not found ...
+  //TODO: report(id, ["failure"]) if command not found ...
 });
 
 //TODO: add start time, to capture duration ...
@@ -77,19 +77,10 @@ function report(id, result) {
   app.ports.suggestions.send(result);
 }
 
-//goto("1001", url);
-//click("1002", "#refreshButton");
-//textContains("1003", "#messageList");
-//close("1004");
-
 //TODO: have the app call back (via port) when ready .... or just assert something instead ...
 
 function goto(id, url) {
-//  console.log("### Goto(url)");
-//  console.log(url);
   page.open(url, function(status) {
-//    console.log(url);
-//    console.log(status);
     if (status !== 'success') {
       report(id, ['Unable to access network'])
     } else {
@@ -101,6 +92,7 @@ function goto(id, url) {
 function close(id) {
   report(id, [])
   page.close()
+  //TODO: pull out a separate exit
   phantom.exit()
 }
 
@@ -109,7 +101,7 @@ function click(id, selector) {
     //condition
     return page.evaluate(function(theSelector) {
       //TODO: need to check unique etc
-      console.log(theSelector)
+      //TODO: pull out as findUnique
       return $(theSelector).is(":visible");
     }, selector);
 
@@ -118,25 +110,21 @@ function click(id, selector) {
       page.evaluate(function(theSelector) {
         $(theSelector).click();
       }, selector);
-      //console.log("--> I clicked it");
     }
   );
 }
 
 function textContains(id, selector) {
-//  console.log("### Assert(TextContains(id, value))");
   waitFor(id, function() {
     //condition
     return page.evaluate(function(theSelector) {
       //TODO: need to check unique etc
+      //TODO: pull out as findUnique
       return $(theSelector).is(":contains('ManualMetaDataRefresh')");
     }, selector);
 
     //action
     }, function() {
-      //console.log("--> Text did contain it now.");
-      //TODO: need an end test of something, but this should not be here ...
-      //phantom.exit();
     }
   );
 }
