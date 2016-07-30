@@ -34,6 +34,11 @@ init =
   (Model commands, asFx Start )
 
 
+--TODO: server - add port, will make it better for paralle
+--TODO: goto - url should be "/elm.html"
+--TODO: textContains needs to have the expected
+--TODO: close should not take any args
+--TODO: should args just be a list?
 commands : List Step
 commands =
     [ Request "serve" "../shoreditch-ui-chrome/chrome"
