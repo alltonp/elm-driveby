@@ -1,6 +1,7 @@
 var page = require('webpage').create();
 
-var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=j7jupt60l7pada6hhok204p91g'
+//TODO: this needs to not be here obv
+var url = 'http://localhost:63342/shoreditch-ui-chrome/chrome/elm.html?_ijt=kkddkkcf57lbf27nqdk1angfgq'
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -12,14 +13,12 @@ function waitFor(id, testFx, onReady, timeOutMillis) {
         start = new Date().getTime(),
         condition = false,
         interval = setInterval(function() {
-//            console.log("looping...")
             if ( (new Date().getTime() - start < maxtimeOutMillis) && !condition ) {
                 // If not time-out yet and condition not yet fulfilled
                 condition = (typeof(testFx) === "string" ? eval(testFx) : testFx()); //< defensive code
             } else {
                 if(!condition) {
                     // If condition still not fulfilled (timeout but condition is 'false')
-//                    console.log("'waitFor()' timeout");
                     clearInterval(interval); //< Stop this interval
                     report(id, ["timeout"])
                 } else {
@@ -87,19 +86,12 @@ function goto(id, url) {
   });
 }
 
-function close(id) {
-  report(id, [])
-  page.close()
-  //TODO: pull out a separate exit
-  phantom.exit()
-}
-
 function click(id, selector) {
   waitFor(id, function() {
     //condition
     return page.evaluate(function(theSelector) {
       //TODO: need to check unique etc
-      //TODO: pull out as findUnique
+      //TODO: pull out as findUniqueInteractable
       return $(theSelector).is(":visible");
     }, selector);
 
@@ -112,6 +104,7 @@ function click(id, selector) {
   );
 }
 
+//TODO: asserts() will always look a bit like this
 function textContains(id, selector, expected) {
   waitFor(id, function() {
     //condition
@@ -125,4 +118,11 @@ function textContains(id, selector, expected) {
     }, function() {
     }
   );
+}
+
+function close(id) {
+  report(id, [])
+  page.close()
+  //TODO: pull out a separate exit
+  phantom.exit()
 }
