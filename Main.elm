@@ -42,12 +42,15 @@ commands : List Step
 commands =
     [ Request "1" "goto" "url"
     , Request "1" "click" "#refreshButton"
-    ] |> List.map (\r -> Step r False)
+    ]
+    |> List.indexedMap (,)
+    |> List.map (\(i,r) -> Step (toString i) r False)
 
 -- UPDATE
 
 type alias Step =
-  { request: Request
+  { id: String
+  , request: Request
   , executed: Bool
   }
 
