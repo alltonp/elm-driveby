@@ -26,18 +26,27 @@ main =
 
 -- MODEL
 
+--TODO: make script: List Command
 type alias Model =
   { word : String
   , suggestions : List String
+  , commands : List Request
   }
 
 init : (Model, Cmd Msg)
 init =
-  (Model "z" [], asFx Start )
+  (Model "z" [] commands, asFx Start )
 
+
+commands : List Request
+commands =
+    [
+    (Request "1" "goto" "url")
+    ]
 
 -- UPDATE
 
+--TODO: make command: Command
 type alias Request =
   { id: String
   , command: String
@@ -53,7 +62,7 @@ type alias Response =
 
 type Msg
   = Start
-  | Change String
+--  | Change String
   | Check
   | Suggest Response
 
@@ -72,8 +81,8 @@ update msg model =
 --      ( model, check (Request "1" "click" "#refreshButton") )
       ( model, check (Request "1" "goto" "url") )
 
-    Change newWord ->
-      ( Model newWord [], Cmd.none )
+--    Change newWord ->
+--      ( Model newWord [], Cmd.none )
 
     Check ->
 --      let
@@ -85,7 +94,7 @@ update msg model =
       let
         d = Debug.log "> elm received" response
       in
-      ( Model model.word response.failures, Cmd.none )
+      ( model, Cmd.none )
 
 
 -- SUBSCRIPTIONS
@@ -102,8 +111,10 @@ subscriptions model =
 view : Model -> Html Msg
 view model =
   div []
-    [ input [ onInput Change ] []
-    , button [ onClick Check ] [ text "Check" ]
+    [
+--    input [ onInput Change ] []
+--    ,
+    button [ onClick Check ] [ text "Check" ]
     , div [] [ text (String.join ", " model.suggestions) ]
     ]
 
