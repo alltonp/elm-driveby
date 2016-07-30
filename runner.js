@@ -7,6 +7,8 @@ var page = require('webpage').create();
 //TODO: have a runId (and maybe stick all id's on context)
 //TODO: should screenshot be before the action - might be more useful for debug
 //TODO: might be nice highlight the interactable element (like watir) before we do the action ...
+//TODO: one server for all, or one per test? port numbers
+//TODO: write the files somewhere useful, include the port-number perhaps ...
 function waitFor(id, testFx, onReady, timeOutMillis) {
     var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //< Default Max Timout is 3s
         start = new Date().getTime(),
