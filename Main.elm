@@ -98,13 +98,12 @@ update msg model =
 
     Suggest response ->
       let
-        d = Debug.log "> elm received response: " response
         steps' = List.map (\s -> if s.id == response.id then Step s.id s.request True else s ) model.commands
         model' = { model | commands = steps' }
         --TODO: go with Script, Step, Command, Result etc
         --TODO: send ExampleFailure if response has failures
         --TODO: Start should be NextStep
-        next = if List.isEmpty response.failures then asFx Start else asFx (Exit "Spec Failed")
+        next = if List.isEmpty response.failures then asFx Start else asFx (Exit ("Spec Failed: " ++ (toString response.failures)) )
       in
       ( model', next )
 
