@@ -1,6 +1,6 @@
 TODO:
 - rename autobuild -> autocompile
-- make an autotest.js which compiles and runs tests if compile succeeds ...
+- make an autotest.js which compiles app, compiles tests, and runs tests if both compiles succeeds ...
 - integrate with elm-test
 - serve the app.js under test
 - consider making wrapper of phantom as a separate thing ...
@@ -46,6 +46,8 @@ testing ports and effects:
 - https://github.com/rogeriochaves/elm-testable
 - https://gist.github.com/evancz/8521339
 
+parallel:
+- http://package.elm-lang.org/packages/elm-lang/core/4.0.1/Process#future-plans
 
 TIPS:
 - port modules not permitted in the port repository

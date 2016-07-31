@@ -79,6 +79,7 @@ type Msg
 
 {-| blah
 -}
+--TODO: need to be exposed somehow
 port check : Step -> Cmd msg
 
 
@@ -111,8 +112,10 @@ update msg model =
       ( model, check (Step "999" (Request "close" [] ) False) )
 
 
+--TODO: need to be exposed somehow
 port suggestions : (Response -> msg) -> Sub msg
 
+--TODO: need to be exposed somehow
 subscriptions : Model -> Sub Msg
 subscriptions model =
   suggestions Suggest
