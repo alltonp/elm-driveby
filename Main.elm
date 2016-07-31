@@ -84,6 +84,8 @@ type Msg
 port check : Step -> Cmd msg
 
 
+--TODO: this will be the drivby update ...
+--TODO: we will probably need our own to handle DriveBy.Msg ... like the DatePicker ...
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
