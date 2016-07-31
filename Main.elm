@@ -36,6 +36,7 @@ init =
 
 --TODO: specify this using functions, to ensure the correct args ... click id etc
 --TODO: ensure the Script top level has a description ..
+--TODO: should be assert [ "textContains" etc ... ]
 commands : List Step
 commands =
     [ Request "serve" [ "../shoreditch-ui-chrome/chrome", "8080" ]
@@ -68,10 +69,12 @@ type alias Response =
   }
 
 
+--TODO: fix all this naming too
 type Msg
   = Start
   | Suggest Response
   | Exit String
+--TODO: add a Finish (and do the reporting bit here ...)
 
 
 {-| blah
@@ -97,6 +100,7 @@ update msg model =
         d = Debug.log "> elm received response: " response
         steps' = List.map (\s -> if s.id == response.id then Step s.id s.request True else s ) model.commands
         model' = { model | commands = steps' }
+        --TODO: go with Script, Step, Command, Result etc
         --TODO: send ExampleFailure if response has failures
         --TODO: Start should be NextStep
         next = if List.isEmpty response.failures then asFx Start else asFx (Exit "Spec Failed")
