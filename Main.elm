@@ -36,7 +36,9 @@ init =
 
 --TODO: specify this using functions, to ensure the correct args ... click id etc
 --TODO: ensure the Script top level has a description ..
---TODO: should be assert [ "textContains" etc ... ]
+--TODO: should be assert [ "textContains", "#messageList", "Auto Loading Metadata" ]
+--TODO: or assert [ "#messageList" "textContains", "Auto Loading Metadata" ]
+--TODO: might map well to jquery functions
 commands : List Step
 commands =
     [ Request "serve" [ "../shoreditch-ui-chrome/chrome", "8080" ]
@@ -63,6 +65,7 @@ type alias Request =
   }
 
 
+--TODO: consider Id as a type and give it the bits it needs ...
 type alias Response =
   { id: String
   , failures: List String
@@ -92,9 +95,10 @@ update msg model =
       let
         next = List.filter (\s -> not s.executed) model.commands |> List.head
         cmd = case next of
-            Just c -> check c
+            Just c ->
+              let d = Debug.log "Driveby" c.request
+              in check c
             Nothing -> asFx (Exit ("Spec Passed") )
-        --d = Debug.log "> elm sending next: " next
       in
       ( model, cmd)
 
@@ -115,7 +119,7 @@ update msg model =
     Exit message ->
       let
         --TODO: this is odd, lets do in js instead ...
-        d = Debug.log ("Driveby: " ++ message) ""
+        d = Debug.log ("Driveby" ++ message) ""
       in
       ( model, check (Step "999" (Request "close" [] ) False) )
 
