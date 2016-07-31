@@ -52,7 +52,7 @@ function waitFor(id, testFx, onReady, timeOutMillis) {
 //TODO: definitely make this an argument ... maybe support multiple file inputs .... run if successful ... good for autotesting
 //TODO: inject jquery ... (don't rely on being in the page itself ... or make it optional at least)
 var r2 = phantom.injectJs("tests.js") ? "... done injecting elm.js!" : "... fail! Check the $PWD?!";
-console.log(r2);
+//console.log(r2);
 
 //TODO: ultimately replace with worker();
 var app = Elm.Spelling.fullscreen();
@@ -158,7 +158,7 @@ function serve(id, path, port) {
     });
 
     if (service) {
-        console.log('Web server running on port ' + port);
+//        console.log('Web server running on port ' + port);
         //    console.log(path)
     } else {
         console.log('Error: Could not create web server listening on port ' + port);
@@ -169,6 +169,7 @@ function serve(id, path, port) {
 }
 
 page.onError = function(msg, trace) {
+//TODO: append these to a file in the result dir ....
 //  var msgStack = ['PHANTOM ERROR: ' + msg];
 //  if (trace && trace.length) {
 //    msgStack.push('TRACE:');
