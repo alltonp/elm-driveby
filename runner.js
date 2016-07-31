@@ -9,6 +9,7 @@ var page = require('webpage').create();
 //TODO: might be nice highlight the interactable element (like watir) before we do the action ...
 //TODO: one server for all, or one per test? port numbers
 //TODO: write the files somewhere useful, include the port-number perhaps ...
+//TODO: do as much as possible in elm .. e.g. build the test report in elm, save it in js
 function waitFor(id, testFx, onReady, timeOutMillis) {
     var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //< Default Max Timout is 3s
         start = new Date().getTime(),
@@ -62,7 +63,7 @@ app.ports.check.subscribe(function(word) {
   if (word.request.command == "click") { click(word.id, word.request.arg); }
   //TODO: return the port in the response ... (or specify it on the way in)
   else if (word.request.command == "goto") { goto(word.id, 'http://localhost:8080/elm.html'); }
-  else if (word.request.command == "textContains") { textContains(word.id, word.request.arg, "ManualMetaDataRefresh"); }
+  else if (word.request.command == "textContains") { textContains(word.id, word.request.arg, word.request.expected); }
   else if (word.request.command == "close") { close(word.id); }
   else if (word.request.command == "serve") { serve(word.id, word.request.arg); }
   else { report(word.id, ["don't know how to process: " + word.request.command] ); }

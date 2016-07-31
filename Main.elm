@@ -41,11 +41,11 @@ init =
 --TODO: should args just be a list?
 commands : List Step
 commands =
-    [ Request "serve" "../shoreditch-ui-chrome/chrome"
-    , Request "goto" "url"
-    , Request "click" "#refreshButton"
-    , Request "textContains" "#messageList"
-    , Request "close" ""
+    [ Request "serve" "../shoreditch-ui-chrome/chrome" Nothing
+    , Request "goto" "url" Nothing
+    , Request "click" "#refreshButton" Nothing
+    , Request "textContains" "#messageList" (Just "ManualMetaDataRefresh")
+    , Request "close" "" Nothing
     ]
     |> List.indexedMap (,)
     |> List.map (\(i,r) -> Step (toString i) r False)
@@ -62,6 +62,7 @@ type alias Step =
 type alias Request =
   { command: String
   , arg: String
+  , expected: Maybe String
   }
 
 
@@ -107,7 +108,7 @@ update msg model =
       ( model', next )
 
     Exit message ->
-      ( model, check (Step "999" (Request "close" "") False) )
+      ( model, check (Step "999" (Request "close" "" Nothing) False) )
 
 
 port suggestions : (Response -> msg) -> Sub msg
