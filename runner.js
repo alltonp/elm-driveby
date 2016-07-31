@@ -10,6 +10,7 @@ var page = require('webpage').create();
 //TODO: one server for all, or one per test? port numbers
 //TODO: write the files somewhere useful, include the port-number perhaps ...
 //TODO: do as much as possible in elm .. e.g. build the test report in elm, save it in js
+//TODO: this script should have a return value of success of failure, for scripts to use ...
 function waitFor(id, testFx, onReady, timeOutMillis) {
     var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //< Default Max Timout is 3s
         start = new Date().getTime(),
