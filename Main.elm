@@ -44,7 +44,6 @@ commands =
     , Request "textContains" [ "#messageList", "Auto Loading Metadata" ]
     , Request "click" [ "#refreshButton" ]
     , Request "textContains" [ "#messageList", "ManualMetaDataRefresh" ]
-    , Request "close" []
     ]
     |> List.indexedMap (,)
     |> List.map (\(i,r) -> Step (toString i) r False)
@@ -94,8 +93,8 @@ update msg model =
         next = List.filter (\s -> not s.executed) model.commands |> List.head
         cmd = case next of
             Just c -> check c
-            Nothing -> Cmd.none
-        d = Debug.log "> elm sending next: " next
+            Nothing -> asFx (Exit ("Spec Passed") )
+        --d = Debug.log "> elm sending next: " next
       in
       ( model, cmd)
 
@@ -115,7 +114,8 @@ update msg model =
     --TODO: is this Failed really?
     Exit message ->
       let
-        d = Debug.log "Error" message
+        --TODO: this is odd, lets do in js instead ...
+        d = Debug.log ("Driveby: " ++ message) ""
       in
       ( model, check (Step "999" (Request "close" [] ) False) )
 
