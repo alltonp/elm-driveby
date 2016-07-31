@@ -34,13 +34,11 @@ init =
   (Model commands, asFx Start )
 
 
---TODO: server - add port, will make it better for paralle
---TODO: textContains needs to have the expected
---TODO: close should not take any args
---TODO: should args just be a list?
+--TODO: specify this using functions, to ensure the correct args ... click id etc
+--TODO: ensure the Script top level has a description ..
 commands : List Step
 commands =
-    [ Request "serve" [ "../shoreditch-ui-chrome/chrome" ]
+    [ Request "serve" [ "../shoreditch-ui-chrome/chrome", "8080" ]
     , Request "goto" [ "http://localhost:8080/elm.html" ]
     , Request "click" [ "#refreshButton" ]
     , Request "textContains" [ "#messageList", "ManualMetaDataRefresh" ]

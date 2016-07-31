@@ -65,7 +65,7 @@ app.ports.check.subscribe(function(word) {
   else if (word.request.command == "goto") { goto(word.id, word.request.args[0]); }
   else if (word.request.command == "textContains") { textContains(word.id, word.request.args[0], word.request.args[1]); }
   else if (word.request.command == "close") { close(word.id); }
-  else if (word.request.command == "serve") { serve(word.id, word.request.args[0]); }
+  else if (word.request.command == "serve") { serve(word.id, word.request.args[0], word.request.args[1]); }
   else { report(word.id, ["don't know how to process: " + word.request.command + word.request.args] ); }
 
   //TODO: report(id, ["failure"]) if command not found ...
@@ -132,8 +132,7 @@ function close(id) {
   phantom.exit()
 }
 
-function serve(id, path) {
-    port = "8080";
+function serve(id, path, port) {
     server = require('webserver').create();
     var fs = require('fs')
 
