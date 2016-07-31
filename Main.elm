@@ -41,6 +41,7 @@ commands : List Step
 commands =
     [ Request "serve" [ "../shoreditch-ui-chrome/chrome", "8080" ]
     , Request "goto" [ "http://localhost:8080/elm.html" ]
+    , Request "textContains" [ "#messageList", "Auto Loading Metadata" ]
     , Request "click" [ "#refreshButton" ]
     , Request "textContains" [ "#messageList", "ManualMetaDataRefresh" ]
     , Request "close" []
@@ -98,16 +99,22 @@ update msg model =
 
     Suggest response ->
       let
+        current = List.filter (\s -> s.id == response.id) model.commands
         steps' = List.map (\s -> if s.id == response.id then Step s.id s.request True else s ) model.commands
         model' = { model | commands = steps' }
         --TODO: go with Script, Step, Command, Result etc
         --TODO: send ExampleFailure if response has failures
         --TODO: Start should be NextStep
-        next = if List.isEmpty response.failures then asFx Start else asFx (Exit ("Spec Failed: " ++ (toString response.failures)) )
+        next = if List.isEmpty response.failures then asFx Start
+               else asFx (Exit ("Spec Failed: " ++ (toString response.failures) ++ " running " ++ (toString current)) )
       in
       ( model', next )
 
+    --TODO: is this Failed really?
     Exit message ->
+      let
+        d = Debug.log "Error" message
+      in
       ( model, check (Step "999" (Request "close" [] ) False) )
 
 
