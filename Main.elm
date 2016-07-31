@@ -35,17 +35,16 @@ init =
 
 
 --TODO: server - add port, will make it better for paralle
---TODO: goto - url should be "/elm.html"
 --TODO: textContains needs to have the expected
 --TODO: close should not take any args
 --TODO: should args just be a list?
 commands : List Step
 commands =
-    [ Request "serve" "../shoreditch-ui-chrome/chrome" Nothing
-    , Request "goto" "http://localhost:8080/elm.html" Nothing
-    , Request "click" "#refreshButton" Nothing
-    , Request "textContains" "#messageList" (Just "ManualMetaDataRefresh")
-    , Request "close" "" Nothing
+    [ Request "serve" [ "../shoreditch-ui-chrome/chrome" ]
+    , Request "goto" [ "http://localhost:8080/elm.html" ]
+    , Request "click" [ "#refreshButton" ]
+    , Request "textContains" [ "#messageList", "ManualMetaDataRefresh" ]
+    , Request "close" []
     ]
     |> List.indexedMap (,)
     |> List.map (\(i,r) -> Step (toString i) r False)
@@ -61,8 +60,7 @@ type alias Step =
 --TODO: make command: Command
 type alias Request =
   { command: String
-  , arg: String
-  , expected: Maybe String
+  , args: List String
   }
 
 
@@ -108,7 +106,7 @@ update msg model =
       ( model', next )
 
     Exit message ->
-      ( model, check (Step "999" (Request "close" "" Nothing) False) )
+      ( model, check (Step "999" (Request "close" [] ) False) )
 
 
 port suggestions : (Response -> msg) -> Sub msg

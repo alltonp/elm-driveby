@@ -60,13 +60,13 @@ var app = Elm.Spelling.fullscreen();
 
 app.ports.check.subscribe(function(word) {
 //  console.log("> js received: " + JSON.stringify(word));
-  if (word.request.command == "click") { click(word.id, word.request.arg); }
+  if (word.request.command == "click") { click(word.id, word.request.args[0]); }
   //TODO: return the port in the response ... (or specify it on the way in)
-  else if (word.request.command == "goto") { goto(word.id, word.request.arg); }
-  else if (word.request.command == "textContains") { textContains(word.id, word.request.arg, word.request.expected); }
+  else if (word.request.command == "goto") { goto(word.id, word.request.args[0]); }
+  else if (word.request.command == "textContains") { textContains(word.id, word.request.args[0], word.request.args[1]); }
   else if (word.request.command == "close") { close(word.id); }
-  else if (word.request.command == "serve") { serve(word.id, word.request.arg); }
-  else { report(word.id, ["don't know how to process: " + word.request.command] ); }
+  else if (word.request.command == "serve") { serve(word.id, word.request.args[0]); }
+  else { report(word.id, ["don't know how to process: " + word.request.command + word.request.args] ); }
 
   //TODO: report(id, ["failure"]) if command not found ...
 });
