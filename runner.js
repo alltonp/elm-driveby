@@ -49,8 +49,7 @@ function waitFor(id, testFx, onReady, timeOutMillis) {
 //
 //console.log(x);
 
-//TODO: make this an argument ...
-//TODO: make the .html of the app an an argument too ... (actually be separate)
+//TODO: definitely make this an argument ... maybe support multiple file inputs .... run if successful ... good for autotesting
 //TODO: inject jquery ... (don't rely on being in the page itself ... or make it optional at least)
 var r2 = phantom.injectJs("tests.js") ? "... done injecting elm.js!" : "... fail! Check the $PWD?!";
 console.log(r2);
@@ -58,17 +57,15 @@ console.log(r2);
 //TODO: ultimately replace with worker();
 var app = Elm.Spelling.fullscreen();
 
+//TODO: fix this naming, its not check or word ...
 app.ports.check.subscribe(function(word) {
-//  console.log("> js received: " + JSON.stringify(word));
   if (word.request.command == "click") { click(word.id, word.request.args[0]); }
   //TODO: return the port in the response ... (or specify it on the way in)
   else if (word.request.command == "goto") { goto(word.id, word.request.args[0]); }
   else if (word.request.command == "textContains") { textContains(word.id, word.request.args[0], word.request.args[1]); }
   else if (word.request.command == "close") { close(word.id); }
   else if (word.request.command == "serve") { serve(word.id, word.request.args[0], word.request.args[1]); }
-  else { report(word.id, ["don't know how to process: " + word.request.command + word.request.args] ); }
-
-  //TODO: report(id, ["failure"]) if command not found ...
+  else { report(word.id, ["don't know how to process command: " + JSON.stringify(word) ]); }
 });
 
 //TODO: add start time, to capture duration ...
