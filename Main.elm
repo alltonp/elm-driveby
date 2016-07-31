@@ -96,9 +96,9 @@ update msg model =
         next = List.filter (\s -> not s.executed) model.commands |> List.head
         cmd = case next of
             Just c ->
-              let d = Debug.log "Driveby" c.request
+              let d = Debug.log "Driveby" (c.request.command ++ " " ++ (toString c.request.args) )
               in check c
-            Nothing -> asFx (Exit ("Spec Passed") )
+            Nothing -> asFx (Exit ("Passed") )
       in
       ( model, cmd)
 
@@ -111,7 +111,7 @@ update msg model =
         --TODO: send ExampleFailure if response has failures
         --TODO: Start should be NextStep
         next = if List.isEmpty response.failures then asFx Start
-               else asFx (Exit ("Spec Failed: " ++ (toString response.failures) ++ " running " ++ (toString current)) )
+               else asFx (Exit ("Failed: " ++ (toString response.failures) ++ " running " ++ (toString current)) )
       in
       ( model', next )
 
@@ -119,7 +119,7 @@ update msg model =
     Exit message ->
       let
         --TODO: this is odd, lets do in js instead ...
-        d = Debug.log ("Driveby" ++ message) ""
+        d = Debug.log "Driveby" message
       in
       ( model, check (Step "999" (Request "close" [] ) False) )
 
