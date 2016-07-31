@@ -62,7 +62,7 @@ app.ports.check.subscribe(function(word) {
 //  console.log("> js received: " + JSON.stringify(word));
   if (word.request.command == "click") { click(word.id, word.request.arg); }
   //TODO: return the port in the response ... (or specify it on the way in)
-  else if (word.request.command == "goto") { goto(word.id, 'http://localhost:8080/elm.html'); }
+  else if (word.request.command == "goto") { goto(word.id, word.request.arg); }
   else if (word.request.command == "textContains") { textContains(word.id, word.request.arg, word.request.expected); }
   else if (word.request.command == "close") { close(word.id); }
   else if (word.request.command == "serve") { serve(word.id, word.request.arg); }

@@ -42,7 +42,7 @@ init =
 commands : List Step
 commands =
     [ Request "serve" "../shoreditch-ui-chrome/chrome" Nothing
-    , Request "goto" "url" Nothing
+    , Request "goto" "http://localhost:8080/elm.html" Nothing
     , Request "click" "#refreshButton" Nothing
     , Request "textContains" "#messageList" (Just "ManualMetaDataRefresh")
     , Request "close" "" Nothing
