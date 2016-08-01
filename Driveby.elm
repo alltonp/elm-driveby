@@ -11,7 +11,7 @@ import Task
 driveby : List Step -> (Step -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Never
 driveby test commandsPort resultsPort =
   App.program
-    { init = (Model test, asFx Start )
+    { init = (Model test, asFx Start)
     , view = view
     , update = update commandsPort
     , subscriptions = subscriptions resultsPort

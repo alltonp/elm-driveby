@@ -16,6 +16,7 @@ main =
 --TODO: should be assert [ "textContains", "#messageList", "Auto Loading Metadata" ]
 --TODO: or assert [ "#messageList" "textContains", "Auto Loading Metadata" ]
 --TODO: might map well to jquery functions
+--TODO: support multiple tests
 test : List Step
 test =
     [ Request "serve" [ "../shoreditch-ui-chrome/chrome", "8080" ]
@@ -24,6 +25,7 @@ test =
     , Request "click" [ "#refreshButton" ]
     , Request "textContains" [ "#messageList", "ManualMetaDataRefresh" ]
     ]
+    --TODO: this bit should be internal
     |> List.indexedMap (,)
     |> List.map (\(i,r) -> Step (toString i) r False)
 
