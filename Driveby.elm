@@ -63,6 +63,13 @@ type alias Step =
   , executed: Bool
   }
 
+
+
+type alias Context =
+  { browser: Int
+  }
+
+
 --TODO: consider id/selector being a a first class thing, at least a Maybe ...
 --TODO: consider value being a a first class thing, at least a Maybe ...
 --TODO: consider expected being a a first class thing, at least a Maybe ...
