@@ -8,6 +8,7 @@ import Html exposing (..)
 import Task
 
 
+driveby : List Step -> (Model -> Sub Msg) -> ({ executed : Bool, request : Request, id : String } -> Cmd Msg) -> Program Never
 driveby tests subscriptions checker =
   App.program
     { init = (Model tests, asFx Start )
