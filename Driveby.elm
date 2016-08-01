@@ -38,6 +38,7 @@ type alias Request =
 
 
 --TODO: consider Id as a type and give it the bits it needs ...
+--TODO: rename to Result
 type alias Response =
   { id: String
   , failures: List String
@@ -60,7 +61,7 @@ type alias Model =
 
 --TODO: this will be the driveby update ...
 --TODO: we will probably need our own to handle DriveBy.Msg ... like the DatePicker ...
---update : Msg -> Model -> (Model, Cmd Msg)
+update : (Step -> Cmd Msg) -> Msg -> Model -> (Model, Cmd Msg)
 update checker msg model =
   case msg of
     Start ->
