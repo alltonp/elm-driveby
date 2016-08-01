@@ -129,7 +129,16 @@ function enter(id, selector, value) {
     //action
     }, function() {
       page.evaluate(function(theSelector, theValue) {
-        $(theSelector).focus();
+        e = $(theSelector)
+
+        //TODO: if clear .. but not firing events properly .. backspace maybe
+//        e.val("");
+
+        //TODO: struggling to put cursor in correct place .. why is that?
+//        e.setCursorPosition(e.val().length);
+        e.setSelectionRange(10, 20);
+        e.focus();
+
 //        $(theSelector).val("");
 //        $(theSelector).change();
 //        console.log(theValue);
@@ -137,8 +146,8 @@ function enter(id, selector, value) {
 //        console.log($(theSelector).val);
       }, selector, value);
 
-//      page.sendEvent('keypress', '');
-      page.sendEvent('keypress', page.event.key.Clear);
+      //TODO: this does seem to work if it is not empty ...
+//      page.sendEvent('keypress', page.event.key.Backspace);
 
       page.sendEvent('keypress', value);
     }
