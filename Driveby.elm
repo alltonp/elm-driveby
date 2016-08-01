@@ -82,7 +82,12 @@ update : (Step -> Cmd Msg) -> Msg -> Model -> (Model, Cmd Msg)
 update commandsPort msg model =
   case msg of
     Go date ->
-      ( model, asFx Start )
+      let
+        --script' = [model.script] |> List.indexedMap (,) |> List.map(\i s -> {s | id = Just i })
+        script = model.script
+        script' = { script | id = Just "1" }
+      in
+      ( { model | script = script' } , asFx Start )
 
     Start ->
       let
