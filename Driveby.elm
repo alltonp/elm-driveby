@@ -6,6 +6,7 @@ module Driveby exposing (..)
 import Html.App as App
 import Html exposing (..)
 import Task
+import Date exposing (..)
 
 
 --TODO: so for sequence its easy, just have a current one and work through the list
@@ -16,7 +17,7 @@ import Task
 driveby : Script -> (Step -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Never
 driveby script commandsPort responsesPort =
   App.program
-    { init = (Model script, asFx Start)
+    { init = (Model script, go)
     , view = view
     , update = update commandsPort
     , subscriptions = subscriptions responsesPort
@@ -66,7 +67,8 @@ type alias Response =
 
 --TODO: fix all this naming too
 type Msg
-  = Start
+  = Go Date
+  | Start
   | Process Response
   | Exit String
 --TODO: add a Finish (and do the reporting bit here ...)
@@ -75,6 +77,9 @@ type Msg
 update : (Step -> Cmd Msg) -> Msg -> Model -> (Model, Cmd Msg)
 update commandsPort msg model =
   case msg of
+    Go date ->
+      ( model, asFx Start )
+
     Start ->
       let
         next = List.filter (\s -> not s.executed) model.script.steps |> List.head
@@ -121,6 +126,9 @@ asFx : msg -> Cmd msg
 asFx msg =
   Task.perform (\_ -> Debug.crash "This failure cannot happen.") identity (Task.succeed msg)
 
+
+go : Cmd Msg
+go = Task.perform (\_ -> Debug.crash "This failure cannot happen.") Go Date.now
 
 ---
 
