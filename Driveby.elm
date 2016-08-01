@@ -28,7 +28,7 @@ driveby script commandsPort responsesPort =
 
 init : Script -> Flags -> (Model, Cmd Msg)
 init script flags =
-   (Model script Nothing, go)
+   (Model script (Just (Config flags.browsers)), go)
 
 
 subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
@@ -101,6 +101,8 @@ update commandsPort msg model =
       let
         --TODO: store date or lose it ...
         --script' = [model.script] |> List.indexedMap (,) |> List.map(\i s -> {s | id = Just i })
+        d = Debug.log "Configuring" (toString model)
+
         script = model.script
         script' = { script | id = Just "1" }
       in
