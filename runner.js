@@ -136,8 +136,14 @@ function enter(id, selector, value) {
 
         //TODO: struggling to put cursor in correct place .. why is that?
 //        e.setCursorPosition(e.val().length);
-        e.setSelectionRange(10, 20);
+//        e.setSelectionRange(10, 20);
         e.focus();
+
+//        var range = e.createTextRange();
+//                    range.collapse(true);
+//                    range.moveEnd('character', 10);
+//                    range.moveStart('character', 10);
+//                    range.select();
 
 //        $(theSelector).val("");
 //        $(theSelector).change();
