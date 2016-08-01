@@ -23,7 +23,7 @@ test =
     [ serve "../shoreditch-ui-chrome/chrome" 8080
     , goto "http://localhost:8080/elm.html"
     , Request "textContains" [ "#messageList", "Auto Loading Metadata" ]
-    , Request "click" [ "#refreshButton" ]
+    , click "refreshButton"
     , Request "textContains" [ "#messageList", "ManualMetaDataRefresh" ]
     ]
     --TODO: this bit should be internal
@@ -40,3 +40,8 @@ serve path onPort =
 goto : String -> Request
 goto url =
    Request "goto" [url]
+
+
+click : String -> Request
+click id =
+   Request "click" ["#" ++ id]
