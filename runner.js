@@ -20,7 +20,7 @@ function waitFor(id, testFx, onReady, timeOutMillis) {
         interval = setInterval(function() {
             if ( (new Date().getTime() - start < maxtimeOutMillis) && !condition ) {
                 // If not time-out yet and condition not yet fulfilled
-                condition = (typeof(testFx) === "string" ? eval(testFx) : testFx()); //< defensive code
+                condition = testFx(); //< defensive code
             } else {
                 if(!condition) {
                     // If condition still not fulfilled (timeout but condition is 'false')
@@ -29,7 +29,7 @@ function waitFor(id, testFx, onReady, timeOutMillis) {
                 } else {
                     // Condition fulfilled (timeout and/or condition is 'true')
 //                    console.log("'waitFor()' finished in " + (new Date().getTime() - start) + "ms.");
-                    typeof(onReady) === "string" ? eval(onReady) : onReady(); //< Do what it's supposed to do once the condition is fulfilled
+                    onReady(); //< Do what it's supposed to do once the condition is fulfilled
                     clearInterval(interval); //< Stop this interval
                     report(id, [])
                 }
