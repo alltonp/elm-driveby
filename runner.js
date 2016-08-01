@@ -83,8 +83,6 @@ function report(id, result) {
   app.ports.results.send(result);
 }
 
-//TODO: have the app call back (via port) when ready .... or just assert something instead ...
-
 function goto(id, url) {
   page.open(url, function(status) {
     if (status !== 'success') {
@@ -99,11 +97,11 @@ function click(id, selector) {
   waitFor(id, function() {
     //condition
     return page.evaluate(function(theSelector) {
-      //TODO: need to check unique etc
       //TODO: pull out as findUniqueInteractable
-      //TODO: should be only 1 and 'displayed'
       //TODO: make this a condition
-      return $(theSelector).is(":visible");
+      e = $(theSelector)
+      return e.length == 1 && e.is(":visible");
+      //TODO: need butWas()
     }, selector);
 
     //action
