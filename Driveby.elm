@@ -85,9 +85,9 @@ update commandsPort msg model =
 
     Suggest response ->
       let
-        current = List.filter (\s -> s.id == response.id) model.script.steps
-        steps' = List.map (\s -> if s.id == response.id then Step s.id s.command True else s ) model.script.steps
         script = model.script
+        current = List.filter (\s -> s.id == response.id) script.steps
+        steps' = List.map (\s -> if s.id == response.id then Step s.id s.command True else s ) script.steps
         script' = { script | steps = steps' }
         model' = { model | script = script' }
         --TODO: go with Script, Step, Command, Result etc
