@@ -49,5 +49,11 @@ testing ports and effects:
 parallel:
 - http://package.elm-lang.org/packages/elm-lang/core/4.0.1/Process#future-plans
 
+example from:
+- https://github.com/evancz/elm-architecture-tutorial/blob/master/examples/1-button.elm
+
+element flashing: (good for screenshots maybe ...)
+- http://www.rubydoc.info/gems/watir-webdriver/Watir/Element#flash-instance_method
+
 TIPS:
 - port modules not permitted in the port repository
