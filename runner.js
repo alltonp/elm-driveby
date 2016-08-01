@@ -79,7 +79,7 @@ function report(id, result) {
   var result = { id:id, failures:result }
 //  console.log("> js sent: " + JSON.stringify(result));
   //TODO: make this a config option
-//  page.render('step-' + id + '.png')
+  page.render('step-' + id + '.png')
   app.ports.results.send(result);
 }
 

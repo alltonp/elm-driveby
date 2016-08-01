@@ -46,6 +46,9 @@ testing ports and effects:
 - https://github.com/rogeriochaves/elm-testable
 - https://gist.github.com/evancz/8521339
 
+jquery asserts:
+- http://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_dom_html_set
+
 parallel:
 - http://package.elm-lang.org/packages/elm-lang/core/4.0.1/Process#future-plans
 

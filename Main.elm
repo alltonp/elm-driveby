@@ -17,6 +17,7 @@ main =
 --TODO: might map well to jquery functions
 --TODO: support multiple tests
 --TODO: should screenshot be a command? (taking a filepath, would offload more to elm)
+--TODO: support TextEquals next
 test : Script
 test =
   script "First Test"
