@@ -14,6 +14,8 @@ import Date exposing (..)
 --TOOD: obviously parallel of 1 is same as seq :)
 --TODO: ultimately no console sutff in here, report it to js land instead
 --TODO: ultimately should take List Script
+--when asking for next, just get the next command for the current script, if script is done, get the next script .. etc
+--or TEA up the script runners?
 driveby : Script -> (Step -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Never
 driveby script commandsPort responsesPort =
   App.program
