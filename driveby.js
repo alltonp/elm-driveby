@@ -69,14 +69,15 @@ var app = Elm.DrivebyTest.worker();
 //TODO: ideally take a command here ... or maybe have step.context
 //TODO: ultimately have a config message come through here ... be useful to be able to change it on the fly
 app.ports.requests.subscribe(function(request) {
-  var command = request.command.name
+  var command = request.command
+  var name = command.name
   var id = request.id
-  if (command == "click") { click(id, request.command.args[0]); }
-  else if (command == "enter") { enter(id, request.command.args[0], request.command.args[1]); }
-  else if (command == "goto") { goto(id, request.command.args[0]); }
-  else if (command == "textContains") { textContains(id, request.command.args[0], request.command.args[1]); }
-  else if (command == "close") { close(id); }
-  else if (command == "serve") { serve(id, request.command.args[0], request.command.args[1]); }
+  if (name == "click") { click(id, command.args[0]); }
+  else if (name == "enter") { enter(id, command.args[0], command.args[1]); }
+  else if (name == "goto") { goto(id, command.args[0]); }
+  else if (name == "textContains") { textContains(id, command.args[0], command.args[1]); }
+  else if (name == "close") { close(id); }
+  else if (name == "serve") { serve(id, command.args[0], command.args[1]); }
   else { respond(step.id, ["don't know how to process request: " + JSON.stringify(request) ]); }
 });
 
