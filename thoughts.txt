@@ -2,21 +2,14 @@ TODO:
 - rename autobuild -> autocompile
 - make an autotest.js which compiles app, compiles tests, and runs tests if both compiles succeeds ...
 - integrate with elm-test
-- serve the app.js under test
-- consider making wrapper of phantom as a separate thing ...
-- ports or native or both or neither
-- how to sequence the steps ...
-- so tests will contain the Elm.embed/worker of the test suite ...
-- when we execute a command, we send it to JS (with a uid)
-- when js responds we reply (with the uid) and update the elm model
-- we want these things to be tests ..
+- we want these things to be tests .. ideally ..
 - how about wrapping phantomjs in a restful server and have elm call it ...
   ... would that then mean that it could be a package?
-- is using rest a way around the ports/native restrictions?
-- aim for a single js artifact, and the phantomjs
+- aim for a single js artifact, and the phantomjs download (jquery is a problem probably)
 - move the more scripty stuff into driveby.js ... including autotest features and spawning etc.
 - support command stubbing with a response string, json, text etc.
 - see if there is a way to save a Virtual Dom to file ...
+- more of a testing solution than a webdriver wrapper
 
 
 USEFUL:
