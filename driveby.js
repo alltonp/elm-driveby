@@ -75,7 +75,7 @@ function waitFor(id, testFx, onReady, timeOutMillis) {
 //
 //console.log(x);
 
-//TODO: definitely make this an argument ... maybe support multiple file inputs .... run if successful ... good for autotesting
+//TODO: definitely make this an argv ... maybe support multiple file inputs .... run if successful ... good for autotesting
 //TODO: inject jquery ... (don't rely on being in the page itself ... or make it optional at least)
 var r2 = phantom.injectJs("tests.js") ? "... done injecting elm.js!" : "... fail! Check the $PWD?!";
 //console.log(r2);
@@ -91,7 +91,7 @@ app.ports.requests.subscribe(function(request) {
   var name = command.name
   var id = request.step.id
   var page = pages[request.context.browser]
-  //TODO: should be context
+
   if (name == "click") { click(page, id, command.args[0]); }
   else if (name == "enter") { enter(page, id, command.args[0], command.args[1]); }
   else if (name == "goto") { goto(page, id, command.args[0]); }
