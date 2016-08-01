@@ -5,19 +5,29 @@
 //TODO: make it so that each command can report it's duration
 var started = new Date().getTime();
 
-
 var pages = [];
 
 //TODO: put this in config, then on startup inform elm of the config ...
 for (var i = 0; i < 3; i+=1) {
     p = require('webpage').create();
+
+    //TODO: make this a config option - surpress action logging
+    p.onConsoleMessage = function(msg, lineNum, sourceId) {
+      console.log('CONSOLE: [' + msg + '] (from line #' + lineNum + ' in "' + sourceId + '")');
+    };
+
+    //TODO: make this an option to report/surppress page errors in config
+    p.onError = function(msg, trace) {
+    //TODO: append these to a file in the result dir ....
+    };
+
 //    console.log(p)
     pages.push(p);
 }
 
 //console.log(pages.length)
 
-var page = pages[0];
+//var page = pages[0];
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
@@ -54,11 +64,6 @@ function waitFor(id, testFx, onReady, timeOutMillis) {
 
 };
 
-//TODO: make this a config option - surpress action logging
-page.onConsoleMessage = function(msg, lineNum, sourceId) {
-  console.log('CONSOLE: [' + msg + '] (from line #' + lineNum + ' in "' + sourceId + '")');
-};
-
 //var r = page.injectJs("tests.js") ? "... done injecting tests.js!" : "... fail! Check the $PWD?!";
 //console.log(r);
 
@@ -84,12 +89,13 @@ app.ports.requests.subscribe(function(request) {
   var command = request.command
   var name = command.name
   var id = request.id
+  var page = pages[0]
   //TODO: should be context
-  if (name == "click") { click(id, command.args[0]); }
-  else if (name == "enter") { enter(id, command.args[0], command.args[1]); }
-  else if (name == "goto") { goto(id, command.args[0]); }
-  else if (name == "textContains") { textContains(id, command.args[0], command.args[1]); }
-  else if (name == "close") { close(id); }
+  if (name == "click") { click(page, id, command.args[0]); }
+  else if (name == "enter") { enter(page, id, command.args[0], command.args[1]); }
+  else if (name == "goto") { goto(page, id, command.args[0]); }
+  else if (name == "textContains") { textContains(page, id, command.args[0], command.args[1]); }
+  else if (name == "close") { close(page, id); }
   else if (name == "serve") { serve(id, command.args[0], command.args[1]); }
   else { respond(step.id, ["don't know how to process request: " + JSON.stringify(request) ]); }
 });
@@ -105,7 +111,7 @@ function respond(id, failures) {
 }
 
 //TODO: I dont seem to fail nicely, e.g. hang on bad url
-function goto(id, url) {
+function goto(page, id, url) {
   page.open(url, function(status) {
     if (status !== 'success') {
       respond(id, ['Unable to access network'])
@@ -115,7 +121,7 @@ function goto(id, url) {
   });
 }
 
-function click(id, selector) {
+function click(page, id, selector) {
   waitFor(id, function() {
     //condition
     return page.evaluate(function(theSelector) {
@@ -137,7 +143,7 @@ function click(id, selector) {
 }
 
 //TODO: consider casper ... http://docs.casperjs.org/en/latest/modules/casper.html#options
-function enter(id, selector, value) {
+function enter(page, id, selector, value) {
   waitFor(id, function() {
     //condition
     return page.evaluate(function(theSelector) {
@@ -188,7 +194,7 @@ function enter(id, selector, value) {
 //TIP: and performance - https://api.jquery.com/filter/
 
 //TODO: asserts() will always look a bit like this
-function textContains(id, selector, expected) {
+function textContains(page, id, selector, expected) {
   waitFor(id, function() {
     //condition
     return page.evaluate(function(theSelector, theExpected) {
@@ -202,7 +208,7 @@ function textContains(id, selector, expected) {
   );
 }
 
-function close(id) {
+function close(page, id) {
   respond(id, [])
   page.close()
   //TODO: pull out a separate exit
@@ -245,8 +251,3 @@ function serve(id, path, port) {
 
   respond(id, [])
 }
-
-//TODO: make this an option to report/surppress page errors in config
-page.onError = function(msg, trace) {
-//TODO: append these to a file in the result dir ....
-};
