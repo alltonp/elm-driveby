@@ -5,7 +5,19 @@
 //TODO: make it so that each command can report it's duration
 var started = new Date().getTime();
 
-var page = require('webpage').create();
+
+var pages = [];
+
+//TODO: put this in config, then on startup inform elm of the config ...
+for (var i = 0; i < 3; i+=1) {
+    p = require('webpage').create();
+//    console.log(p)
+    pages.push(p);
+}
+
+//console.log(pages.length)
+
+var page = pages[0];
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
