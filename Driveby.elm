@@ -1,12 +1,14 @@
 --TODO: tighten this up ...
 module Driveby exposing (..)
+--main
+
 
 import Html.App as App
 import Html exposing (..)
 import Task
 
 
-drivebyMain tests update subscriptions =
+driveby tests update subscriptions checker =
   App.program
     { init = (Model tests, asFx Start )
     , view = view

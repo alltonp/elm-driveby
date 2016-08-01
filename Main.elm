@@ -6,7 +6,7 @@ import Driveby exposing (..)
 
 
 main =
-   drivebyMain commands update subscriptions
+   driveby commands update subscriptions checker
 
 
 --TODO: specify this using functions, to ensure the correct args ... click id etc
