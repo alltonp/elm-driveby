@@ -152,22 +152,22 @@ script name commands =
 --TODO: eventually these will be in Driveby.Command or something
 serve : String -> Int -> Command
 serve path onPort =
-   Command "serve" [path, toString onPort]
+  Command "serve" [path, toString onPort]
 
 
 goto : String -> Command
 goto url =
-   Command "goto" [url]
+  Command "goto" [url]
 
 
 click : String -> Command
 click id =
-   Command "click" ["#" ++ id]
+  Command "click" ["#" ++ id]
 
 
 enter : String -> String -> Command
 enter id value =
-   Command "enter" ["#" ++ id, value]
+  Command "enter" ["#" ++ id, value]
 
 
 close : Command
