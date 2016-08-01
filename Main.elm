@@ -4,7 +4,7 @@ port module DrivebyTest exposing (requests)
 import Driveby exposing (..)
 
 
-port requests : Step -> Cmd msg
+port requests : Request -> Cmd msg
 port responses : (Response -> msg) -> Sub msg
 
 

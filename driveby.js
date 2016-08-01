@@ -87,9 +87,9 @@ var app = Elm.DrivebyTest.embed(unused, flags);
 //TODO: ideally take a command here ... or maybe have step.context
 //TODO: ultimately have a config message come through here ... be useful to be able to change it on the fly
 app.ports.requests.subscribe(function(request) {
-  var command = request.command
+  var command = request.step.command
   var name = command.name
-  var id = request.id
+  var id = request.step.id
   var page = pages[0]
   //TODO: should be context
   if (name == "click") { click(page, id, command.args[0]); }

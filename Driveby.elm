@@ -16,12 +16,12 @@ import Date exposing (..)
 --TODO: ultimately should take List Script
 --when asking for next, just get the next command for the current script, if script is done, get the next script .. etc
 --or TEA up the script runners?
-driveby : Script -> (Step -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Flags
-driveby script commandsPort responsesPort =
+driveby : Script -> (Request -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Flags
+driveby script requestsPort responsesPort =
   App.programWithFlags
     { init = init script
     , view = view
-    , update = update commandsPort
+    , update = update requestsPort
     , subscriptions = subscriptions responsesPort
     }
 
@@ -65,7 +65,7 @@ type alias Step =
 
 type alias Request =
   { step: Step
-  ,  context: Context
+--  , context: Context
   }
 
 type alias Context =
@@ -104,8 +104,8 @@ type Msg
 --TODO: add a Finish (and do the reporting bit here ...)
 
 
-update : (Step -> Cmd Msg) -> Msg -> Model -> (Model, Cmd Msg)
-update commandsPort msg model =
+update : (Request -> Cmd Msg) -> Msg -> Model -> (Model, Cmd Msg)
+update requestsPort msg model =
   case msg of
     Go date ->
       let
@@ -126,7 +126,7 @@ update commandsPort msg model =
 --              let
 --                d = Debug.log "Driveby" (c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
 --              in
-                commandsPort c
+                requestsPort (Request c)
             Nothing -> asFx (Exit ("☑ - "  ++ model.script.name) )
       in
       ( model, cmd )
@@ -152,7 +152,7 @@ update commandsPort msg model =
         --TODO: this is odd, lets do in js instead ...
         d = Debug.log "Driveby" message
       in
-      ( model, commandsPort (Step "999" close False) )
+      ( model, requestsPort (Request (Step "999" close False)) )
 
 
 view : Model -> Html Msg
