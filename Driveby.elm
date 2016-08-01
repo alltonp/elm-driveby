@@ -25,13 +25,12 @@ subscriptions results model =
 
 type alias Step =
   { id: String
-  , request: Request
+  , request: Command
   , executed: Bool
   }
 
 
---TODO: change me to be a Command
-type alias Request =
+type alias Command =
   { name: String
   , args: List String
   }
@@ -92,7 +91,7 @@ update commandsPort msg model =
         --TODO: this is odd, lets do in js instead ...
         d = Debug.log "Driveby" message
       in
-      ( model, commandsPort (Step "999" (Request "close" [] ) False) {-check-} )
+      ( model, commandsPort (Step "999" (Command "close" [] ) False) {-check-} )
 
 
 view : Model -> Html Msg
@@ -108,16 +107,16 @@ asFx msg =
 ---
 
 --TODO: eventually these will be in Driveby.Command or something
-serve : String -> Int -> Request
+serve : String -> Int -> Command
 serve path onPort =
-   Request "serve" [path, toString onPort]
+   Command "serve" [path, toString onPort]
 
 
-goto : String -> Request
+goto : String -> Command
 goto url =
-   Request "goto" [url]
+   Command "goto" [url]
 
 
-click : String -> Request
+click : String -> Command
 click id =
-   Request "click" ["#" ++ id]
+   Command "click" ["#" ++ id]

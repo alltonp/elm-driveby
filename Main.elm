@@ -23,9 +23,9 @@ test : List Step
 test =
     [ serve "../shoreditch-ui-chrome/chrome" 8080
     , goto "http://localhost:8080/elm.html"
-    , Request "textContains" [ "#messageList", "Auto Loading Metadata" ]
+    , Command "textContains" [ "#messageList", "Auto Loading Metadata" ]
     , click "refreshButton"
-    , Request "textContains" [ "#messageList", "ManualMetaDataRefresh" ]
+    , Command "textContains" [ "#messageList", "ManualMetaDataRefresh" ]
     ]
     --TODO: this bit should be internal
     |> List.indexedMap (,)
