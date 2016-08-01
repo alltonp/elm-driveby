@@ -12,9 +12,11 @@ TODO:
 - we want these things to be tests ..
 - how about wrapping phantomjs in a restful server and have elm call it ...
   ... would that then mean that it could be a package?
-- make mounting the app be a command, giving us back a url to use for the test run (put in come context)
 - is using rest a way around the ports/native restrictions?
 - aim for a single js artifact, and the phantomjs
+- move the more scripty stuff into driveby.js ... including autotest features and spawning etc.
+- support command stubbing with a response string, json, text etc.
+- see if there is a way to save a Virtual Dom to file ...
 
 
 USEFUL:
