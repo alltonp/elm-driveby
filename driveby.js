@@ -42,7 +42,7 @@ function waitFor(id, testFx, onReady, timeOutMillis) {
 
 };
 
-//TODO: make this a config option
+//TODO: make this a config option - surpress action logging
 page.onConsoleMessage = function(msg, lineNum, sourceId) {
   console.log('CONSOLE: [' + msg + '] (from line #' + lineNum + ' in "' + sourceId + '")');
 };
@@ -229,7 +229,7 @@ function serve(id, path, port) {
   respond(id, [])
 }
 
-//TODO: make this an option to report/surppress errors in config
+//TODO: make this an option to report/surppress page errors in config
 page.onError = function(msg, trace) {
 //TODO: append these to a file in the result dir ....
 };
