@@ -62,7 +62,7 @@ type alias Model =
 --TODO: this will be the driveby update ...
 --TODO: we will probably need our own to handle DriveBy.Msg ... like the DatePicker ...
 update : (Step -> Cmd Msg) -> Msg -> Model -> (Model, Cmd Msg)
-update checker msg model =
+update commandsPort msg model =
   case msg of
     Start ->
       let
@@ -70,7 +70,7 @@ update checker msg model =
         cmd = case next of
             Just c ->
               let d = Debug.log "Driveby" (c.request.command ++ " " ++ (toString c.request.args) )
-              in checker c --check
+              in commandsPort c
             Nothing -> asFx (Exit ("Passed") )
       in
       ( model, cmd )
@@ -94,7 +94,7 @@ update checker msg model =
         --TODO: this is odd, lets do in js instead ...
         d = Debug.log "Driveby" message
       in
-      ( model, checker (Step "999" (Request "close" [] ) False) {-check-} )
+      ( model, commandsPort (Step "999" (Request "close" [] ) False) {-check-} )
 
 
 view : Model -> Html Msg
