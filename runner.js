@@ -99,7 +99,7 @@ function click(id, selector) {
     return page.evaluate(function(theSelector) {
       //TODO: pull out as findUniqueInteractable
       //TODO: make this a condition
-      e = $(theSelector)
+      var e = $(theSelector)
       return e.length == 1 && e.is(":visible");
       //TODO: need butWas()
     }, selector);
@@ -122,7 +122,7 @@ function textContains(id, selector, expected) {
     //condition
     return page.evaluate(function(theSelector, theExpected) {
       //TODO: pull out as findUnique
-      e = $(theSelector)
+      var e = $(theSelector)
       return e.length == 1 && e.is(":contains('" + theExpected + "')");
     }, selector, expected);
 
