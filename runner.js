@@ -62,12 +62,12 @@ var app = Elm.DrivebyTest.fullscreen();
 
 //TODO: fix this naming, its not check or word ...
 app.ports.commands.subscribe(function(word) {
-  if (word.request.name == "click") { click(word.id, word.request.args[0]); }
+  if (word.command.name == "click") { click(word.id, word.command.args[0]); }
   //TODO: return the port in the response ... (or specify it on the way in)
-  else if (word.request.name == "goto") { goto(word.id, word.request.args[0]); }
-  else if (word.request.name == "textContains") { textContains(word.id, word.request.args[0], word.request.args[1]); }
-  else if (word.request.name == "close") { close(word.id); }
-  else if (word.request.name == "serve") { serve(word.id, word.request.args[0], word.request.args[1]); }
+  else if (word.command.name == "goto") { goto(word.id, word.command.args[0]); }
+  else if (word.command.name == "textContains") { textContains(word.id, word.command.args[0], word.command.args[1]); }
+  else if (word.command.name == "close") { close(word.id); }
+  else if (word.command.name == "serve") { serve(word.id, word.command.args[0], word.command.args[1]); }
   else { report(word.id, ["don't know how to process command: " + JSON.stringify(word) ]); }
 });
 

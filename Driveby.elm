@@ -25,7 +25,7 @@ subscriptions results model =
 
 type alias Step =
   { id: String
-  , request: Command
+  , command: Command
   , executed: Bool
   }
 
@@ -66,7 +66,7 @@ update commandsPort msg model =
         next = List.filter (\s -> not s.executed) model.commands |> List.head
         cmd = case next of
             Just c ->
-              let d = Debug.log "Driveby" (c.request.name ++ " " ++ (toString c.request.args) )
+              let d = Debug.log "Driveby" (c.command.name ++ " " ++ (toString c.command.args) )
               in commandsPort c
             Nothing -> asFx (Exit ("Passed") )
       in
@@ -75,7 +75,7 @@ update commandsPort msg model =
     Suggest response ->
       let
         current = List.filter (\s -> s.id == response.id) model.commands
-        steps' = List.map (\s -> if s.id == response.id then Step s.id s.request True else s ) model.commands
+        steps' = List.map (\s -> if s.id == response.id then Step s.id s.command True else s ) model.commands
         model' = { model | commands = steps' }
         --TODO: go with Script, Step, Command, Result etc
         --TODO: send ExampleFailure if response has failures
