@@ -100,6 +100,7 @@ function click(id, selector) {
     return page.evaluate(function(theSelector) {
       //TODO: pull out as findUniqueInteractable
       //TODO: make this a condition
+      //TODO: if trying to lose jquery ... could use: document.getElementById
       var e = $(theSelector)
       return e.length == 1 && e.is(":visible");
       //TODO: need butWas()
@@ -176,8 +177,7 @@ function textContains(id, selector, expected) {
     }, selector, expected);
 
     //action
-    }, function() {
-    }
+    }, function() {}
   );
 }
 
@@ -195,9 +195,6 @@ function serve(id, path, port) {
 
     var service = server.listen(port, { keepAlive: true }, function (request, response) {
         var fqn = path + request.url;
-//        console.log('Request at ' + new Date());
-//        console.log('### ' + request.url);
-//        console.log(fqn);
 
         //TODO: if file doesnt exist then 404 instead ...
 //        if (fs.exists(path))
@@ -231,13 +228,4 @@ function serve(id, path, port) {
 //TODO: make this an option to report/surppress errors in config
 page.onError = function(msg, trace) {
 //TODO: append these to a file in the result dir ....
-//  var msgStack = ['PHANTOM ERROR: ' + msg];
-//  if (trace && trace.length) {
-//    msgStack.push('TRACE:');
-//    trace.forEach(function(t) {
-//      msgStack.push(' -> ' + (t.file || t.sourceURL) + ': ' + t.line + (t.function ? ' (in function ' + t.function +')' : ''));
-//    });
-//  }
-//  console.error(msgStack.join('\n'));
-//  phantom.exit(1);
 };
