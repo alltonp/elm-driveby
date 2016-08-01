@@ -13,7 +13,7 @@ import Task
 driveby : Script -> (Step -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Never
 driveby script commandsPort resultsPort =
   App.program
-    { init = (Model script.steps, asFx Start)
+    { init = (Model script, asFx Start)
     , view = view
     , update = update commandsPort
     , subscriptions = subscriptions resultsPort
@@ -23,6 +23,12 @@ driveby script commandsPort resultsPort =
 subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
 subscriptions results model =
   results Suggest
+
+
+--TODO: make script: List Command
+type alias Model =
+  { commands : Script
+  }
 
 
 --TODO: we may need a bool to say its been run, or maybe store the start, stop times,
@@ -63,18 +69,12 @@ type Msg
 --TODO: add a Finish (and do the reporting bit here ...)
 
 
---TODO: make script: List Command
-type alias Model =
-  { commands : List Step
-  }
-
-
 update : (Step -> Cmd Msg) -> Msg -> Model -> (Model, Cmd Msg)
 update commandsPort msg model =
   case msg of
     Start ->
       let
-        next = List.filter (\s -> not s.executed) model.commands |> List.head
+        next = List.filter (\s -> not s.executed) model.commands.steps |> List.head
         cmd = case next of
             Just c ->
               let d = Debug.log "Driveby" (c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
@@ -85,9 +85,11 @@ update commandsPort msg model =
 
     Suggest response ->
       let
-        current = List.filter (\s -> s.id == response.id) model.commands
-        steps' = List.map (\s -> if s.id == response.id then Step s.id s.command True else s ) model.commands
-        model' = { model | commands = steps' }
+        current = List.filter (\s -> s.id == response.id) model.commands.steps
+        steps' = List.map (\s -> if s.id == response.id then Step s.id s.command True else s ) model.commands.steps
+        script = model.commands
+        script' = { script | steps = steps' }
+        model' = { model | commands = script' }
         --TODO: go with Script, Step, Command, Result etc
         --TODO: send ExampleFailure if response has failures
         --TODO: Start should be NextStep

@@ -23,6 +23,7 @@ useful for a ui-less worker:
 
 useful for parallel launching:
 - https://github.com/ariya/phantomjs/blob/master/examples/child_process-examples.js
+- https://github.com/ariya/phantomjs/blob/master/examples/render_multi_url.js
 
 useful for reporting:
 - https://github.com/ariya/phantomjs/blob/master/examples/echoToFile.js
