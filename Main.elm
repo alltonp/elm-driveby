@@ -16,12 +16,12 @@ checker m p =
     m p
 
 
-port suggestions : (Response -> msg) -> Sub msg
+port results : (Response -> msg) -> Sub msg
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  suggestions Suggest
+  results Suggest
 
 
 

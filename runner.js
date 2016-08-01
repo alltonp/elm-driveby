@@ -75,7 +75,7 @@ function report(id, result) {
   var result = { id:id, failures:result }
 //  console.log("> js sent: " + JSON.stringify(result));
   page.render('step-' + id + '.png')
-  app.ports.suggestions.send(result);
+  app.ports.results.send(result);
 }
 
 //TODO: have the app call back (via port) when ready .... or just assert something instead ...
