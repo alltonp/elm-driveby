@@ -1,4 +1,4 @@
-port module DrivebyTest exposing (check)
+port module DrivebyTest exposing (command)
 --command?
 --result?
 
@@ -6,10 +6,10 @@ import Driveby exposing (..)
 
 
 main =
-   driveby commands subscriptions (checker check)
+   driveby commands subscriptions (checker command)
 
 
-port check : Step -> Cmd msg
+port command : Step -> Cmd msg
 
 --check : Msg -> (Step -> Cmd msg)
 checker m p =
