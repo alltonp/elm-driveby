@@ -42,6 +42,7 @@ type alias Script =
   }
 
 
+--TODO: this should poobably be Request and requestId everywhere ...
 type alias Step =
   { id: String
   , command: Command
