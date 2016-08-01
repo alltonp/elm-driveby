@@ -63,10 +63,14 @@ type alias Step =
   , executed: Bool
   }
 
+
+--TODO: cry to lose/inline Step if we can
+--if steps were an array, could it just be the index?
 type alias Request =
   { step: Step
---  , context: Context
+  , context: Context
   }
+
 
 type alias Context =
   { browser: Int
@@ -126,7 +130,7 @@ update requestsPort msg model =
 --              let
 --                d = Debug.log "Driveby" (c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
 --              in
-                requestsPort (Request c)
+                requestsPort (Request c (Context 1))
             Nothing -> asFx (Exit ("☑ - "  ++ model.script.name) )
       in
       ( model, cmd )
@@ -152,7 +156,7 @@ update requestsPort msg model =
         --TODO: this is odd, lets do in js instead ...
         d = Debug.log "Driveby" message
       in
-      ( model, requestsPort (Request (Step "999" close False)) )
+      ( model, requestsPort (Request (Step "999" close False) (Context 1)) )
 
 
 view : Model -> Html Msg
