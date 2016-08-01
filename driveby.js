@@ -68,14 +68,16 @@ var app = Elm.DrivebyTest.worker();
 
 //TODO: ideally take a command here ... or maybe have step.context
 //TODO: ultimately have a config message come through here ... be useful to be able to change it on the fly
-app.ports.commands.subscribe(function(step) {
-  if (step.command.name == "click") { click(step.id, step.command.args[0]); }
-  else if (step.command.name == "enter") { enter(step.id, step.command.args[0], step.command.args[1]); }
-  else if (step.command.name == "goto") { goto(step.id, step.command.args[0]); }
-  else if (step.command.name == "textContains") { textContains(step.id, step.command.args[0], step.command.args[1]); }
-  else if (step.command.name == "close") { close(step.id); }
-  else if (step.command.name == "serve") { serve(step.id, step.command.args[0], step.command.args[1]); }
-  else { respond(step.id, ["don't know how to process command: " + JSON.stringify(step) ]); }
+app.ports.requests.subscribe(function(request) {
+  var command = request.command.name
+  var id = request.id
+  if (command == "click") { click(id, request.command.args[0]); }
+  else if (command == "enter") { enter(id, request.command.args[0], request.command.args[1]); }
+  else if (command == "goto") { goto(id, request.command.args[0]); }
+  else if (command == "textContains") { textContains(id, request.command.args[0], request.command.args[1]); }
+  else if (command == "close") { close(id); }
+  else if (command == "serve") { serve(id, request.command.args[0], request.command.args[1]); }
+  else { respond(step.id, ["don't know how to process request: " + JSON.stringify(request) ]); }
 });
 
 //TODO: add start time, to capture duration ...

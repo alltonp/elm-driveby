@@ -1,15 +1,15 @@
-port module DrivebyTest exposing (commands)
+port module DrivebyTest exposing (requests)
 
 
 import Driveby exposing (..)
 
 
-port commands : Step -> Cmd msg
+port requests : Step -> Cmd msg
 port responses : (Response -> msg) -> Sub msg
 
 
 main =
-   driveby test commands responses
+   driveby test requests responses
 
 
 --TODO: should be assert [ "textContains", "#messageList", "Auto Loading Metadata" ]
