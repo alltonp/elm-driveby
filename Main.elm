@@ -4,25 +4,11 @@ port module DrivebyTest exposing (commands)
 
 import Driveby exposing (..)
 
-
-main =
-   driveby test subscriptions (checker commands)
-
-
 port commands : Step -> Cmd msg
-
---check : Msg -> (Step -> Cmd msg)
-checker m p =
-    m p
-
-
 port results : (Response -> msg) -> Sub msg
 
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-  results Suggest
-
+main =
+   driveby test (commands) (results)
 
 
 --TODO: specify this using functions, to ensure the correct args ... click id etc

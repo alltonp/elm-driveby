@@ -8,14 +8,19 @@ import Html exposing (..)
 import Task
 
 
-driveby : List Step -> (Model -> Sub Msg) -> (Step -> Cmd Msg) -> Program Never
-driveby test subscriptions checker =
+driveby : List Step -> (Step -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Never
+driveby test commandsPort resultsPort =
   App.program
     { init = (Model test, asFx Start )
     , view = view
-    , update = update checker
-    , subscriptions = subscriptions
+    , update = update commandsPort
+    , subscriptions = subscriptions resultsPort
     }
+
+
+subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
+subscriptions results model =
+  results Suggest
 
 
 type alias Step =
