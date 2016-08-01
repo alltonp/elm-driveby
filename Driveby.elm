@@ -41,6 +41,7 @@ type alias Model =
 type alias Script =
   { name: String
   , steps: List Step
+  , id: Maybe String
   }
 
 
@@ -139,7 +140,7 @@ script : String -> List Command -> Script
 script name steps =
   Script name (steps
       |> List.indexedMap (,)
-      |> List.map (\(i,r) -> Step (toString i) r False))
+      |> List.map (\(i,r) -> Step (toString i) r False)) Nothing
 
 
 --TODO: eventually these will be in Driveby.Command or something
