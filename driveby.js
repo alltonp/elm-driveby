@@ -1,3 +1,5 @@
+//TODO: make this the main script https://github.com/ariya/phantomjs/blob/master/examples/arguments.js
+
 //TODO: make it so that each command can report it's duration
 var started = new Date().getTime();
 

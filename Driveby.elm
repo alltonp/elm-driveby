@@ -38,7 +38,9 @@ type alias Step =
   , executed: Bool
   }
 
-
+--TODO: consider id/selector being a a first class thing, at least a Maybe ...
+--TODO: consider value being a a first class thing, at least a Maybe ...
+--TODO: consider expected being a a first class thing, at least a Maybe ...
 type alias Command =
   { name: String
   , args: List String
