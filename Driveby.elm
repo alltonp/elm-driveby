@@ -104,3 +104,21 @@ view model =
 asFx : msg -> Cmd msg
 asFx msg =
   Task.perform (\_ -> Debug.crash "This failure cannot happen.") identity (Task.succeed msg)
+
+
+---
+
+
+serve : String -> Int -> Request
+serve path onPort =
+   Request "serve" [path, toString onPort]
+
+
+goto : String -> Request
+goto url =
+   Request "goto" [url]
+
+
+click : String -> Request
+click id =
+   Request "click" ["#" ++ id]

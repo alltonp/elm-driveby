@@ -31,17 +31,3 @@ test =
     |> List.map (\(i,r) -> Step (toString i) r False)
 
 
-
-serve : String -> Int -> Request
-serve path onPort =
-   Request "serve" [path, toString onPort]
-
-
-goto : String -> Request
-goto url =
-   Request "goto" [url]
-
-
-click : String -> Request
-click id =
-   Request "click" ["#" ++ id]
