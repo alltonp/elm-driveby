@@ -49,6 +49,9 @@ testing ports and effects:
 jquery asserts:
 - http://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_dom_html_set
 
+interesting way to bend in the js's
+- https://github.com/laszlopandy/elm-console/blob/master/elm-io.sh
+
 parallel:
 - http://package.elm-lang.org/packages/elm-lang/core/4.0.1/Process#future-plans
 
