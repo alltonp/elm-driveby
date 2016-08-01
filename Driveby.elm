@@ -8,6 +8,7 @@ import Html exposing (..)
 import Task
 
 
+--TODO: ultimately should take List Script
 driveby : List Step -> (Step -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Never
 driveby test commandsPort resultsPort =
   App.program
@@ -21,6 +22,12 @@ driveby test commandsPort resultsPort =
 subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
 subscriptions results model =
   results Suggest
+
+
+type alias Script =
+  { name: String
+  , steps: List Step
+  }
 
 
 type alias Step =
