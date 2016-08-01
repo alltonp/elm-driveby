@@ -87,7 +87,7 @@ function respond(id, failures) {
   var response = { id:id, failures:failures }
   //TODO: make this a config option
   //TODO: and actually this is probably the wrong place for it. because some commmands don't want it...
-  page.render('step-' + id + '.png')
+  //page.render('step-' + id + '.png')
   app.ports.responses.send(response);
 }
 
