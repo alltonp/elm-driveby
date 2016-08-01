@@ -1,10 +1,18 @@
 --TODO: tighten this up ...
 module Driveby exposing (..)
 
-
+import Html.App as App
 import Html exposing (..)
 import Task
 
+
+drivebyMain tests update subscriptions =
+  App.program
+    { init = (Model tests, asFx Start )
+    , view = view
+    , update = update
+    , subscriptions = subscriptions
+    }
 
 type alias Step =
   { id: String
@@ -44,7 +52,6 @@ type alias Model =
 view : Model -> Html Msg
 view model =
   div [ ] [ ]
-
 
 
 asFx : msg -> Cmd msg

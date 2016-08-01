@@ -2,22 +2,11 @@ port module DrivebyTest exposing (check)
 --command?
 --result?
 
-import Html.App as App
 import Driveby exposing (..)
 
 
 main =
-  App.program
-    { init = init
-    , view = Driveby.view
-    , update = update
-    , subscriptions = subscriptions
-    }
-
-
-init : (Model, Cmd Msg)
-init =
-  (Model commands, asFx Start )
+   drivebyMain commands update subscriptions
 
 
 --TODO: specify this using functions, to ensure the correct args ... click id etc
