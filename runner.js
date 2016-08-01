@@ -141,11 +141,11 @@ function close(id) {
 }
 
 function serve(id, path, port) {
-    server = require('webserver').create();
+    var server = require('webserver').create();
     var fs = require('fs')
 
-    service = server.listen(port, { keepAlive: true }, function (request, response) {
-        fqn = path + request.url;
+    var service = server.listen(port, { keepAlive: true }, function (request, response) {
+        var fqn = path + request.url;
 //        console.log('Request at ' + new Date());
 //        console.log('### ' + request.url);
 //        console.log(fqn);
@@ -153,7 +153,7 @@ function serve(id, path, port) {
         //TODO: if file doesnt exist then 404 instead ...
 //        if (fs.exists(path))
 
-        body = fs.read(fqn);
+        var body = fs.read(fqn);
         response.statusCode = 200;
         response.headers = {
             'Cache': 'no-cache',
