@@ -62,7 +62,8 @@ var r2 = phantom.injectJs("tests.js") ? "... done injecting elm.js!" : "... fail
 //TODO: ultimately the module should probably be an arg
 var app = Elm.DrivebyTest.fullscreen();
 
-//TODO: fix this naming, its not check or word ...
+//TODO: ideally take a command here ... or maybe have step.context
+//TODO: ultimately have a config message come through here ... be useful to be able to change it on the fly
 app.ports.commands.subscribe(function(step) {
   if (step.command.name == "click") { click(step.id, step.command.args[0]); }
   //TODO: return the port in the response ... (or specify it on the way in)
