@@ -1,4 +1,6 @@
 //TODO: make this the main script https://github.com/ariya/phantomjs/blob/master/examples/arguments.js
+//TODO: this looks good for parallel - https://github.com/ariya/phantomjs/blob/master/examples/child_process-examples.js
+//TODO: instantiate multiple 'page's and stash them away ... implement a tuplespace in elm?
 
 //TODO: make it so that each command can report it's duration
 var started = new Date().getTime();
