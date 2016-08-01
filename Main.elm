@@ -6,7 +6,7 @@ import Driveby exposing (..)
 
 
 main =
-   driveby commands subscriptions (checker command)
+   driveby test subscriptions (checker command)
 
 
 port command : Step -> Cmd msg
@@ -30,8 +30,8 @@ subscriptions model =
 --TODO: should be assert [ "textContains", "#messageList", "Auto Loading Metadata" ]
 --TODO: or assert [ "#messageList" "textContains", "Auto Loading Metadata" ]
 --TODO: might map well to jquery functions
-commands : List Step
-commands =
+test : List Step
+test =
     [ Request "serve" [ "../shoreditch-ui-chrome/chrome", "8080" ]
     , Request "goto" [ "http://localhost:8080/elm.html" ]
     , Request "textContains" [ "#messageList", "Auto Loading Metadata" ]
