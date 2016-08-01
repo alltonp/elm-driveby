@@ -57,7 +57,7 @@ var r2 = phantom.injectJs("tests.js") ? "... done injecting elm.js!" : "... fail
 
 //TODO: ultimately replace with worker();
 //TODO: ultimately the module should probably be an arg
-var app = Elm.DrivebyTests.fullscreen();
+var app = Elm.DrivebyTest.fullscreen();
 
 //TODO: fix this naming, its not check or word ...
 app.ports.check.subscribe(function(word) {

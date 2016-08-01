@@ -1,5 +1,6 @@
-port module DrivebyTests exposing (check)
-
+port module DrivebyTest exposing (check)
+--command?
+--result?
 
 import Html.App as App
 import Driveby exposing (..)
