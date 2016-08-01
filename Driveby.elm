@@ -10,10 +10,10 @@ import Task
 
 --TODO: ultimately no console sutff in here, report it to js land instead
 --TODO: ultimately should take List Script
-driveby : List Step -> (Step -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Never
-driveby test commandsPort resultsPort =
+driveby : Script -> (Step -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Never
+driveby script commandsPort resultsPort =
   App.program
-    { init = (Model test, asFx Start)
+    { init = (Model script.steps, asFx Start)
     , view = view
     , update = update commandsPort
     , subscriptions = subscriptions resultsPort
@@ -114,6 +114,13 @@ asFx msg =
 
 
 ---
+
+script : String -> List Command -> Script
+script name steps =
+  Script name (steps
+      |> List.indexedMap (,)
+      |> List.map (\(i,r) -> Step (toString i) r False))
+
 
 --TODO: eventually these will be in Driveby.Command or something
 serve : String -> Int -> Command

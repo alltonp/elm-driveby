@@ -19,16 +19,14 @@ main =
 --TODO: might map well to jquery functions
 --TODO: support multiple tests
 --TODO: should screenshot be a command? (taking a filepath, would offload more to elm)
-test : List Step
+test : Script
 test =
+  script "First Test"
     [ serve "../shoreditch-ui-chrome/chrome" 8080
     , goto "http://localhost:8080/elm.html"
     , Command "textContains" [ "#messageList", "Auto Loading Metadata" ]
     , click "refreshButton"
     , Command "textContains" [ "#messageList", "ManualMetaDataRefresh" ]
     ]
-    --TODO: this bit should be internal
-    |> List.indexedMap (,)
-    |> List.map (\(i,r) -> Step (toString i) r False)
 
 
