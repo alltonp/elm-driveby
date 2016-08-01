@@ -12,8 +12,6 @@ main =
    driveby test commands results
 
 
---TODO: specify this using functions, to ensure the correct args ... click id etc
---TODO: ensure the Script top level has a description ..
 --TODO: should be assert [ "textContains", "#messageList", "Auto Loading Metadata" ]
 --TODO: or assert [ "#messageList" "textContains", "Auto Loading Metadata" ]
 --TODO: might map well to jquery functions
