@@ -32,7 +32,7 @@ type alias Step =
 
 --TODO: change me to be a Command
 type alias Request =
-  { command: String
+  { name: String
   , args: List String
   }
 
@@ -67,7 +67,7 @@ update commandsPort msg model =
         next = List.filter (\s -> not s.executed) model.commands |> List.head
         cmd = case next of
             Just c ->
-              let d = Debug.log "Driveby" (c.request.command ++ " " ++ (toString c.request.args) )
+              let d = Debug.log "Driveby" (c.request.name ++ " " ++ (toString c.request.args) )
               in commandsPort c
             Nothing -> asFx (Exit ("Passed") )
       in
