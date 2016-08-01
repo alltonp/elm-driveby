@@ -91,6 +91,7 @@ function respond(id, failures) {
   app.ports.responses.send(response);
 }
 
+//TODO: I dont seem to fail nicely, e.g. hang on bad url
 function goto(id, url) {
   page.open(url, function(status) {
     if (status !== 'success') {

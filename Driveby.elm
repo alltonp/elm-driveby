@@ -8,6 +8,9 @@ import Html exposing (..)
 import Task
 
 
+--TODO: so for sequence its easy, just have a current one and work through the list
+--TODO: for parallel, how do we do it?
+--TOOD: obviously parallel of 1 is same as seq :)
 --TODO: ultimately no console sutff in here, report it to js land instead
 --TODO: ultimately should take List Script
 driveby : Script -> (Step -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Never
@@ -77,9 +80,11 @@ update commandsPort msg model =
         next = List.filter (\s -> not s.executed) model.script.steps |> List.head
         cmd = case next of
             Just c ->
-              let d = Debug.log "Driveby" (c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
-              in commandsPort c
-            Nothing -> asFx (Exit ("Passed") )
+--              let
+--                d = Debug.log "Driveby" (c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
+--              in
+                commandsPort c
+            Nothing -> asFx (Exit ("☑ - "  ++ model.script.name) )
       in
       ( model, cmd )
 
@@ -94,7 +99,7 @@ update commandsPort msg model =
         --TODO: send ExampleFailure if response has failures
         --TODO: Start should be NextStep
         next = if List.isEmpty response.failures then asFx Start
-               else asFx (Exit ("Failed: " ++ (toString response.failures) ++ " running " ++ (toString current)) )
+               else asFx (Exit ("☒ - " ++ (toString response.failures) ++ " running " ++ (toString current)) )
       in
       ( model', next )
 
