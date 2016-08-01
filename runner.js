@@ -63,14 +63,14 @@ var r2 = phantom.injectJs("tests.js") ? "... done injecting elm.js!" : "... fail
 var app = Elm.DrivebyTest.fullscreen();
 
 //TODO: fix this naming, its not check or word ...
-app.ports.commands.subscribe(function(word) {
-  if (word.command.name == "click") { click(word.id, word.command.args[0]); }
+app.ports.commands.subscribe(function(step) {
+  if (step.command.name == "click") { click(step.id, step.command.args[0]); }
   //TODO: return the port in the response ... (or specify it on the way in)
-  else if (word.command.name == "goto") { goto(word.id, word.command.args[0]); }
-  else if (word.command.name == "textContains") { textContains(word.id, word.command.args[0], word.command.args[1]); }
-  else if (word.command.name == "close") { close(word.id); }
-  else if (word.command.name == "serve") { serve(word.id, word.command.args[0], word.command.args[1]); }
-  else { report(word.id, ["don't know how to process command: " + JSON.stringify(word) ]); }
+  else if (step.command.name == "goto") { goto(step.id, step.command.args[0]); }
+  else if (step.command.name == "textContains") { textContains(step.id, step.command.args[0], step.command.args[1]); }
+  else if (step.command.name == "close") { close(step.id); }
+  else if (step.command.name == "serve") { serve(step.id, step.command.args[0], step.command.args[1]); }
+  else { report(step.id, ["don't know how to process command: " + JSON.stringify(step) ]); }
 });
 
 //TODO: add start time, to capture duration ...
