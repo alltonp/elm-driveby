@@ -34,7 +34,7 @@ function waitFor(id, testFx, onReady, timeOutMillis) {
                     report(id, [])
                 }
             }
-        }, 250); //< repeat check every 250ms
+        }, 1); //< repeat check every 250ms
 };
 
 //page.onConsoleMessage = function(msg, lineNum, sourceId) {
