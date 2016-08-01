@@ -11,18 +11,18 @@ import Task
 --TODO: ultimately no console sutff in here, report it to js land instead
 --TODO: ultimately should take List Script
 driveby : Script -> (Step -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Never
-driveby script commandsPort resultsPort =
+driveby script commandsPort responsesPort =
   App.program
     { init = (Model script, asFx Start)
     , view = view
     , update = update commandsPort
-    , subscriptions = subscriptions resultsPort
+    , subscriptions = subscriptions responsesPort
     }
 
 
 subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
-subscriptions response model =
-  response Process
+subscriptions responsesPort model =
+  responsesPort Process
 
 
 --TODO: so we want a list of scripts, and ultimately run them in parallel, but for now in sequence
