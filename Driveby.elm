@@ -27,7 +27,7 @@ subscriptions results model =
 
 --TODO: make script: List Command
 type alias Model =
-  { commands : Script
+  { script : Script
   }
 
 
@@ -74,7 +74,7 @@ update commandsPort msg model =
   case msg of
     Start ->
       let
-        next = List.filter (\s -> not s.executed) model.commands.steps |> List.head
+        next = List.filter (\s -> not s.executed) model.script.steps |> List.head
         cmd = case next of
             Just c ->
               let d = Debug.log "Driveby" (c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
@@ -85,11 +85,11 @@ update commandsPort msg model =
 
     Suggest response ->
       let
-        current = List.filter (\s -> s.id == response.id) model.commands.steps
-        steps' = List.map (\s -> if s.id == response.id then Step s.id s.command True else s ) model.commands.steps
-        script = model.commands
+        current = List.filter (\s -> s.id == response.id) model.script.steps
+        steps' = List.map (\s -> if s.id == response.id then Step s.id s.command True else s ) model.script.steps
+        script = model.script
         script' = { script | steps = steps' }
-        model' = { model | commands = script' }
+        model' = { model | script = script' }
         --TODO: go with Script, Step, Command, Result etc
         --TODO: send ExampleFailure if response has failures
         --TODO: Start should be NextStep
