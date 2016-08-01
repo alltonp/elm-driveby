@@ -121,9 +121,9 @@ function textContains(id, selector, expected) {
   waitFor(id, function() {
     //condition
     return page.evaluate(function(theSelector, theExpected) {
-      //TODO: need to check unique etc
       //TODO: pull out as findUnique
-      return $(theSelector).is(":contains('" + theExpected + "')");
+      e = $(theSelector)
+      return e.length == 1 && e.is(":contains('" + theExpected + "')");
     }, selector, expected);
 
     //action
