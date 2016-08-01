@@ -60,7 +60,7 @@ var r2 = phantom.injectJs("tests.js") ? "... done injecting elm.js!" : "... fail
 var app = Elm.DrivebyTest.fullscreen();
 
 //TODO: fix this naming, its not check or word ...
-app.ports.command.subscribe(function(word) {
+app.ports.commands.subscribe(function(word) {
   if (word.request.command == "click") { click(word.id, word.request.args[0]); }
   //TODO: return the port in the response ... (or specify it on the way in)
   else if (word.request.command == "goto") { goto(word.id, word.request.args[0]); }
