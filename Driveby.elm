@@ -30,7 +30,7 @@ type alias Step =
   }
 
 
---TODO: make command: Command
+--TODO: change me to be a Command
 type alias Request =
   { command: String
   , args: List String

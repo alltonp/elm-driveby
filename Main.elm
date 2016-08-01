@@ -21,7 +21,7 @@ main =
 test : List Step
 test =
     [ serve "../shoreditch-ui-chrome/chrome" 8080
-    , Request "goto" [ "http://localhost:8080/elm.html" ]
+    , goto "http://localhost:8080/elm.html"
     , Request "textContains" [ "#messageList", "Auto Loading Metadata" ]
     , Request "click" [ "#refreshButton" ]
     , Request "textContains" [ "#messageList", "ManualMetaDataRefresh" ]
@@ -35,3 +35,8 @@ test =
 serve : String -> Int -> Request
 serve path onPort =
    Request "serve" [path, toString onPort]
+
+
+goto : String -> Request
+goto url =
+   Request "goto" [url]
