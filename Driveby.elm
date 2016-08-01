@@ -63,7 +63,10 @@ type alias Step =
   , executed: Bool
   }
 
-
+type alias Request =
+  { step: Step
+  ,  context: Context
+  }
 
 type alias Context =
   { browser: Int
