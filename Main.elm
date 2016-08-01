@@ -1,4 +1,4 @@
-port module Spelling exposing (check)
+port module DrivebyTests exposing (check)
 
 
 import Html.App as App
