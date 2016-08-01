@@ -40,6 +40,9 @@ commands =
 --TODO: need to be exposed somehow
 port check : Step -> Cmd msg
 
+--check : Msg -> (Step -> Cmd msg)
+checker m p =
+    p m
 
 --TODO: this will be the drivby update ...
 --TODO: we will probably need our own to handle DriveBy.Msg ... like the DatePicker ...
@@ -52,10 +55,10 @@ update msg model =
         cmd = case next of
             Just c ->
               let d = Debug.log "Driveby" (c.request.command ++ " " ++ (toString c.request.args) )
-              in check c
+              in checker c check
             Nothing -> asFx (Exit ("Passed") )
       in
-      ( model, cmd)
+      ( model, cmd )
 
     Suggest response ->
       let
@@ -76,7 +79,7 @@ update msg model =
         --TODO: this is odd, lets do in js instead ...
         d = Debug.log "Driveby" message
       in
-      ( model, check (Step "999" (Request "close" [] ) False) )
+      ( model, checker (Step "999" (Request "close" [] ) False) check )
 
 
 --TODO: need to be exposed somehow
