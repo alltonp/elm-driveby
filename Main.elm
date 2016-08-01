@@ -20,7 +20,7 @@ main =
 --TODO: support multiple tests
 test : List Step
 test =
-    [ Request "serve" [ "../shoreditch-ui-chrome/chrome", "8080" ]
+    [ serve "../shoreditch-ui-chrome/chrome" 8080
     , Request "goto" [ "http://localhost:8080/elm.html" ]
     , Request "textContains" [ "#messageList", "Auto Loading Metadata" ]
     , Request "click" [ "#refreshButton" ]
@@ -31,3 +31,7 @@ test =
     |> List.map (\(i,r) -> Step (toString i) r False)
 
 
+
+serve : String -> Int -> Request
+serve path onPort =
+   Request "serve" [path, toString onPort]
