@@ -1,18 +1,13 @@
 port module Spelling exposing (check)
 
 
-{-|  Wibbly
-  e.g.
-  @docs check
--}
-
-
 import Html exposing (..)
 import Html.App as App
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import String
 import Task
+import Driveby exposing (..)
 
 
 main =
@@ -51,37 +46,6 @@ commands =
     |> List.map (\(i,r) -> Step (toString i) r False)
 
 
-type alias Step =
-  { id: String
-  , request: Request
-  , executed: Bool
-  }
-
-
---TODO: make command: Command
-type alias Request =
-  { command: String
-  , args: List String
-  }
-
-
---TODO: consider Id as a type and give it the bits it needs ...
-type alias Response =
-  { id: String
-  , failures: List String
-  }
-
-
---TODO: fix all this naming too
-type Msg
-  = Start
-  | Suggest Response
-  | Exit String
---TODO: add a Finish (and do the reporting bit here ...)
-
-
-{-| blah
--}
 --TODO: need to be exposed somehow
 port check : Step -> Cmd msg
 
