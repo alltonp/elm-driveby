@@ -81,7 +81,13 @@ var r2 = phantom.injectJs("tests.js") ? "... done injecting elm.js!" : "... fail
 //console.log(r2);
 
 //TODO: ultimately the module should probably be an arg
-var app = Elm.DrivebyTest.worker();
+var flags =
+        { browsers: pages.length
+        };
+
+
+var d = document.createElement('div');
+var app = Elm.DrivebyTest.embed(d, flags);
 
 //TODO: ideally take a command here ... or maybe have step.context
 //TODO: ultimately have a config message come through here ... be useful to be able to change it on the fly
@@ -99,6 +105,9 @@ app.ports.requests.subscribe(function(request) {
   else if (name == "serve") { serve(id, command.args[0], command.args[1]); }
   else { respond(step.id, ["don't know how to process request: " + JSON.stringify(request) ]); }
 });
+
+//var config = { browsers:pages.length }
+//app.ports.responses.send(config);
 
 //TODO: add start time, to capture duration ...
 //TODO: rename to notifyElm or something ...

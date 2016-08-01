@@ -16,14 +16,19 @@ import Date exposing (..)
 --TODO: ultimately should take List Script
 --when asking for next, just get the next command for the current script, if script is done, get the next script .. etc
 --or TEA up the script runners?
-driveby : Script -> (Step -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Never
+driveby : Script -> (Step -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Flags
 driveby script commandsPort responsesPort =
-  App.program
-    { init = (Model script, go)
+  App.programWithFlags
+    { init = init script
     , view = view
     , update = update commandsPort
     , subscriptions = subscriptions responsesPort
     }
+
+
+init : Script -> Flags -> (Model, Cmd Msg)
+init script flags =
+   (Model script Nothing, go)
 
 
 subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
@@ -31,9 +36,14 @@ subscriptions responsesPort model =
   responsesPort Process
 
 
+type alias Flags =
+  { browsers : Int }
+
+
 --TODO: so we want a list of scripts, and ultimately run them in parallel, but for now in sequence
 type alias Model =
   { script : Script
+  , config : Maybe Config
   }
 
 
@@ -70,10 +80,15 @@ type alias Response =
   }
 
 
+type alias Config =
+  { browsers: Int
+  }
+
 --TODO: fix all this naming too
 type Msg
   = Go Date
   | Start
+--  | Setup Config
   | Process Response
   | Exit String
 --TODO: add a Finish (and do the reporting bit here ...)
@@ -84,11 +99,18 @@ update commandsPort msg model =
   case msg of
     Go date ->
       let
+        --TODO: store date or lose it ...
         --script' = [model.script] |> List.indexedMap (,) |> List.map(\i s -> {s | id = Just i })
         script = model.script
         script' = { script | id = Just "1" }
       in
       ( { model | script = script' } , asFx Start )
+
+--    Setup config ->
+--      let
+--        d = Debug.log "Configuring" (toString config)
+--      in
+--      ( { model | config = Just config } , asFx Start )
 
     Start ->
       let
