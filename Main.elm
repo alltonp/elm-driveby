@@ -12,7 +12,7 @@ import Driveby exposing (..)
 main =
   App.program
     { init = init
-    , view = view
+    , view = Driveby.view
     , update = update
     , subscriptions = subscriptions
     }
