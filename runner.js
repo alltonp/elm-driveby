@@ -58,9 +58,8 @@ function waitFor(id, testFx, onReady, timeOutMillis) {
 var r2 = phantom.injectJs("tests.js") ? "... done injecting elm.js!" : "... fail! Check the $PWD?!";
 //console.log(r2);
 
-//TODO: ultimately replace with worker();
 //TODO: ultimately the module should probably be an arg
-var app = Elm.DrivebyTest.fullscreen();
+var app = Elm.DrivebyTest.worker();
 
 //TODO: ideally take a command here ... or maybe have step.context
 //TODO: ultimately have a config message come through here ... be useful to be able to change it on the fly
