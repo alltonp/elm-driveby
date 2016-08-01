@@ -54,7 +54,7 @@ type alias Command =
 
 
 --TODO: consider Id as a type and give it the bits it needs ...
---TODO: rename to Result
+--TODO: rename to Result or Outcome
 type alias Response =
   { id: String
   , failures: List String
