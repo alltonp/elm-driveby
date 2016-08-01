@@ -80,6 +80,7 @@ function report(id, result) {
   var result = { id:id, failures:result }
 //  console.log("> js sent: " + JSON.stringify(result));
   //TODO: make this a config option
+  //TODO: and actually this is probably the wrong place for it. because some commmands don't want it...
   page.render('step-' + id + '.png')
   app.ports.results.send(result);
 }

@@ -136,3 +136,8 @@ goto url =
 click : String -> Command
 click id =
    Command "click" ["#" ++ id]
+
+
+enter : String -> String -> Command
+enter id value =
+   Command "enter" ["#" ++ id, value]

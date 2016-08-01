@@ -31,10 +31,10 @@ test =
 --    , click "refreshButton"
 --    , Command "textContains" [ "#messageList", "ManualMetaDataRefresh" ]
 
-    , Command "enter" [ "#configuration", "1" ]
+    , enter "configuration" "1"
     , Command "textContains" [ "#messageList", "ConfigurationChanged \"1" ]
 
-    , Command "enter" [ "#configuration", "2" ]
+    , enter "configuration" "2"
     , Command "textContains" [ "#messageList", "ConfigurationChanged \"12" ]
 
 --    , click "refreshButton"
