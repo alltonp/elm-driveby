@@ -59,8 +59,6 @@ type alias Model =
   }
 
 
---TODO: this will be the driveby update ...
---TODO: we will probably need our own to handle DriveBy.Msg ... like the DatePicker ...
 update : (Step -> Cmd Msg) -> Msg -> Model -> (Model, Cmd Msg)
 update commandsPort msg model =
   case msg of
@@ -109,7 +107,7 @@ asFx msg =
 
 ---
 
-
+--TODO: eventually these will be in Driveby.Command or something
 serve : String -> Int -> Request
 serve path onPort =
    Request "serve" [path, toString onPort]
