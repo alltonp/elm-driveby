@@ -1,7 +1,6 @@
 port module Spelling exposing (check)
 
 
-import Html exposing (..)
 import Html.App as App
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -18,11 +17,6 @@ main =
     , subscriptions = subscriptions
     }
 
-
---TODO: make script: List Command
-type alias Model =
-  { commands : List Step
-  }
 
 init : (Model, Cmd Msg)
 init =
@@ -95,11 +89,6 @@ port suggestions : (Response -> msg) -> Sub msg
 subscriptions : Model -> Sub Msg
 subscriptions model =
   suggestions Suggest
-
-
-view : Model -> Html Msg
-view model =
-  div [ ] [ ]
 
 
 asFx : msg -> Cmd msg
