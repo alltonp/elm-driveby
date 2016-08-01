@@ -18,6 +18,7 @@ main =
 --TODO: or assert [ "#messageList" "textContains", "Auto Loading Metadata" ]
 --TODO: might map well to jquery functions
 --TODO: support multiple tests
+--TODO: should screenshot be a command? (taking a filepath, would offload more to elm)
 test : List Step
 test =
     [ serve "../shoreditch-ui-chrome/chrome" 8080

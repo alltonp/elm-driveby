@@ -1,3 +1,5 @@
+var started = new Date().getTime();
+
 var page = require('webpage').create();
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
@@ -96,6 +98,7 @@ function click(id, selector) {
     return page.evaluate(function(theSelector) {
       //TODO: need to check unique etc
       //TODO: pull out as findUniqueInteractable
+      //TODO: should be only 1 and 'displayed'
       return $(theSelector).is(":visible");
     }, selector);
 
@@ -107,6 +110,9 @@ function click(id, selector) {
     }
   );
 }
+
+//TIP: these will be useful for asserts - https://api.jquery.com/category/selectors/
+//TIP: and performance - https://api.jquery.com/filter/
 
 //TODO: asserts() will always look a bit like this
 function textContains(id, selector, expected) {
@@ -128,6 +134,7 @@ function close(id) {
   report(id, [])
   page.close()
   //TODO: pull out a separate exit
+  console.log("Done " + (new Date().getTime() - started) + "ms.");
   phantom.exit()
 }
 

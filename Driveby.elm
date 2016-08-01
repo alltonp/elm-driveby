@@ -1,6 +1,6 @@
 --TODO: tighten this up ...
 module Driveby exposing (..)
---main
+--driveby
 
 
 import Html.App as App
