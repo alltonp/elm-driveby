@@ -2,6 +2,7 @@ module Driveby exposing (..)
 
 
 import Html exposing (..)
+import Task
 
 
 type alias Step =
@@ -42,3 +43,9 @@ type alias Model =
 view : Model -> Html Msg
 view model =
   div [ ] [ ]
+
+
+
+asFx : msg -> Cmd msg
+asFx msg =
+  Task.perform (\_ -> Debug.crash "This failure cannot happen.") identity (Task.succeed msg)

@@ -5,7 +5,6 @@ import Html.App as App
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import String
-import Task
 import Driveby exposing (..)
 
 
@@ -85,12 +84,9 @@ update msg model =
 --TODO: need to be exposed somehow
 port suggestions : (Response -> msg) -> Sub msg
 
+
 --TODO: need to be exposed somehow
 subscriptions : Model -> Sub Msg
 subscriptions model =
   suggestions Suggest
 
-
-asFx : msg -> Cmd msg
-asFx msg =
-  Task.perform (\_ -> Debug.crash "This failure cannot happen.") identity (Task.succeed msg)
