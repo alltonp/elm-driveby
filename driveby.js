@@ -90,7 +90,7 @@ app.ports.requests.subscribe(function(request) {
   var command = request.step.command
   var name = command.name
   var id = request.step.id
-  var page = pages[0]
+  var page = pages[request.context.browser]
   //TODO: should be context
   if (name == "click") { click(page, id, command.args[0]); }
   else if (name == "enter") { enter(page, id, command.args[0], command.args[1]); }
