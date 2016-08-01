@@ -5,11 +5,11 @@ import Driveby exposing (..)
 
 
 port commands : Step -> Cmd msg
-port results : (Response -> msg) -> Sub msg
+port responses : (Response -> msg) -> Sub msg
 
 
 main =
-   driveby test commands results
+   driveby test commands responses
 
 
 --TODO: should be assert [ "textContains", "#messageList", "Auto Loading Metadata" ]
