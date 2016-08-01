@@ -139,6 +139,8 @@ function enter(id, selector, value) {
 //        e.setSelectionRange(10, 20);
         e.focus();
 
+//        e.selectionStart = 10;
+//        e.selectionEndt = 20;
 //        var range = e.createTextRange();
 //                    range.collapse(true);
 //                    range.moveEnd('character', 10);
