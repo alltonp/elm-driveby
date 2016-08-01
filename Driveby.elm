@@ -28,7 +28,7 @@ driveby script commandsPort responsesPort =
 
 init : Script -> Flags -> (Model, Cmd Msg)
 init script flags =
-   (Model script (Just (Config flags.browsers)), go)
+   (Model script (Config flags.browsers), go)
 
 
 subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
@@ -43,7 +43,7 @@ type alias Flags =
 --TODO: so we want a list of scripts, and ultimately run them in parallel, but for now in sequence
 type alias Model =
   { script : Script
-  , config : Maybe Config
+  , config : Config
   }
 
 
