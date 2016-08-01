@@ -9,6 +9,22 @@ main =
    driveby commands subscriptions (checker check)
 
 
+port check : Step -> Cmd msg
+
+--check : Msg -> (Step -> Cmd msg)
+checker m p =
+    m p
+
+
+port suggestions : (Response -> msg) -> Sub msg
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  suggestions Suggest
+
+
+
 --TODO: specify this using functions, to ensure the correct args ... click id etc
 --TODO: ensure the Script top level has a description ..
 --TODO: should be assert [ "textContains", "#messageList", "Auto Loading Metadata" ]
@@ -25,21 +41,4 @@ commands =
     |> List.indexedMap (,)
     |> List.map (\(i,r) -> Step (toString i) r False)
 
-
---TODO: need to be exposed somehow
-port check : Step -> Cmd msg
-
---check : Msg -> (Step -> Cmd msg)
-checker m p =
-    m p
-
-
---TODO: need to be exposed somehow
-port suggestions : (Response -> msg) -> Sub msg
-
-
---TODO: need to be exposed somehow
-subscriptions : Model -> Sub Msg
-subscriptions model =
-  suggestions Suggest
 
