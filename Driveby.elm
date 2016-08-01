@@ -48,6 +48,7 @@ type alias Script =
 --TODO: this should poobably be Request and requestId everywhere ...
 type alias Step =
   { id: String
+  --, scriptId : String
   , command: Command
   , executed: Bool
   }
@@ -142,8 +143,8 @@ go = Task.perform (\_ -> Debug.crash "This failure cannot happen.") Go Date.now
 ---
 
 script : String -> List Command -> Script
-script name steps =
-  Script name (steps
+script name commands =
+  Script name (commands
       |> List.indexedMap (,)
       |> List.map (\(i,r) -> Step (toString i) r False)) Nothing
 

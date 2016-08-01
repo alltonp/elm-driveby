@@ -72,6 +72,7 @@ app.ports.requests.subscribe(function(request) {
   var command = request.command
   var name = command.name
   var id = request.id
+  //TODO: should be context
   if (name == "click") { click(id, command.args[0]); }
   else if (name == "enter") { enter(id, command.args[0], command.args[1]); }
   else if (name == "goto") { goto(id, command.args[0]); }
