@@ -1,10 +1,10 @@
+//TODO: make it so that each command can report it's duration
 var started = new Date().getTime();
 
 var page = require('webpage').create();
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
-//TODO: remove the String support for functions ...
 //TODO: rename id to stepId
 //TODO: have a runId (and maybe stick all id's on context)
 //TODO: should screenshot be before the action - might be more useful for debug
@@ -13,28 +13,26 @@ var page = require('webpage').create();
 //TODO: write the files somewhere useful, include the port-number perhaps ...
 //TODO: do as much as possible in elm .. e.g. build the test report in elm, save it in js
 //TODO: this script should have a return value of success of failure, for scripts to use ...
+//TODO: rename functions and condition to be more readable
 function waitFor(id, testFx, onReady, timeOutMillis) {
-    var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //< Default Max Timout is 3s
+    var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //TODO: make this a config option
         start = new Date().getTime(),
         condition = false,
         interval = setInterval(function() {
             if ( (new Date().getTime() - start < maxtimeOutMillis) && !condition ) {
-                // If not time-out yet and condition not yet fulfilled
-                condition = testFx(); //< defensive code
+                condition = testFx();
             } else {
-                if(!condition) {
-                    // If condition still not fulfilled (timeout but condition is 'false')
-                    clearInterval(interval); //< Stop this interval
-                    report(id, ["timeout"])
+                if (!condition) {
+                    clearInterval(interval);
+                    report(id, ["timeout"]);
                 } else {
-                    // Condition fulfilled (timeout and/or condition is 'true')
-//                    console.log("'waitFor()' finished in " + (new Date().getTime() - start) + "ms.");
-                    onReady(); //< Do what it's supposed to do once the condition is fulfilled
-                    clearInterval(interval); //< Stop this interval
-                    report(id, [])
+                    onReady();
+                    clearInterval(interval);
+                    report(id, []);
                 }
             }
-        }, 1); //< repeat check every 250ms
+        }, 1); //TODO: make this a config option
+
 };
 
 //page.onConsoleMessage = function(msg, lineNum, sourceId) {
@@ -73,9 +71,11 @@ app.ports.commands.subscribe(function(word) {
 });
 
 //TODO: add start time, to capture duration ...
+//TODO: rename to notifyElm or something ...
 function report(id, result) {
   var result = { id:id, failures:result }
 //  console.log("> js sent: " + JSON.stringify(result));
+  //TODO: make this a config option
   page.render('step-' + id + '.png')
   app.ports.results.send(result);
 }
@@ -99,6 +99,7 @@ function click(id, selector) {
       //TODO: need to check unique etc
       //TODO: pull out as findUniqueInteractable
       //TODO: should be only 1 and 'displayed'
+      //TODO: make this a condition
       return $(theSelector).is(":visible");
     }, selector);
 
@@ -177,6 +178,7 @@ function serve(id, path, port) {
   report(id, [])
 }
 
+//TODO: make this an option to report/surppress errors in config
 page.onError = function(msg, trace) {
 //TODO: append these to a file in the result dir ....
 //  var msgStack = ['PHANTOM ERROR: ' + msg];
