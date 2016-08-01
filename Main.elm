@@ -21,11 +21,22 @@ main =
 test : Script
 test =
   script "First Test"
-    [ serve "../shoreditch-ui-chrome/chrome" 8080
+    [
+      serve "../shoreditch-ui-chrome/chrome" 8080
     , goto "http://localhost:8080/elm.html"
+
     , Command "textContains" [ "#messageList", "Auto Loading Metadata" ]
-    , click "refreshButton"
-    , Command "textContains" [ "#messageList", "ManualMetaDataRefresh" ]
+    , Command "textContains" [ "#messageList", "LoadAllMetaDataResponse ([{ url = " ]
+
+--    , click "refreshButton"
+--    , Command "textContains" [ "#messageList", "ManualMetaDataRefresh" ]
+
+    , Command "enter" [ "#configuration", "1" ]
+    , Command "textContains" [ "#messageList", "ConfigurationChanged \"1" ]
+
+    , Command "enter" [ "#configuration", "2" ]
+    , Command "textContains" [ "#messageList", "ConfigurationChanged \"12" ]
+
+--    , click "refreshButton"
+--    , Command "textContains" [ "#messageList", "LoadAllMetaDataResponse []" ]
     ]
-
-

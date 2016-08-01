@@ -38,9 +38,10 @@ function waitFor(id, testFx, onReady, timeOutMillis) {
 
 };
 
-//page.onConsoleMessage = function(msg, lineNum, sourceId) {
-//  console.log('CONSOLE: [' + msg + '] (from line #' + lineNum + ' in "' + sourceId + '")');
-//};
+//TODO: make this a config option
+page.onConsoleMessage = function(msg, lineNum, sourceId) {
+  console.log('CONSOLE: [' + msg + '] (from line #' + lineNum + ' in "' + sourceId + '")');
+};
 
 //var r = page.injectJs("tests.js") ? "... done injecting tests.js!" : "... fail! Check the $PWD?!";
 //console.log(r);
@@ -65,7 +66,7 @@ var app = Elm.DrivebyTest.worker();
 //TODO: ultimately have a config message come through here ... be useful to be able to change it on the fly
 app.ports.commands.subscribe(function(step) {
   if (step.command.name == "click") { click(step.id, step.command.args[0]); }
-  //TODO: return the port in the response ... (or specify it on the way in)
+  else if (step.command.name == "enter") { enter(step.id, step.command.args[0], step.command.args[1]); }
   else if (step.command.name == "goto") { goto(step.id, step.command.args[0]); }
   else if (step.command.name == "textContains") { textContains(step.id, step.command.args[0], step.command.args[1]); }
   else if (step.command.name == "close") { close(step.id); }
@@ -109,6 +110,37 @@ function click(id, selector) {
       page.evaluate(function(theSelector) {
         $(theSelector).click();
       }, selector);
+    }
+  );
+}
+
+//TODO: consider casper ... http://docs.casperjs.org/en/latest/modules/casper.html#options
+function enter(id, selector, value) {
+  waitFor(id, function() {
+    //condition
+    return page.evaluate(function(theSelector) {
+      //TODO: pull out as findUniqueInteractable
+      //TODO: make this a condition
+      var e = $(theSelector)
+      return e.length == 1 && e.is(":visible");
+      //TODO: need butWas()
+    }, selector);
+
+    //action
+    }, function() {
+      page.evaluate(function(theSelector, theValue) {
+        $(theSelector).focus();
+//        $(theSelector).val("");
+//        $(theSelector).change();
+//        console.log(theValue);
+//        thePage.sendEvent('keypress', theValue);
+//        console.log($(theSelector).val);
+      }, selector, value);
+
+//      page.sendEvent('keypress', '');
+      page.sendEvent('keypress', page.event.key.Clear);
+
+      page.sendEvent('keypress', value);
     }
   );
 }
