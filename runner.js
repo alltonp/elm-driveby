@@ -14,6 +14,7 @@ var page = require('webpage').create();
 //TODO: do as much as possible in elm .. e.g. build the test report in elm, save it in js
 //TODO: this script should have a return value of success of failure, for scripts to use ...
 //TODO: rename functions and condition to be more readable
+//TODO: consider running this as a daemon
 function waitFor(id, testFx, onReady, timeOutMillis) {
     var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //TODO: make this a config option
         start = new Date().getTime(),
