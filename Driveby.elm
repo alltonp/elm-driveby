@@ -104,7 +104,7 @@ update commandsPort msg model =
         --TODO: this is odd, lets do in js instead ...
         d = Debug.log "Driveby" message
       in
-      ( model, commandsPort (Step "999" (Command "close" [] ) False) {-check-} )
+      ( model, commandsPort (Step "999" close False) )
 
 
 view : Model -> Html Msg
@@ -145,3 +145,8 @@ click id =
 enter : String -> String -> Command
 enter id value =
    Command "enter" ["#" ++ id, value]
+
+
+close : Command
+close =
+  Command "close" []
