@@ -9,9 +9,9 @@ import Task
 
 
 driveby : List Step -> (Model -> Sub Msg) -> ({ executed : Bool, request : Request, id : String } -> Cmd Msg) -> Program Never
-driveby tests subscriptions checker =
+driveby test subscriptions checker =
   App.program
-    { init = (Model tests, asFx Start )
+    { init = (Model test, asFx Start )
     , view = view
     , update = update checker
     , subscriptions = subscriptions
