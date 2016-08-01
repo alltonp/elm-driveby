@@ -1,14 +1,15 @@
 port module DrivebyTest exposing (commands)
---command?
---result?
+
 
 import Driveby exposing (..)
+
 
 port commands : Step -> Cmd msg
 port results : (Response -> msg) -> Sub msg
 
+
 main =
-   driveby test (commands) (results)
+   driveby test commands results
 
 
 --TODO: specify this using functions, to ensure the correct args ... click id etc
