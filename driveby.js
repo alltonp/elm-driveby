@@ -31,11 +31,11 @@ function waitFor(id, testFx, onReady, timeOutMillis) {
             } else {
                 if (!condition) {
                     clearInterval(interval);
-                    report(id, ["timeout"]);
+                    respond(id, ["timeout"]);
                 } else {
                     onReady();
                     clearInterval(interval);
-                    report(id, []);
+                    respond(id, []);
                 }
             }
         }, 1); //TODO: make this a config option
@@ -75,12 +75,12 @@ app.ports.commands.subscribe(function(step) {
   else if (step.command.name == "textContains") { textContains(step.id, step.command.args[0], step.command.args[1]); }
   else if (step.command.name == "close") { close(step.id); }
   else if (step.command.name == "serve") { serve(step.id, step.command.args[0], step.command.args[1]); }
-  else { report(step.id, ["don't know how to process command: " + JSON.stringify(step) ]); }
+  else { respond(step.id, ["don't know how to process command: " + JSON.stringify(step) ]); }
 });
 
 //TODO: add start time, to capture duration ...
 //TODO: rename to notifyElm or something ...
-function report(id, failures) {
+function respond(id, failures) {
   var response = { id:id, failures:failures }
   //TODO: make this a config option
   //TODO: and actually this is probably the wrong place for it. because some commmands don't want it...
@@ -91,9 +91,9 @@ function report(id, failures) {
 function goto(id, url) {
   page.open(url, function(status) {
     if (status !== 'success') {
-      report(id, ['Unable to access network'])
+      respond(id, ['Unable to access network'])
     } else {
-      report(id, [])
+      respond(id, [])
     }
   });
 }
@@ -186,7 +186,7 @@ function textContains(id, selector, expected) {
 }
 
 function close(id) {
-  report(id, [])
+  respond(id, [])
   page.close()
   //TODO: pull out a separate exit
   console.log("Done " + (new Date().getTime() - started) + "ms.");
@@ -226,7 +226,7 @@ function serve(id, path, port) {
         phantom.exit();
     }
 
-  report(id, [])
+  respond(id, [])
 }
 
 //TODO: make this an option to report/surppress errors in config
