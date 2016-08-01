@@ -8,6 +8,7 @@ import Html exposing (..)
 import Task
 
 
+--TODO: ultimately no console sutff in here, report it to js land instead
 --TODO: ultimately should take List Script
 driveby : List Step -> (Step -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Never
 driveby test commandsPort resultsPort =
@@ -24,6 +25,7 @@ subscriptions results model =
   results Suggest
 
 
+--TODO: we may need a bool to say its been run, or maybe store the start, stop times,
 type alias Script =
   { name: String
   , steps: List Step
