@@ -21,11 +21,11 @@ driveby script commandsPort resultsPort =
 
 
 subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
-subscriptions results model =
-  results Suggest
+subscriptions response model =
+  response Process
 
 
---TODO: make script: List Command
+--TODO: so we want a list of scripts, and ultimately run them in parallel, but for now in sequence
 type alias Model =
   { script : Script
   }
@@ -64,7 +64,7 @@ type alias Response =
 --TODO: fix all this naming too
 type Msg
   = Start
-  | Suggest Response
+  | Process Response
   | Exit String
 --TODO: add a Finish (and do the reporting bit here ...)
 
@@ -83,7 +83,7 @@ update commandsPort msg model =
       in
       ( model, cmd )
 
-    Suggest response ->
+    Process response ->
       let
         script = model.script
         current = List.filter (\s -> s.id == response.id) script.steps
