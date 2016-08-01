@@ -11,7 +11,7 @@ import Date exposing (..)
 
 --TODO: so for sequence its easy, just have a current one and work through the list
 --TODO: for parallel, how do we do it?
---TOOD: obviously parallel of 1 is same as seq :)
+--TODO: obviously parallel of 1 is same as seq :)
 --TODO: ultimately no console sutff in here, report it to js land instead
 --TODO: ultimately should take List Script
 --when asking for next, just get the next command for the current script, if script is done, get the next script .. etc
@@ -107,12 +107,6 @@ update commandsPort msg model =
         script' = { script | id = Just "1" }
       in
       ( { model | script = script' } , asFx Start )
-
---    Setup config ->
---      let
---        d = Debug.log "Configuring" (toString config)
---      in
---      ( { model | config = Just config } , asFx Start )
 
     Start ->
       let

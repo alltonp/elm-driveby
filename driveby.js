@@ -7,9 +7,9 @@ var started = new Date().getTime();
 
 var pages = [];
 
-//TODO: put this in config, then on startup inform elm of the config ...
-for (var i = 0; i < 3; i+=1) {
-    p = require('webpage').create();
+//TODO: put this in arg[] to this script ..
+for (var i = 0; i < 2; i+=1) {
+    var p = require('webpage').create();
 
     //TODO: make this a config option - surpress action logging
     p.onConsoleMessage = function(msg, lineNum, sourceId) {
@@ -80,14 +80,9 @@ function waitFor(id, testFx, onReady, timeOutMillis) {
 var r2 = phantom.injectJs("tests.js") ? "... done injecting elm.js!" : "... fail! Check the $PWD?!";
 //console.log(r2);
 
-//TODO: ultimately the module should probably be an arg
-var flags =
-        { browsers: pages.length
-        };
-
-
-var d = document.createElement('div');
-var app = Elm.DrivebyTest.embed(d, flags);
+var flags = { browsers: pages.length };
+var unused = document.createElement('div');
+var app = Elm.DrivebyTest.embed(unused, flags);
 
 //TODO: ideally take a command here ... or maybe have step.context
 //TODO: ultimately have a config message come through here ... be useful to be able to change it on the fly
