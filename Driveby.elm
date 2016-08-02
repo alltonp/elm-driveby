@@ -142,8 +142,7 @@ update requestsPort msg model =
 
       in
 --      ( { model | script = script' } , asFx (Start 1) )
-      ( { model | script = script' } , x )
-
+        ( { model | script = script' } , x )
 
     Start browserId ->
       let
@@ -165,7 +164,7 @@ update requestsPort msg model =
             --TODO: this looks iffy now ...
             Nothing -> asFx (Exit ("☑ - "  ++ model.script.name) )
       in
-      ( model, cmd )
+        ( model, cmd )
 
     Process response ->
       let
@@ -180,7 +179,7 @@ update requestsPort msg model =
         next = if List.isEmpty response.failures then asFx (RunNext response.context.browserId)
                else asFx (Exit ("☒ - " ++ (toString response.failures) ++ " running " ++ (toString current)) )
       in
-      ( model', next )
+        ( model', next )
 
     --TODO: is this Failed really?
     Exit message ->
@@ -188,8 +187,8 @@ update requestsPort msg model =
         --TODO: this renders odd, lets do in js instead ...
         d = Debug.log "Driveby" message
       in
-      --TODO: this 1 is well dodgy ...
-      ( model, requestsPort (Request (Step "999" close False) (Context 1)) )
+        --TODO: this 1 is well dodgy ...
+        ( model, requestsPort (Request (Step "999" close False) (Context 1)) )
 
 
 view : Model -> Html Msg
@@ -203,7 +202,8 @@ asFx msg =
 
 
 go : Cmd Msg
-go = Task.perform (\_ -> Debug.crash "This failure cannot happen.") Go Date.now
+go =
+  Task.perform (\_ -> Debug.crash "This failure cannot happen.") Go Date.now
 
 ---
 
