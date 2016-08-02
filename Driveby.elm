@@ -7,6 +7,7 @@ import Html.App as App
 import Html exposing (..)
 import Task
 import Date exposing (..)
+import Array exposing (..)
 
 
 --TODO: so for sequence its easy, just have a current one and work through the list
@@ -34,7 +35,7 @@ driveby script requestsPort responsesPort =
 
 init : Script -> Flags -> (Model, Cmd Msg)
 init script flags =
-   (Model script (Config flags.browsers), go)
+   (Model script (Config flags.browsers) (Array.repeat flags.browsers (Script "N/A" [] Nothing) ), go)
 
 
 subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
@@ -50,6 +51,7 @@ type alias Flags =
 type alias Model =
   { script : Script
   , config : Config
+  , running : Array Script
   }
 
 
@@ -109,6 +111,7 @@ type alias Config =
 type Msg
   = Go Date
   | Start Int
+  | RunNext Int
 --  | Setup Config
   | Process Response
   | Exit String
@@ -127,19 +130,29 @@ update requestsPort msg model =
         script = model.script
         script' = { script | id = Just "1" }
 
-        all = List.repeat (model.config.browsers-1) 0
+        howMany = (model.config.browsers-1)
+        all = List.repeat howMany 0
               |> List.indexedMap (,)
               |> List.map (\(i,r) -> asFx (Start i) )
 
         x = Cmd.batch (all)
 
-        dx = Debug.log "x" (toString x)
+--        dx = Debug.log "x" (toString x)
 
       in
 --      ( { model | script = script' } , asFx (Start 1) )
       ( { model | script = script' } , x )
 
+
     Start browserId ->
+      let
+        script = model.script
+        running = model.running
+        running' = Array.set browserId script running
+      in
+        ( { model | running = running' } , asFx (RunNext browserId))
+
+    RunNext browserId ->
       let
         next = List.filter (\s -> not s.executed) model.script.steps |> List.head
         cmd = case next of
@@ -162,7 +175,7 @@ update requestsPort msg model =
         --TODO: go with Script, Step, Command, Result etc
         --TODO: send ExampleFailure if response has failures
         --TODO: Start should be NextStep
-        next = if List.isEmpty response.failures then asFx (Start response.context.browserId)
+        next = if List.isEmpty response.failures then asFx (RunNext response.context.browserId)
                else asFx (Exit ("☒ - " ++ (toString response.failures) ++ " running " ++ (toString current)) )
       in
       ( model', next )
