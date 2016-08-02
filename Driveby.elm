@@ -79,7 +79,7 @@ type alias Request =
 
 
 type alias Context =
-  { browser: Int
+  { browserId: Int
   }
 
 
@@ -153,7 +153,7 @@ update requestsPort msg model =
         --TODO: go with Script, Step, Command, Result etc
         --TODO: send ExampleFailure if response has failures
         --TODO: Start should be NextStep
-        next = if List.isEmpty response.failures then asFx (Start response.context.browser)
+        next = if List.isEmpty response.failures then asFx (Start response.context.browserId)
                else asFx (Exit ("☒ - " ++ (toString response.failures) ++ " running " ++ (toString current)) )
       in
       ( model', next )
