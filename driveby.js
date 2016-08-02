@@ -44,7 +44,7 @@ for (var i = 0; i < 2; i+=1) {
 //TODO: consider running this as a daemon
 //TODO: this waiting could be in elm ... would possibly need to subscribe to time
 //TODO: changes to this file should also trigger autotest.sh
-function waitFor(id, testFx, onReady, timeOutMillis) {
+function waitFor(context, id, testFx, onReady, timeOutMillis) {
     var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //TODO: make this a config option
         start = new Date().getTime(),
         condition = false,
@@ -54,11 +54,11 @@ function waitFor(id, testFx, onReady, timeOutMillis) {
             } else {
                 if (!condition) {
                     clearInterval(interval);
-                    respond(id, ["timeout"]);
+                    respond(context, id, ["timeout"]);
                 } else {
                     onReady();
                     clearInterval(interval);
-                    respond(id, []);
+                    respond(context, id, []);
                 }
             }
         }, 1); //TODO: make this a config option
@@ -99,8 +99,8 @@ app.ports.requests.subscribe(function(request) {
   else if (name == "goto") { goto(page, context, id, command.args[0]); }
   else if (name == "textContains") { textContains(page, context, id, command.args[0], command.args[1]); }
   else if (name == "close") { close(page, context, id); }
-  else if (name == "serve") { serve(id, command.args[0], command.args[1]); }
-  else { respond(step.id, ["don't know how to process request: " + JSON.stringify(request) ]); }
+  else if (name == "serve") { serve(context, id, command.args[0], command.args[1]); }
+  else { respond(context, step.id, ["don't know how to process request: " + JSON.stringify(request) ]); }
 });
 
 //var config = { browsers:pages.length }
@@ -108,7 +108,7 @@ app.ports.requests.subscribe(function(request) {
 
 //TODO: add start time, to capture duration ...
 //TODO: rename to notifyElm or something ...
-function respond(id, failures) {
+function respond(context, id, failures) {
   var response = { id:id, failures:failures }
   //TODO: make this a config option
   //TODO: and actually this is probably the wrong place for it. because some commmands don't want it...
@@ -120,15 +120,15 @@ function respond(id, failures) {
 function goto(page, context, id, url) {
   page.open(url, function(status) {
     if (status !== 'success') {
-      respond(id, ['Unable to access network'])
+      respond(context, id, ['Unable to access network'])
     } else {
-      respond(id, [])
+      respond(context, id, [])
     }
   });
 }
 
 function click(page, context, id, selector) {
-  waitFor(id, function() {
+  waitFor(context, id, function() {
     //condition
     return page.evaluate(function(theSelector) {
       //TODO: pull out as findUniqueInteractable
@@ -150,7 +150,7 @@ function click(page, context, id, selector) {
 
 //TODO: consider casper ... http://docs.casperjs.org/en/latest/modules/casper.html#options
 function enter(page, context, id, selector, value) {
-  waitFor(id, function() {
+  waitFor(context, id, function() {
     //condition
     return page.evaluate(function(theSelector) {
       //TODO: pull out as findUniqueInteractable
@@ -201,7 +201,7 @@ function enter(page, context, id, selector, value) {
 
 //TODO: asserts() will always look a bit like this
 function textContains(page, context, id, selector, expected) {
-  waitFor(id, function() {
+  waitFor(context, id, function() {
     //condition
     return page.evaluate(function(theSelector, theExpected) {
       //TODO: pull out as findUnique
@@ -215,14 +215,14 @@ function textContains(page, context, id, selector, expected) {
 }
 
 function close(page, context, id) {
-  respond(id, [])
+  respond(context, id, [])
   page.close()
   //TODO: pull out a separate exit
   console.log("Done " + (new Date().getTime() - started) + "ms.");
   phantom.exit()
 }
 
-function serve(id, path, port) {
+function serve(context, id, path, port) {
     var server = require('webserver').create();
     var fs = require('fs')
 
@@ -255,5 +255,5 @@ function serve(id, path, port) {
         phantom.exit();
     }
 
-  respond(id, [])
+  respond(context, id, [])
 }
