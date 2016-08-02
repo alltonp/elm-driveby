@@ -153,7 +153,7 @@ update requestsPort msg model =
         --TODO: go with Script, Step, Command, Result etc
         --TODO: send ExampleFailure if response has failures
         --TODO: Start should be NextStep
-        next = if List.isEmpty response.failures then asFx (Start 1 {-response.browser-})
+        next = if List.isEmpty response.failures then asFx (Start response.context.browser)
                else asFx (Exit ("☒ - " ++ (toString response.failures) ++ " running " ++ (toString current)) )
       in
       ( model', next )
@@ -161,9 +161,10 @@ update requestsPort msg model =
     --TODO: is this Failed really?
     Exit message ->
       let
-        --TODO: this is odd, lets do in js instead ...
+        --TODO: this renders odd, lets do in js instead ...
         d = Debug.log "Driveby" message
       in
+      --TODO: this 1 is well dodgy ...
       ( model, requestsPort (Request (Step "999" close False) (Context 1)) )
 
 
