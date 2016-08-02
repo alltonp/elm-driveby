@@ -126,18 +126,27 @@ update requestsPort msg model =
 
         script = model.script
         script' = { script | id = Just "1" }
-        --model.config.browsers
+
+        all = List.repeat (model.config.browsers-1) 0
+              |> List.indexedMap (,)
+              |> List.map (\(i,r) -> asFx (Start i) )
+
+        x = Cmd.batch (all)
+
+        dx = Debug.log "x" (toString x)
+
       in
-      ( { model | script = script' } , asFx (Start 1) )
+--      ( { model | script = script' } , asFx (Start 1) )
+      ( { model | script = script' } , x )
 
     Start browserId ->
       let
         next = List.filter (\s -> not s.executed) model.script.steps |> List.head
         cmd = case next of
             Just c ->
---              let
---                d = Debug.log "Driveby" (c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
---              in
+              let
+                d = Debug.log "Driveby" ((toString browserId) ++ " " ++ c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
+              in
                 requestsPort (Request c (Context browserId))
             Nothing -> asFx (Exit ("☑ - "  ++ model.script.name) )
       in
