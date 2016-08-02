@@ -130,7 +130,7 @@ update requestsPort msg model =
       in
       ( { model | script = script' } , asFx (Start 1) )
 
-    Start browser ->
+    Start browserId ->
       let
         next = List.filter (\s -> not s.executed) model.script.steps |> List.head
         cmd = case next of
@@ -138,7 +138,7 @@ update requestsPort msg model =
 --              let
 --                d = Debug.log "Driveby" (c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
 --              in
-                requestsPort (Request c (Context browser))
+                requestsPort (Request c (Context browserId))
             Nothing -> asFx (Exit ("☑ - "  ++ model.script.name) )
       in
       ( model, cmd )
