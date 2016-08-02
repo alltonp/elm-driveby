@@ -125,11 +125,12 @@ update requestsPort msg model =
       let
         --TODO: store date or lose it ...
         --script' = [model.script] |> List.indexedMap (,) |> List.map(\i s -> {s | id = Just i })
-        d = Debug.log "Configuring" (toString model)
+--        d = Debug.log "Configuring" (toString model)
 
         script = model.script
         script' = { script | id = Just "1" }
 
+        --TODO should be max of browsers and scripts
         howMany = (model.config.browsers-1)
         all = List.repeat howMany 0
               |> List.indexedMap (,)
@@ -161,6 +162,7 @@ update requestsPort msg model =
                 d = Debug.log "Driveby" ((toString browserId) ++ " " ++ c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
               in
                 requestsPort (Request c (Context browserId))
+            --TODO: this looks iffy now ...
             Nothing -> asFx (Exit ("☑ - "  ++ model.script.name) )
       in
       ( model, cmd )
