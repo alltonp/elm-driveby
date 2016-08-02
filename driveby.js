@@ -5,6 +5,7 @@
 //TODO: make it so that each command can report it's duration
 var started = new Date().getTime();
 
+//TODO: rename to browsers
 var pages = [];
 
 //TODO: put this in arg[] to this script ..
@@ -90,13 +91,14 @@ app.ports.requests.subscribe(function(request) {
   var command = request.step.command
   var name = command.name
   var id = request.step.id
-  var page = pages[request.context.browser]
+  var context = request.context
+  var page = pages[context.browser]
 
-  if (name == "click") { click(page, id, command.args[0]); }
-  else if (name == "enter") { enter(page, id, command.args[0], command.args[1]); }
-  else if (name == "goto") { goto(page, id, command.args[0]); }
-  else if (name == "textContains") { textContains(page, id, command.args[0], command.args[1]); }
-  else if (name == "close") { close(page, id); }
+  if (name == "click") { click(page, context, id, command.args[0]); }
+  else if (name == "enter") { enter(page, context, id, command.args[0], command.args[1]); }
+  else if (name == "goto") { goto(page, context, id, command.args[0]); }
+  else if (name == "textContains") { textContains(page, context, id, command.args[0], command.args[1]); }
+  else if (name == "close") { close(page, context, id); }
   else if (name == "serve") { serve(id, command.args[0], command.args[1]); }
   else { respond(step.id, ["don't know how to process request: " + JSON.stringify(request) ]); }
 });
@@ -115,7 +117,7 @@ function respond(id, failures) {
 }
 
 //TODO: I dont seem to fail nicely, e.g. hang on bad url
-function goto(page, id, url) {
+function goto(page, context, id, url) {
   page.open(url, function(status) {
     if (status !== 'success') {
       respond(id, ['Unable to access network'])
@@ -125,7 +127,7 @@ function goto(page, id, url) {
   });
 }
 
-function click(page, id, selector) {
+function click(page, context, id, selector) {
   waitFor(id, function() {
     //condition
     return page.evaluate(function(theSelector) {
@@ -147,7 +149,7 @@ function click(page, id, selector) {
 }
 
 //TODO: consider casper ... http://docs.casperjs.org/en/latest/modules/casper.html#options
-function enter(page, id, selector, value) {
+function enter(page, context, id, selector, value) {
   waitFor(id, function() {
     //condition
     return page.evaluate(function(theSelector) {
@@ -198,7 +200,7 @@ function enter(page, id, selector, value) {
 //TIP: and performance - https://api.jquery.com/filter/
 
 //TODO: asserts() will always look a bit like this
-function textContains(page, id, selector, expected) {
+function textContains(page, context, id, selector, expected) {
   waitFor(id, function() {
     //condition
     return page.evaluate(function(theSelector, theExpected) {
@@ -212,7 +214,7 @@ function textContains(page, id, selector, expected) {
   );
 }
 
-function close(page, id) {
+function close(page, context, id) {
   respond(id, [])
   page.close()
   //TODO: pull out a separate exit

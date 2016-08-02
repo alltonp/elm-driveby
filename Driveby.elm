@@ -16,6 +16,12 @@ import Date exposing (..)
 --TODO: ultimately should take List Script
 --when asking for next, just get the next command for the current script, if script is done, get the next script .. etc
 --or TEA up the script runners?
+
+--have an Array of executors and put a script in each one ...
+--then get and set the script from there ...
+--how will we find it again?
+--maybe a Dict is better
+
 driveby : Script -> (Request -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Flags
 driveby script requestsPort responsesPort =
   App.programWithFlags
@@ -90,6 +96,7 @@ type alias Command =
 --TODO: rename to Result or Outcome
 type alias Response =
   { id: String
+--  , browser : Int
   , failures: List String
   }
 
@@ -101,7 +108,7 @@ type alias Config =
 --TODO: fix all this naming too
 type Msg
   = Go Date
-  | Start
+  | Start Int
 --  | Setup Config
   | Process Response
   | Exit String
@@ -119,10 +126,11 @@ update requestsPort msg model =
 
         script = model.script
         script' = { script | id = Just "1" }
+        --model.config.browsers
       in
-      ( { model | script = script' } , asFx Start )
+      ( { model | script = script' } , asFx (Start 1) )
 
-    Start ->
+    Start browser ->
       let
         next = List.filter (\s -> not s.executed) model.script.steps |> List.head
         cmd = case next of
@@ -130,7 +138,7 @@ update requestsPort msg model =
 --              let
 --                d = Debug.log "Driveby" (c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
 --              in
-                requestsPort (Request c (Context 1))
+                requestsPort (Request c (Context browser))
             Nothing -> asFx (Exit ("☑ - "  ++ model.script.name) )
       in
       ( model, cmd )
@@ -145,7 +153,7 @@ update requestsPort msg model =
         --TODO: go with Script, Step, Command, Result etc
         --TODO: send ExampleFailure if response has failures
         --TODO: Start should be NextStep
-        next = if List.isEmpty response.failures then asFx Start
+        next = if List.isEmpty response.failures then asFx (Start 1 {-response.browser-})
                else asFx (Exit ("☒ - " ++ (toString response.failures) ++ " running " ++ (toString current)) )
       in
       ( model', next )
