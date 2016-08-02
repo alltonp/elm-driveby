@@ -57,31 +57,31 @@ type alias Model =
 
 --TODO: we may need a bool to say its been run, or maybe store the start, stop times,
 type alias Script =
-  { name: String
-  , steps: List Step
-  , id: Maybe String
+  { name : String
+  , steps : List Step
+  , id : Maybe String
   }
 
 
 --TODO: this should poobably be Request and requestId everywhere ...
 type alias Step =
-  { id: String
+  { id : String
   --, scriptId : String
-  , command: Command
-  , executed: Bool
+  , command : Command
+  , executed : Bool
   }
 
 
 --TODO: cry to lose/inline Step if we can
 --if steps were an array, could it just be the index?
 type alias Request =
-  { step: Step
-  , context: Context
+  { step : Step
+  , context : Context
   }
 
 
 type alias Context =
-  { browserId: Int
+  { browserId : Int
   }
 
 
@@ -89,22 +89,22 @@ type alias Context =
 --TODO: consider value being a a first class thing, at least a Maybe ...
 --TODO: consider expected being a a first class thing, at least a Maybe ...
 type alias Command =
-  { name: String
-  , args: List String
+  { name : String
+  , args : List String
   }
 
 
 --TODO: consider Id as a type and give it the bits it needs ...
 --TODO: rename to Result or Outcome
 type alias Response =
-  { id: String
-  , context: Context
-  , failures: List String
+  { id : String
+  , context : Context
+  , failures : List String
   }
 
 
 type alias Config =
-  { browsers: Int
+  { browsers : Int
   }
 
 --TODO: fix all this naming too
