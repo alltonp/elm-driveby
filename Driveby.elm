@@ -96,7 +96,7 @@ type alias Command =
 --TODO: rename to Result or Outcome
 type alias Response =
   { id: String
---  , browser : Int
+  , context: Context
   , failures: List String
   }
 
