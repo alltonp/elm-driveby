@@ -57,7 +57,7 @@ type alias Model =
   { script : Script
   , scripts : List Script
   , config : Config
-  , browserIdToScriptId : Dict Int (Maybe String)
+  , browserIdToScriptId : Dict Int String
   , scriptIdToScript : Dict String Script
   }
 
@@ -138,7 +138,7 @@ update requestsPort msg model =
       let
         --TODO: store date or lose it ...
         --script' = [model.script] |> List.indexedMap (,) |> List.map(\i s -> {s | id = Just i })
---        d = Debug.log "Configuring" (toString model)
+        d = Debug.log "Go" (toString model)
 
         script = model.script
         script' = { script | id = Just "1" }
@@ -167,7 +167,7 @@ update requestsPort msg model =
         script = model.script
 --        running = model.running
 --        running' = Array.set browserId script running
-        browserIdToScriptId' = Dict.update browserId (\v -> Just script.id) model.browserIdToScriptId
+        browserIdToScriptId' = Dict.update browserId (\v -> script.id) model.browserIdToScriptId
 
       in
         ( { model | browserIdToScriptId = browserIdToScriptId' } , asFx (RunNext browserId))
@@ -175,20 +175,30 @@ update requestsPort msg model =
 
     RunNext browserId ->
       let
-        script = model.script
-        next = List.filter (\s -> not s.executed) script.steps |> List.head
-        cmd = case next of
-            Just c ->
+        maybeScript = Just model.script
+--        scriptId = Dict.get browserId model.browserIdToScriptId
+--        maybeScript = Dict.get (Maybe.withDefault "" scriptId) model.scriptIdToScript
+
+        cmd2 = case maybeScript of
+            Just script ->
               let
-                d = Debug.log "Driveby" ((toString browserId) ++ " " ++ c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
-                m = Debug.log "Model" (toString model.browserIdToScriptId)
---                m = Debug.log "Model" (toString model.browserIdToScriptId ++ toString model.scriptIdToScript)
+                next = List.filter (\s -> not s.executed) script.steps |> List.head
+                cmd = case next of
+                    Just c ->
+                      let
+                        d = Debug.log "Driveby" ((toString browserId) ++ " " ++ c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
+                        m = Debug.log "Model" (toString model.browserIdToScriptId)
+        --                m = Debug.log "Model" (toString model.browserIdToScriptId ++ toString model.scriptIdToScript)
+                      in
+                        requestsPort (Request c (Context browserId))
+                    --TODO: this looks iffy now ...
+                    Nothing -> asFx (Exit ("☑ - "  ++ script.name) )
               in
-                requestsPort (Request c (Context browserId))
-            --TODO: this looks iffy now ...
-            Nothing -> asFx (Exit ("☑ - "  ++ script.name) )
+                 cmd
+
+            Nothing -> Cmd.none
       in
-        ( model, cmd )
+        ( model, cmd2 )
 
     Process response ->
       let
