@@ -40,7 +40,8 @@ init script flags =
      (Config flags.browsers)
 --     (Array.repeat flags.browsers (Script "N/A" [] Nothing Nothing Nothing) )
 --     (Dict.fromList [("0", Just "0")])
-     (Dict.empty)
+     Dict.empty
+     Dict.empty
      , go)
 
 
@@ -60,6 +61,7 @@ type alias Model =
   --TODO: I think this needs to die
 --  , running : Array Script
   , browserIdToScriptId : Dict Int (Maybe String)
+  , scriptIdToScript : Dict String Script
   }
 
 
