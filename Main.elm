@@ -9,7 +9,7 @@ port responses : (Response -> msg) -> Sub msg
 
 
 main =
-   driveby test [test, test2] requests responses
+   driveby test [test, test2, test3] requests responses
 
 
 --TODO: should be assert [ "textContains", "#messageList", "Auto Loading Metadata" ]
@@ -47,6 +47,29 @@ test2 =
     [
       serve "../shoreditch-ui-chrome/chrome" 8081
     , goto "http://localhost:8081/elm.html"
+
+    , Command "textContains" [ "#messageList", "Auto Loading Metadata" ]
+    , Command "textContains" [ "#messageList", "LoadAllMetaDataResponse ([{ url = " ]
+
+--    , click "refreshButton"
+--    , Command "textContains" [ "#messageList", "ManualMetaDataRefresh" ]
+
+    , enter "configuration" "1"
+    , Command "textContains" [ "#messageList", "ConfigurationChanged \"1" ]
+
+    , enter "configuration" "2"
+    , Command "textContains" [ "#messageList", "ConfigurationChanged \"12" ]
+
+--    , click "refreshButton"
+--    , Command "textContains" [ "#messageList", "LoadAllMetaDataResponse []" ]
+    ]
+
+test3 : Script
+test3 =
+  script "Third Test"
+    [
+      serve "../shoreditch-ui-chrome/chrome" 8082
+    , goto "http://localhost:8082/elm.html"
 
     , Command "textContains" [ "#messageList", "Auto Loading Metadata" ]
     , Command "textContains" [ "#messageList", "LoadAllMetaDataResponse ([{ url = " ]
