@@ -331,27 +331,19 @@ update requestsPort msg model =
     --TODO: is this Failed really?
     Exit message context ->
       let
-        --TODO: this renders odd, lets do in js instead ...
+        --TODO: this renders strangely, lets do in js instead ...
         d = Debug.log "Driveby" message
---        isMoreScripts = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing ) |> List.isEmpty
         needStarting = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing )
         needFinishing = Dict.values model.scriptIdToScript |> List.filter (\s -> s.finished == Nothing )
---        d2 = Debug.log "Driveby isMoreScripts: " ((toString isMoreScripts) ++ (toString (Dict.values model.scriptIdToScript)))
-        d2 = Debug.log "Driveby needStarting: " ((toString (List.length needStarting)))-- ++ (toString (Dict.values model.scriptIdToScript)))
-        d3 = Debug.log "Driveby needFinishing: " ((toString (List.length needFinishing)))-- ++ (toString (Dict.values model.scriptIdToScript)))
+--        d2 = Debug.log "Driveby needStarting: " ((toString (List.length needStarting)))-- ++ (toString (Dict.values model.scriptIdToScript)))
+--        d3 = Debug.log "Driveby needFinishing: " ((toString (List.length needFinishing)))-- ++ (toString (Dict.values model.scriptIdToScript)))
 
         cmd = if not (List.isEmpty needStarting) then asFx (Start context.browserId context.updated)
               else if not (List.isEmpty needFinishing) then Cmd.none
               --TODO: we should be updating the context.stepId whenever we send it through requestsPort
+              --TODO: we shouldnt have to hardcode this 999 either ..
               else (requestsPort (Request (Step "999" close False) (context)))
---              else asFx (Start context.browserId context.updated)
-
---              then Cmd.none
---              else Cmd.none
       in
-        --TODO: this 1 is well dodgy ...
-        --TODO: and this "1" we need to pass in a context really
-        --TODO: the less said about the last one the better
         ( model, cmd )
 
 
