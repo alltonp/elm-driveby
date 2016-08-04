@@ -8,7 +8,7 @@ import Html exposing (..)
 import Task
 import Date exposing (..)
 import Array exposing (..)
-
+import Dict exposing (..)
 
 --TODO: so for sequence its easy, just have a current one and work through the list
 --TODO: for parallel, how do we do it?
@@ -36,7 +36,7 @@ driveby script requestsPort responsesPort =
 --TODO: this stupid N/A Script thing needs to die, maybe it will do when it becomes a list
 init : Script -> Flags -> (Model, Cmd Msg)
 init script flags =
-   (Model script (Config flags.browsers) (Array.repeat flags.browsers (Script "N/A" [] Nothing Nothing Nothing) ), go)
+   (Model script (Config flags.browsers) (Array.repeat flags.browsers (Script "N/A" [] Nothing Nothing Nothing) ) Dict.empty, go)
 
 
 subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
@@ -52,7 +52,9 @@ type alias Flags =
 type alias Model =
   { script : Script
   , config : Config
+  --TODO: I think this needs to die
   , running : Array Script
+  , browserIdToScriptId : Dict String String
   }
 
 
@@ -137,6 +139,10 @@ update requestsPort msg model =
 
         --TODO should be max of browsers and scripts
         howMany = (model.config.browsers-1)
+
+--        browserIdToScriptId = Dict
+--List.map (\a -> (a, a)) args |> Dict.fromList
+
         all = List.repeat howMany 0
               |> List.indexedMap (,)
               |> List.map (\(i,r) -> asFx (Start i) )
