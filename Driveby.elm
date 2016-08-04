@@ -251,7 +251,7 @@ update requestsPort msg model =
 --        m3 = Debug.log "scriptIdToScript" (toString (Dict.keys model.scriptIdToScript))
 --        m1 = Debug.log "maybeScript" maybeScript
 
-        cmd2 = case maybeScript of
+        (model2, cmd2) = case maybeScript of
             Just executableScript ->
               let
                 next = List.filter (\s -> not s.executed) executableScript.script.steps |> List.head
@@ -262,16 +262,20 @@ update requestsPort msg model =
 --                        m = Debug.log "Model" (toString model.browserIdToScriptId)
         --                m = Debug.log "Model" (toString model.browserIdToScriptId ++ toString model.scriptIdToScript)
                       in
-                        requestsPort (Request c (context))
+                        ( model, requestsPort (Request c (context)))
                     --TODO: this looks iffy now ...
                     --TODO: this is defo wrong, we should'nt have even hit RunNext, should have bailed in Process
-                    Nothing -> asFx (Exit ("☑ - "  ++ executableScript.script.name) context)
+                    Nothing ->
+                      let
+                        executableScript' = { executableScript | started = Just context.updated }
+                      in
+                        ( model, asFx (Exit ("☑ - "  ++ executableScript.script.name) context))
               in
                  cmd
 
-            Nothing -> Cmd.none
+            Nothing -> (model, Cmd.none)
       in
-        ( model, cmd2 )
+        ( model2, cmd2 )
 
     Process response ->
       let
@@ -292,6 +296,7 @@ update requestsPort msg model =
                 script' = { script | steps = steps' }
 
                 executableScript' = { executableScript | script = script'}
+
 --                browserId = response.context.browserId
 --                browserIdToScriptId' = Dict.update browserId (\v -> script') model.browserIdToScriptId
 
