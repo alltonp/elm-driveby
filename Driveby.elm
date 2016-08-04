@@ -1,6 +1,5 @@
---TODO: tighten this up ...
+--TODO: tighten this up ... expose minimum (driveby)
 module Driveby exposing (..)
---driveby
 
 
 import Html.App as App
@@ -10,33 +9,24 @@ import Date exposing (..)
 import Array exposing (..)
 import Dict exposing (..)
 
---TODO: so for sequence its easy, just have a current one and work through the list
---TODO: for parallel, how do we do it?
---TODO: obviously parallel of 1 is same as seq :)
 --TODO: ultimately no console sutff in here, report it to js land instead
---TODO: ultimately should take List Script
 --when asking for next, just get the next command for the current script, if script is done, get the next script .. etc
 --or TEA up the script runners?
 
---have an Array of executors and put a script in each one ...
---then get and set the script from there ...
---how will we find it again?
---maybe a Dict is better
 
-driveby : Script -> List Script -> (Request -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Flags
-driveby script scripts requestsPort responsesPort =
+driveby : List Script -> (Request -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Flags
+driveby scripts requestsPort responsesPort =
   App.programWithFlags
-    { init = init script scripts
+    { init = init scripts
     , view = view
     , update = update requestsPort
     , subscriptions = subscriptions responsesPort
     }
 
 
---TODO: this stupid N/A Script thing needs to die, maybe it will do when it becomes a list
-init : Script -> List Script -> Flags -> (Model, Cmd Msg)
-init script scripts flags =
-   (Model {-script-} scripts
+init : List Script -> Flags -> (Model, Cmd Msg)
+init scripts flags =
+   (Model scripts
      (Config flags.browsers)
      Dict.empty
      Dict.empty
