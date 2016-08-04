@@ -148,7 +148,9 @@ update requestsPort msg model =
         --TODO should be max of browsers and scripts
         howMany = (model.config.browsers-1)
 
---        scriptIdToScript' = List.map (\i a -> (toString i, a)) |> Dict.fromList
+        --TODO: need to do something better with maybe ...
+        --TODO: consider bending them in here .. RunnableScript ...
+        scriptIdToScript' = model.scripts |> List.map (\s -> (s.id |> Maybe.withDefault "???", s)) |> Dict.fromList
 
         all = List.repeat howMany 1
               |> List.indexedMap (,)
@@ -160,7 +162,7 @@ update requestsPort msg model =
 
       in
 --      ( { model | script = script' } , asFx (Start 1) )
-        ( { model | script = script' } , x )
+        ( { model | script = script', scriptIdToScript = scriptIdToScript' } , x )
 
     Start browserId ->
       let
@@ -181,6 +183,7 @@ update requestsPort msg model =
               let
                 d = Debug.log "Driveby" ((toString browserId) ++ " " ++ c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
                 m = Debug.log "Model" (toString model.browserIdToScriptId)
+--                m = Debug.log "Model" (toString model.browserIdToScriptId ++ toString model.scriptIdToScript)
               in
                 requestsPort (Request c (Context browserId))
             --TODO: this looks iffy now ...
