@@ -36,7 +36,11 @@ driveby script requestsPort responsesPort =
 --TODO: this stupid N/A Script thing needs to die, maybe it will do when it becomes a list
 init : Script -> Flags -> (Model, Cmd Msg)
 init script flags =
-   (Model script (Config flags.browsers) (Array.repeat flags.browsers (Script "N/A" [] Nothing Nothing Nothing) ) Dict.empty, go)
+   (Model script
+     (Config flags.browsers)
+--     (Array.repeat flags.browsers (Script "N/A" [] Nothing Nothing Nothing) )
+--     Dict.fromList [("0", Just "0")]
+     , go)
 
 
 subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
@@ -53,8 +57,8 @@ type alias Model =
   { script : Script
   , config : Config
   --TODO: I think this needs to die
-  , running : Array Script
-  , browserIdToScriptId : Dict String String
+--  , running : Array Script
+--  , browserIdToScriptId : Dict String Maybe String
   }
 
 
@@ -140,8 +144,7 @@ update requestsPort msg model =
         --TODO should be max of browsers and scripts
         howMany = (model.config.browsers-1)
 
---        browserIdToScriptId = Dict
---List.map (\a -> (a, a)) args |> Dict.fromList
+--        browserIdToScriptId' = List.repeat howMany (Nothing) |> List.indexedMap (\i a -> (toString i, a)) |> Dict.fromList
 
         all = List.repeat howMany 0
               |> List.indexedMap (,)
@@ -158,10 +161,11 @@ update requestsPort msg model =
     Start browserId ->
       let
         script = model.script
-        running = model.running
-        running' = Array.set browserId script running
+--        running = model.running
+--        running' = Array.set browserId script running
       in
-        ( { model | running = running' } , asFx (RunNext browserId))
+--        ( { model | running = running' } , asFx (RunNext browserId))
+        ( model , asFx (RunNext browserId))
 
     RunNext browserId ->
       let
