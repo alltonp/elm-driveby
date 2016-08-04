@@ -36,7 +36,7 @@ driveby script scripts requestsPort responsesPort =
 --TODO: this stupid N/A Script thing needs to die, maybe it will do when it becomes a list
 init : Script -> List Script -> Flags -> (Model, Cmd Msg)
 init script scripts flags =
-   (Model script scripts
+   (Model {-script-} scripts
      (Config flags.browsers)
      Dict.empty
      Dict.empty
@@ -54,11 +54,12 @@ type alias Flags =
 
 --TODO: kill script ...
 type alias Model =
-  { script : Script
-  , scripts : List Script
+  { {-script : Script
+  ,-}
+  scripts : List Script
   , config : Config
   , browserIdToScriptId : Dict Int String
-  , scriptIdToScript : Dict String Script
+  , scriptIdToScript : Dict String ExecutableScript
   }
 
 
@@ -67,12 +68,14 @@ type alias Model =
 type alias Script =
   { name : String
   , steps : List Step
-  --TODO: make me not a Maybe ideally ..
-  , id : Maybe String
+  }
+
+type alias ExecutableScript =
+  { script: Script
+  , id : String
   , started : Maybe Date
   , finished : Maybe Date
   }
-
 
 --TODO: this should poobably be Request and requestId everywhere ...
 type alias Step =
@@ -93,6 +96,7 @@ type alias Request =
 
 type alias Context =
   { browserId : Int
+  , scriptId : String
   }
 
 
@@ -124,7 +128,7 @@ type Msg
   --TODO: RunScript
   | Start Int
   --TODO: RunNextCommand
-  | RunNext Int
+  | RunNext Context
 --  | Setup Config
   | Process Response
   | Exit String
@@ -138,17 +142,22 @@ update requestsPort msg model =
       let
         --TODO: store date or lose it ...
         --script' = [model.script] |> List.indexedMap (,) |> List.map(\i s -> {s | id = Just i })
---        d = Debug.log "Go" (toString model)
+        d = Debug.log "Go" ""
 
-        script = model.script
-        script' = { script | id = Just "0" }
+--        script = model.script
+--        script' = { script | id = Just "0" }
 
         --TODO should be max of browsers and scripts
         howMany = (model.config.browsers-1)
 
         --TODO: need to do something better with maybe ...
         --TODO: consider bending them in here .. RunnableScript ...
-        scriptIdToScript' = model.scripts |> List.indexedMap (\i s -> (toString i, s)) |> Dict.fromList
+        scriptIdToScript' = model.scripts |> List.indexedMap (\i s ->
+          let
+            id = (toString i)
+          in
+            (id, ExecutableScript s id Nothing Nothing)
+        ) |> Dict.fromList
 
         all = List.repeat howMany 1
               |> List.indexedMap (,)
@@ -159,45 +168,85 @@ update requestsPort msg model =
 --        dx = Debug.log "x" (toString x)
 
       in
---      ( { model | script = script' } , asFx (Start 1) )
-        ( { model | script = script', scriptIdToScript = scriptIdToScript' } , x )
+----      ( { model | script = script' } , asFx (Start 1) )
+----        ( { model | script = script', scriptIdToScript = scriptIdToScript' } , x )
+        ( { model | scriptIdToScript = scriptIdToScript' } , x )
+--        (model, Cmd.none)
+
 
     Start browserId ->
       let
+        rn = Debug.log "Start" browserId
+
         --TODO: this needs to be find next avialable Script
-        script = model.script
+--        script = model.script
+--          script = Dict.value model.scriptIdToScript
+
+        --THIS IS IT ...
+        --find one without a start and update it with one ...
+        --then use that id
+--        maybeNextScript = Dict.filter (\k v -> v.started == Nothing ) model.scriptIdToScript |> Dict.toList |> List.head
+        maybeNextScript = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing ) |> List.head
+
+--        d = Debug.log "maybeNextScript" maybeNextScript
+
+        (model', cmd) =
+          case maybeNextScript of
+            Just nextScript ->
+              let
+                browserIdToScriptId' = Dict.update browserId (\v -> Just nextScript.id) model.browserIdToScriptId
+--                browserIdToScriptId' = model.browserIdToScriptId
+                context = Context browserId nextScript.id
+--                dc = Debug.log "context" context
+
+              in
+                ( { model | browserIdToScriptId = browserIdToScriptId' } , asFx (RunNext context))
+--              (model, Cmd.none)
+
+            Nothing ->
+              (model, Cmd.none)
+
+
 --        running = model.running
 --        running' = Array.set browserId script running
-        browserIdToScriptId' = Dict.update browserId (\v -> script.id) model.browserIdToScriptId
+--        browserIdToScriptId' = Dict.update browserId (\v -> script.id) model.browserIdToScriptId
+        --TODO: kill the maybe ...
+--        context = Context browserId "1"
+
+--        d2 = Debug.log "cmd" cmd
+--        d3 = Debug.log "new model b2s" model'.browserIdToScriptId
+--        d4 = Debug.log "new model s2s" model'.scriptIdToScript
 
       in
-        ( { model | browserIdToScriptId = browserIdToScriptId' } , asFx (RunNext browserId))
+        (model', cmd)
 --        ( model , asFx (RunNext browserId))
 
-    RunNext browserId ->
+    RunNext context ->
       let
-        maybeScript = Just model.script
---        scriptId = Dict.get browserId model.browserIdToScriptId
---        maybeScript = Dict.get (Maybe.withDefault "" scriptId) model.scriptIdToScript
+        rn = Debug.log "RunNext" context
+
+--        maybeScript = Just model.script
+        scriptId = Dict.get context.browserId model.browserIdToScriptId
+        maybeScript = Dict.get (Maybe.withDefault "" scriptId) model.scriptIdToScript
 
 --        m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
 --        m3 = Debug.log "scriptIdToScript" model.scriptIdToScript
 --        m1 = Debug.log "maybeScript" maybeScript
 
         cmd2 = case maybeScript of
-            Just script ->
+            Just executableScript ->
               let
-                next = List.filter (\s -> not s.executed) script.steps |> List.head
+                next = List.filter (\s -> not s.executed) executableScript.script.steps |> List.head
                 cmd = case next of
                     Just c ->
                       let
-                        d = Debug.log "Driveby" ((toString browserId) ++ " " ++ c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
-                        m = Debug.log "Model" (toString model.browserIdToScriptId)
+                        d = Debug.log "Driveby" ((toString context.browserId) ++ " " ++ c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
+--                        m = Debug.log "Model" (toString model.browserIdToScriptId)
         --                m = Debug.log "Model" (toString model.browserIdToScriptId ++ toString model.scriptIdToScript)
                       in
-                        requestsPort (Request c (Context browserId))
+                        requestsPort (Request c (context))
                     --TODO: this looks iffy now ...
-                    Nothing -> asFx (Exit ("☑ - "  ++ script.name) )
+                    Nothing -> asFx (Exit ("☑ - "  ++ executableScript.script.name) )
               in
                  cmd
 
@@ -207,28 +256,44 @@ update requestsPort msg model =
 
     Process response ->
       let
-        maybeScript = Just model.script
---        scriptId = Dict.get browserId model.browserIdToScriptId
---        maybeScript = Dict.get (Maybe.withDefault "" scriptId) model.scriptIdToScript
+        rn = Debug.log "Process" response
 
-        (model', next2) = case maybeScript of
-            Just script ->
+--        maybeScript = Just model.script
+        scriptId = Dict.get response.context.browserId model.browserIdToScriptId
+        maybeScript = Dict.get (Maybe.withDefault "" scriptId) model.scriptIdToScript
+
+        (model2', next2) = case maybeScript of
+            Just executableScript ->
               let
-                current = List.filter (\s -> s.id == response.id) script.steps
-                steps' = List.map (\s -> if s.id == response.id then Step s.id s.command True else s ) script.steps
+                --used? debug only?
+                current = List.filter (\s -> s.id == response.id) executableScript.script.steps
+
+                steps' = List.map (\s -> if s.id == response.id then Step s.id s.command True else s ) executableScript.script.steps
+                script = executableScript.script
                 script' = { script | steps = steps' }
-                model' = { model | script = script' }
+
+                executableScript' = { executableScript | script = script'}
+--                browserId = response.context.browserId
+--                browserIdToScriptId' = Dict.update browserId (\v -> script') model.browserIdToScriptId
+
+                scriptId = response.context.scriptId
+                scriptIdToScript' = Dict.update scriptId (\e -> Just executableScript') model.scriptIdToScript
+--                scriptIdToScript' = Dict.update scriptId (\e -> e) model.scriptIdToScript
+
+--                model' = { model | script = script', browserIdToScriptId = scriptIdToScript' }
+                model' = { model | scriptIdToScript = scriptIdToScript' }
+
                 --TODO: go with Script, Step, Command, Result etc
                 --TODO: send ExampleFailure if response has failures
                 --TODO: Start should be NextStep
-                next = if List.isEmpty response.failures then asFx (RunNext response.context.browserId)
+                next = if List.isEmpty response.failures then asFx (RunNext response.context)
                        else asFx (Exit ("☒ - " ++ (toString response.failures) ++ " running " ++ (toString current)) )
               in
                 (model', next)
 
             Nothing -> (model, Cmd.none)
       in
-        ( model', next2 )
+        ( model2', next2 )
 
     --TODO: is this Failed really?
     Exit message ->
@@ -237,7 +302,8 @@ update requestsPort msg model =
         d = Debug.log "Driveby" message
       in
         --TODO: this 1 is well dodgy ...
-        ( model, requestsPort (Request (Step "999" close False) (Context 1)) )
+        --TODO: and this "1" we need to pass in a context really
+        ( model, requestsPort (Request (Step "999" close False) (Context 1 "1")) )
 
 
 view : Model -> Html Msg
@@ -260,7 +326,7 @@ script : String -> List Command -> Script
 script name commands =
   Script name (commands
       |> List.indexedMap (,)
-      |> List.map (\(i,r) -> Step (toString i) r False)) Nothing Nothing Nothing
+      |> List.map (\(i,r) -> Step (toString i) r False))
 
 
 --TODO: eventually these will be in Driveby.Command or something
