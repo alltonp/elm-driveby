@@ -97,6 +97,7 @@ type alias Request =
 type alias Context =
   { browserId : Int
   , scriptId : String
+  , stepId : Int
   }
 
 
@@ -196,7 +197,7 @@ update requestsPort msg model =
               let
                 browserIdToScriptId' = Dict.update browserId (\v -> Just nextScript.id) model.browserIdToScriptId
 --                browserIdToScriptId' = model.browserIdToScriptId
-                context = Context browserId nextScript.id
+                context = Context browserId nextScript.id 0
 --                dc = Debug.log "context" context
 
               in
@@ -246,6 +247,7 @@ update requestsPort msg model =
                       in
                         requestsPort (Request c (context))
                     --TODO: this looks iffy now ...
+                    --TODO: this is defo wrong, we should'nt have even hit RunNext, should have bailed in Process
                     Nothing -> asFx (Exit ("☑ - "  ++ executableScript.script.name) )
               in
                  cmd
@@ -286,7 +288,9 @@ update requestsPort msg model =
                 --TODO: go with Script, Step, Command, Result etc
                 --TODO: send ExampleFailure if response has failures
                 --TODO: Start should be NextStep
-                next = if List.isEmpty response.failures then asFx (RunNext response.context)
+                context = response.context
+                --TOOD: we should really have the stepId ...
+                next = if List.isEmpty response.failures then asFx (RunNext { context | stepId = context.stepId + 1 } )
                        else asFx (Exit ("☒ - " ++ (toString response.failures) ++ " running " ++ (toString current)) )
               in
                 (model', next)
@@ -303,7 +307,8 @@ update requestsPort msg model =
       in
         --TODO: this 1 is well dodgy ...
         --TODO: and this "1" we need to pass in a context really
-        ( model, requestsPort (Request (Step "999" close False) (Context 1 "1")) )
+        --TODO: the less said about the last one the better
+        ( model, requestsPort (Request (Step "999" close False) (Context 1 "1" 1)) )
 
 
 view : Model -> Html Msg
