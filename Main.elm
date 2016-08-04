@@ -15,9 +15,9 @@ main =
 --TODO: should be assert [ "textContains", "#messageList", "Auto Loading Metadata" ]
 --TODO: or assert [ "#messageList" "textContains", "Auto Loading Metadata" ]
 --TODO: might map well to jquery functions
---TODO: support multiple tests
 --TODO: should screenshot be a command? (taking a filepath, would offload more to elm)
 --TODO: support TextEquals next
+--TODO: make tests more sensible, not just blind C&P and give them names ..
 test : Script
 test =
   script "First Test"

@@ -153,6 +153,7 @@ update requestsPort msg model =
     --This isnt really a good name, the intention is to start a script on browserId
     --but actually it runs the next script on this browserid if there is one
     -- fix the implementation ...
+    -- might not need the date anymore
     Start browserId theDate ->
       let
         maybeNextScript = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing ) |> List.head
