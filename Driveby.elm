@@ -146,9 +146,9 @@ update requestsPort msg model =
 
 --        browserIdToScriptId' = List.repeat howMany (Nothing) |> List.indexedMap (\i a -> (toString i, a)) |> Dict.fromList
 
-        all = List.repeat howMany 0
+        all = List.repeat howMany 1
               |> List.indexedMap (,)
-              |> List.map (\(i,r) -> asFx (Start i) )
+              |> List.map (\(i,r) -> asFx (Start ({-9000 +-} i)) )
 
         x = Cmd.batch (all)
 
