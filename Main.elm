@@ -26,7 +26,7 @@ test =
   script "First Test"
     [
       serve "../shoreditch-ui-chrome/chrome" 8080
-    , goto "http://localhost:8080/elm.html"
+    , gotoLocal "8080/elm.html"
 
     , Command "textContains" [ "#messageList", "Auto Loading Metadata" ]
     , Command "textContains" [ "#messageList", "LoadAllMetaDataResponse ([{ url = " ]

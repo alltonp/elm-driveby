@@ -313,6 +313,10 @@ update requestsPort msg model =
 --                2011-10-05T14:48:00.000Z
 --                clearlyWrongDate = unsafeFromString "2016-06-17T11:15:00+0200"
                 --TOOD: we should really have the stepId ...
+
+                --BUG: if there is an error here we don't run the next step .. so we can't mark the test as finished ...
+                --a good argument for doing that check here ...
+
                 next = if List.isEmpty response.failures then asFx (RunNext { context | stepId = context.stepId + 1 } )
                        else asFx (Exit ("☒ - " ++ (toString response.failures) ++ " running " ++ (toString current)) response.context)
               in
@@ -332,8 +336,8 @@ update requestsPort msg model =
         needStarting = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing )
         needFinishing = Dict.values model.scriptIdToScript |> List.filter (\s -> s.finished == Nothing )
 --        d2 = Debug.log "Driveby isMoreScripts: " ((toString isMoreScripts) ++ (toString (Dict.values model.scriptIdToScript)))
---        d2 = Debug.log "Driveby needStarting: " ((toString (List.length needStarting)))-- ++ (toString (Dict.values model.scriptIdToScript)))
---        d3 = Debug.log "Driveby needFinishing: " ((toString (List.length needFinishing)))-- ++ (toString (Dict.values model.scriptIdToScript)))
+        d2 = Debug.log "Driveby needStarting: " ((toString (List.length needStarting)))-- ++ (toString (Dict.values model.scriptIdToScript)))
+        d3 = Debug.log "Driveby needFinishing: " ((toString (List.length needFinishing)))-- ++ (toString (Dict.values model.scriptIdToScript)))
 
         cmd = if not (List.isEmpty needStarting) then asFx (Start context.browserId context.updated)
               else if not (List.isEmpty needFinishing) then Cmd.none
@@ -391,6 +395,11 @@ serve path onPort =
 goto : String -> Command
 goto url =
   Command "goto" [url]
+
+
+gotoLocal : String -> Command
+gotoLocal path =
+  Command "gotoLocal" [path]
 
 
 click : String -> Command

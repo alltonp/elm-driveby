@@ -98,10 +98,11 @@ app.ports.requests.subscribe(function(request) {
   if (name == "click") { click(page, context, id, command.args[0]); }
   else if (name == "enter") { enter(page, context, id, command.args[0], command.args[1]); }
   else if (name == "goto") { goto(page, context, id, command.args[0]); }
+  else if (name == "gotoLocal") { goto(page, context, id, "http://localhost:" + command.args[0]); }
   else if (name == "textContains") { textContains(page, context, id, command.args[0], command.args[1]); }
   else if (name == "close") { close(page, context, id); }
   else if (name == "serve") { serve(context, id, command.args[0], command.args[1]); }
-  else { respond(context, step.id, ["don't know how to process request: " + JSON.stringify(request) ]); }
+  else { respond(context, id, ["don't know how to process request: " + JSON.stringify(request) ]); }
 });
 
 //var config = { browsers:pages.length }
