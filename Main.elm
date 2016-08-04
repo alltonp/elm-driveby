@@ -9,7 +9,7 @@ port responses : (Response -> msg) -> Sub msg
 
 
 main =
-   driveby test requests responses
+   driveby test [test] requests responses
 
 
 --TODO: should be assert [ "textContains", "#messageList", "Auto Loading Metadata" ]

@@ -23,10 +23,10 @@ import Dict exposing (..)
 --how will we find it again?
 --maybe a Dict is better
 
-driveby : Script -> (Request -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Flags
-driveby script requestsPort responsesPort =
+driveby : Script -> List Script -> (Request -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Flags
+driveby script scripts requestsPort responsesPort =
   App.programWithFlags
-    { init = init script
+    { init = init script scripts
     , view = view
     , update = update requestsPort
     , subscriptions = subscriptions responsesPort
@@ -34,9 +34,9 @@ driveby script requestsPort responsesPort =
 
 
 --TODO: this stupid N/A Script thing needs to die, maybe it will do when it becomes a list
-init : Script -> Flags -> (Model, Cmd Msg)
-init script flags =
-   (Model script
+init : Script -> List Script -> Flags -> (Model, Cmd Msg)
+init script scripts flags =
+   (Model script scripts
      (Config flags.browsers)
 --     (Array.repeat flags.browsers (Script "N/A" [] Nothing Nothing Nothing) )
 --     (Dict.fromList [("0", Just "0")])
@@ -57,6 +57,7 @@ type alias Flags =
 --TODO: so we want a list of scripts, and ultimately run them in parallel, but for now in sequence
 type alias Model =
   { script : Script
+  , scripts : List Script
   , config : Config
   --TODO: I think this needs to die
 --  , running : Array Script
@@ -147,7 +148,7 @@ update requestsPort msg model =
         --TODO should be max of browsers and scripts
         howMany = (model.config.browsers-1)
 
---        browserIdToScriptId' = List.repeat howMany (Nothing) |> List.indexedMap (\i a -> (toString i, a)) |> Dict.fromList
+--        scriptIdToScript' = List.map (\i a -> (toString i, a)) |> Dict.fromList
 
         all = List.repeat howMany 1
               |> List.indexedMap (,)
