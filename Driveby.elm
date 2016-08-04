@@ -244,8 +244,8 @@ update requestsPort msg model =
         scriptId = Dict.get context.browserId model.browserIdToScriptId
         maybeScript = Dict.get (Maybe.withDefault "" scriptId) model.scriptIdToScript
 
-        m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
-        m3 = Debug.log "scriptIdToScript" (toString (Dict.keys model.scriptIdToScript))
+--        m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
+--        m3 = Debug.log "scriptIdToScript" (toString (Dict.keys model.scriptIdToScript))
 --        m1 = Debug.log "maybeScript" maybeScript
 
         cmd2 = case maybeScript of
@@ -321,13 +321,16 @@ update requestsPort msg model =
       let
         --TODO: this renders odd, lets do in js instead ...
         d = Debug.log "Driveby" message
-        isMoreScripts = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing ) |> List.isEmpty
-        d2 = Debug.log "Driveby isMoreScripts: " ((toString isMoreScripts) ++ (toString (Dict.values model.scriptIdToScript)))
+--        isMoreScripts = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing ) |> List.isEmpty
+        isDone = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing ) |> List.isEmpty
+--        d2 = Debug.log "Driveby isMoreScripts: " ((toString isMoreScripts) ++ (toString (Dict.values model.scriptIdToScript)))
+        d2 = Debug.log "Driveby isDone: " ((toString isDone))-- ++ (toString (Dict.values model.scriptIdToScript)))
 
-        cmd = if isMoreScripts
-              then asFx (Start context.browserId context.updated)
+        cmd = if isDone
               --TODO: we should be updating the context.stepId whenever we send it through requestsPort
-              else (requestsPort (Request (Step "999" close False) (context)))
+              then (requestsPort (Request (Step "999" close False) (context)))
+              else asFx (Start context.browserId context.updated)
+
 --              then Cmd.none
 --              else Cmd.none
       in

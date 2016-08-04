@@ -43,10 +43,10 @@ test =
 
 test2 : Script
 test2 =
-  script "First Test"
+  script "Second Test"
     [
-      serve "../shoreditch-ui-chrome/chrome" 8080
-    , goto "http://localhost:8080/elm.html"
+      serve "../shoreditch-ui-chrome/chrome" 8081
+    , goto "http://localhost:8081/elm.html"
 
     , Command "textContains" [ "#messageList", "Auto Loading Metadata" ]
     , Command "textContains" [ "#messageList", "LoadAllMetaDataResponse ([{ url = " ]

@@ -110,7 +110,7 @@ app.ports.requests.subscribe(function(request) {
 //TODO: rename to notifyElm or something ...
 function respond(context, id, failures) {
   var y = Date.now()
-  console.log(y)
+//  console.log(y)
 //  var x = y.toISOString()
 //  console.log(x)
   var response = { context:context, id:id, failures:failures, updated:y }
