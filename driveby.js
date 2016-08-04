@@ -7,7 +7,7 @@ var started = new Date().getTime();
 
 //TODO: rename to browsers
 var pages = [];
-var browserCount = 3;
+var browserCount = 4;
 
 //TODO: put this in arg[] to this script ..
 for (var i = 0; i < browserCount; i+=1) {

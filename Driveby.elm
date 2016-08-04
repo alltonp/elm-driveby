@@ -195,7 +195,7 @@ update requestsPort msg model =
           case maybeNextScript of
             Just executableScript ->
               let
-                rn = Debug.log "Start script on browser: " ((toString executableScript.id) ++  " " ++ (toString browserId) ++ (toString theDate))
+--                rn = Debug.log "Start script on browser: " ((toString executableScript.id) ++  " " ++ (toString browserId) ++ (toString theDate))
 
                 browserIdToScriptId' = Dict.update browserId (\v -> Just executableScript.id) model.browserIdToScriptId
 --                browserIdToScriptId' = model.browserIdToScriptId
@@ -278,7 +278,7 @@ update requestsPort msg model =
 
     Process response ->
       let
-        rn = Debug.log "Process" response
+--        rn = Debug.log "Process" response
 
 --        maybeScript = Just model.script
         scriptId = Dict.get response.context.browserId model.browserIdToScriptId
@@ -332,8 +332,8 @@ update requestsPort msg model =
         needStarting = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing )
         needFinishing = Dict.values model.scriptIdToScript |> List.filter (\s -> s.finished == Nothing )
 --        d2 = Debug.log "Driveby isMoreScripts: " ((toString isMoreScripts) ++ (toString (Dict.values model.scriptIdToScript)))
-        d2 = Debug.log "Driveby needStarting: " ((toString (List.length needStarting)))-- ++ (toString (Dict.values model.scriptIdToScript)))
-        d3 = Debug.log "Driveby needFinishing: " ((toString (List.length needFinishing)))-- ++ (toString (Dict.values model.scriptIdToScript)))
+--        d2 = Debug.log "Driveby needStarting: " ((toString (List.length needStarting)))-- ++ (toString (Dict.values model.scriptIdToScript)))
+--        d3 = Debug.log "Driveby needFinishing: " ((toString (List.length needFinishing)))-- ++ (toString (Dict.values model.scriptIdToScript)))
 
         cmd = if not (List.isEmpty needStarting) then asFx (Start context.browserId context.updated)
               else if not (List.isEmpty needFinishing) then Cmd.none

@@ -18,6 +18,9 @@ main =
 --TODO: support multiple tests
 --TODO: should screenshot be a command? (taking a filepath, would offload more to elm)
 --TODO: support TextEquals next
+--TODO: each script could get a default port and stash in context
+--TODO: goto could have seconds param base, resolves to localhost:port if unspecified
+--TOOD: need a js atomic counter
 test : Script
 test =
   script "First Test"
