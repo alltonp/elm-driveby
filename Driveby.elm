@@ -325,16 +325,17 @@ update requestsPort msg model =
         --TODO: this renders odd, lets do in js instead ...
         d = Debug.log "Driveby" message
 --        isMoreScripts = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing ) |> List.isEmpty
-        areAnyUnstarted = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing ) |> List.isEmpty
-        areAnyStillRunning = Dict.values model.scriptIdToScript |> List.filter (\s -> s.finished == Nothing ) |> List.isEmpty
+        needStarting = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing )
+        needFinishing = Dict.values model.scriptIdToScript |> List.filter (\s -> s.finished == Nothing )
 --        d2 = Debug.log "Driveby isMoreScripts: " ((toString isMoreScripts) ++ (toString (Dict.values model.scriptIdToScript)))
-        d2 = Debug.log "Driveby areAnyUnstarted: " ((toString areAnyUnstarted))-- ++ (toString (Dict.values model.scriptIdToScript)))
-        d3 = Debug.log "Driveby areAnyStillRunning: " ((toString areAnyStillRunning))-- ++ (toString (Dict.values model.scriptIdToScript)))
+        d2 = Debug.log "Driveby needStarting: " ((toString needStarting))-- ++ (toString (Dict.values model.scriptIdToScript)))
+        d3 = Debug.log "Driveby needFinishing: " ((toString needFinishing))-- ++ (toString (Dict.values model.scriptIdToScript)))
 
-        cmd = if areAnyUnstarted
+        cmd = if not (List.isEmpty needStarting) then asFx (Start context.browserId context.updated)
+--              else if not (List.isEmpty needFinishing) then Cmd.none
               --TODO: we should be updating the context.stepId whenever we send it through requestsPort
-              then (requestsPort (Request (Step "999" close False) (context)))
-              else asFx (Start context.browserId context.updated)
+              else (requestsPort (Request (Step "999" close False) (context)))
+--              else asFx (Start context.browserId context.updated)
 
 --              then Cmd.none
 --              else Cmd.none
