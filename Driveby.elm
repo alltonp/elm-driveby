@@ -73,8 +73,8 @@ type alias Script =
 type alias ExecutableScript =
   { script: Script
   , id : String
-  , started : Maybe String
-  , finished : Maybe Date
+  , started : Maybe String {-Date-}
+  , finished : Maybe String {-Date-}
   }
 
 --TODO: this should poobably be Request and requestId everywhere ...
@@ -267,9 +267,11 @@ update requestsPort msg model =
                     --TODO: this is defo wrong, we should'nt have even hit RunNext, should have bailed in Process
                     Nothing ->
                       let
-                        executableScript' = { executableScript | started = Just context.updated }
+                        executableScript' = { executableScript | finished = Just context.updated }
+                        scriptIdToScript' = Dict.update executableScript.id (\e -> Just executableScript') model.scriptIdToScript
+
                       in
-                        ( model, asFx (Exit ("☑ - "  ++ executableScript.script.name) context))
+                        ( { model | scriptIdToScript = scriptIdToScript' }, asFx (Exit ("☑ - "  ++ executableScript.script.name) context))
               in
                  cmd
 
@@ -337,7 +339,7 @@ update requestsPort msg model =
         d3 = Debug.log "Driveby needFinishing: " ((toString needFinishing))-- ++ (toString (Dict.values model.scriptIdToScript)))
 
         cmd = if not (List.isEmpty needStarting) then asFx (Start context.browserId context.updated)
---              else if not (List.isEmpty needFinishing) then Cmd.none
+              else if not (List.isEmpty needFinishing) then Cmd.none
               --TODO: we should be updating the context.stepId whenever we send it through requestsPort
               else (requestsPort (Request (Step "999" close False) (context)))
 --              else asFx (Start context.browserId context.updated)
