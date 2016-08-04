@@ -125,7 +125,9 @@ type alias Config =
 --TODO: fix all this naming too
 type Msg
   = Go Date
+  --TODO: RunScript
   | Start Int
+  --TODO: RunNextCommand
   | RunNext Int
 --  | Setup Config
   | Process Response
