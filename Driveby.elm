@@ -26,11 +26,7 @@ driveby scripts requestsPort responsesPort =
 
 init : List Script -> Flags -> (Model, Cmd Msg)
 init scripts flags =
-   (Model scripts
-     (Config flags.browsers)
-     Dict.empty
-     Dict.empty
-     , go)
+   (Model scripts (Config flags.browsers) Dict.empty Dict.empty, go)
 
 
 subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
@@ -42,6 +38,8 @@ type alias Flags =
   { browsers : Int }
 
 
+-- TODO: ultimately scripts arent needed, they become scriptIdToScript
+-- TODO: ultimately config isnt needed, they become browserIdToScriptId (mainly)
 type alias Model =
   { scripts : List Script
   , config : Config
@@ -64,7 +62,7 @@ type alias ExecutableScript =
   }
 
 
---TODO: this should poobably be Request and requestId everywhere ...
+--TODO: this should probably be Request and requestId everywhere ...
 --TODO: can this id die, I'm not sure yet ...
 type alias Step =
   { id : String
@@ -73,8 +71,8 @@ type alias Step =
   }
 
 
---TODO: cry to lose/inline Step if we can
---if steps were an array, could it just be the index?
+--TODO: try to lose/inline Step if we can
+--if steps were an array, could it just be the index? or recipe for equality issues?
 type alias Request =
   { step : Step
   , context : Context
@@ -132,7 +130,7 @@ update requestsPort msg model =
         --TODO: store date or lose it ...
         d = Debug.log "Go " ((toString (List.length model.scripts) ++ (toString theDate) ++ (toString model.config)))
 
-        howMany = (model.config.browsers)
+        numberOfBrowsersToUse = model.config.browsers
 
         scriptIdToScript' = model.scripts |> List.indexedMap (\i s ->
           let
@@ -141,7 +139,7 @@ update requestsPort msg model =
             (id, ExecutableScript s id Nothing Nothing)
         ) |> Dict.fromList
 
-        all = List.repeat howMany 1
+        all = List.repeat numberOfBrowsersToUse 1
               |> List.indexedMap (,)
               |> List.map (\ (i,r) -> (i) )
               |> List.map (\i -> asFx (Start i "") )
