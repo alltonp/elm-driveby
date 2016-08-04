@@ -138,10 +138,10 @@ update requestsPort msg model =
       let
         --TODO: store date or lose it ...
         --script' = [model.script] |> List.indexedMap (,) |> List.map(\i s -> {s | id = Just i })
-        d = Debug.log "Go" (toString model)
+--        d = Debug.log "Go" (toString model)
 
         script = model.script
-        script' = { script | id = Just "1" }
+        script' = { script | id = Just "0" }
 
         --TODO should be max of browsers and scripts
         howMany = (model.config.browsers-1)
@@ -164,6 +164,7 @@ update requestsPort msg model =
 
     Start browserId ->
       let
+        --TODO: this needs to be find next avialable Script
         script = model.script
 --        running = model.running
 --        running' = Array.set browserId script running
@@ -178,6 +179,10 @@ update requestsPort msg model =
         maybeScript = Just model.script
 --        scriptId = Dict.get browserId model.browserIdToScriptId
 --        maybeScript = Dict.get (Maybe.withDefault "" scriptId) model.scriptIdToScript
+
+--        m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
+--        m3 = Debug.log "scriptIdToScript" model.scriptIdToScript
+--        m1 = Debug.log "maybeScript" maybeScript
 
         cmd2 = case maybeScript of
             Just script ->
