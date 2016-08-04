@@ -7,9 +7,10 @@ var started = new Date().getTime();
 
 //TODO: rename to browsers
 var pages = [];
+var browserCount = 3;
 
 //TODO: put this in arg[] to this script ..
-for (var i = 0; i < 2; i+=1) {
+for (var i = 0; i < browserCount; i+=1) {
     var p = require('webpage').create();
 
     //TODO: make this a config option - surpress action logging

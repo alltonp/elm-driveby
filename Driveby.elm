@@ -52,11 +52,8 @@ type alias Flags =
   { browsers : Int }
 
 
---TODO: kill script ...
 type alias Model =
-  { {-script : Script
-  ,-}
-  scripts : List Script
+  { scripts : List Script
   , config : Config
   , browserIdToScriptId : Dict Int String
   , scriptIdToScript : Dict String ExecutableScript
@@ -70,6 +67,7 @@ type alias Script =
   , steps : List Step
   }
 
+
 type alias ExecutableScript =
   { script: Script
   , id : String
@@ -77,10 +75,10 @@ type alias ExecutableScript =
   , finished : Maybe String {-Date-}
   }
 
+
 --TODO: this should poobably be Request and requestId everywhere ...
 type alias Step =
   { id : String
-  --, scriptId : String
   , command : Command
   , executed : Bool
   }
