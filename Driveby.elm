@@ -281,7 +281,6 @@ update requestsPort msg model =
       let
 --        rn = Debug.log "Process" response
 
---        maybeScript = Just model.script
         scriptId = Dict.get response.context.browserId model.browserIdToScriptId
         maybeScript = Dict.get (Maybe.withDefault "" scriptId) model.scriptIdToScript
 
@@ -296,15 +295,8 @@ update requestsPort msg model =
                 script' = { script | steps = steps' }
 
                 executableScript' = { executableScript | script = script'}
-
---                browserId = response.context.browserId
---                browserIdToScriptId' = Dict.update browserId (\v -> script') model.browserIdToScriptId
-
                 scriptId = response.context.scriptId
                 scriptIdToScript' = Dict.update scriptId (\e -> Just executableScript') model.scriptIdToScript
---                scriptIdToScript' = Dict.update scriptId (\e -> e) model.scriptIdToScript
-
---                model' = { model | script = script', browserIdToScriptId = scriptIdToScript' }
                 model' = { model | scriptIdToScript = scriptIdToScript' }
 
                 --TODO: go with Script, Step, Command, Result etc
@@ -327,16 +319,17 @@ update requestsPort msg model =
       in
         ( model2', next2 )
 
-    --TODO: more like ScriptFinished?
-    --TODO: is this Failed really?
+    --TODO: this looks like ScriptFinished?
     Exit message context ->
       let
         --TODO: this renders strangely, lets do in js instead ...
         d = Debug.log "Driveby" message
+
         needStarting = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing )
         needFinishing = Dict.values model.scriptIdToScript |> List.filter (\s -> s.finished == Nothing )
---        d2 = Debug.log "Driveby needStarting: " ((toString (List.length needStarting)))-- ++ (toString (Dict.values model.scriptIdToScript)))
---        d3 = Debug.log "Driveby needFinishing: " ((toString (List.length needFinishing)))-- ++ (toString (Dict.values model.scriptIdToScript)))
+
+--        d2 = Debug.log "Driveby needStarting: " ((toString (List.length needStarting)))
+--        d3 = Debug.log "Driveby needFinishing: " ((toString (List.length needFinishing)))
 
         cmd = if not (List.isEmpty needStarting) then asFx (Start context.browserId context.updated)
               else if not (List.isEmpty needFinishing) then Cmd.none
@@ -357,6 +350,7 @@ asFx msg =
   Task.perform (\_ -> Debug.crash "This failure cannot happen.") identity (Task.succeed msg)
 
 
+--TODO: this can probably die now we are using JS
 go : Cmd Msg
 go =
   Task.perform (\_ -> Debug.crash "This failure cannot happen.") Go Date.now
@@ -380,6 +374,7 @@ script name commands =
       |> List.map (\(i,r) -> Step (toString i) r False))
 
 
+--TODO: pull out all the other stuff to a runner or engine ...
 --TODO: eventually these will be in Driveby.Command or something
 serve : String -> Command
 serve path =
