@@ -125,7 +125,7 @@ function respond(context, id, failures) {
 
 
 function init(context, id) {
-  context.port = 9000
+  context.localPort = 9000;
   respond(context, id, [])
 }
 
