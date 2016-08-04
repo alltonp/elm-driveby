@@ -102,6 +102,7 @@ app.ports.requests.subscribe(function(request) {
   else if (name == "textContains") { textContains(page, context, id, command.args[0], command.args[1]); }
   else if (name == "close") { close(page, context, id); }
   else if (name == "serve") { serve(context, id, command.args[0], command.args[1]); }
+  else if (name == "init") { init(context, id); }
   else { respond(context, id, ["don't know how to process request: " + JSON.stringify(request) ]); }
 });
 
@@ -121,6 +122,13 @@ function respond(context, id, failures) {
   //page.render('step-' + id + '.png')
   app.ports.responses.send(response);
 }
+
+
+function init(context, id) {
+  context.port = 9000
+  respond(context, id, [])
+}
+
 
 //TODO: I dont seem to fail nicely, e.g. hang on bad url
 function goto(page, context, id, url) {
