@@ -149,7 +149,8 @@ update requestsPort msg model =
 --        script' = { script | id = Just "0" }
 
         --TODO should be max of browsers and scripts
-        howMany = (model.config.browsers-1)
+--        howMany = (model.config.browsers-1)
+        howMany = (model.config.browsers)
 
         --TODO: need to do something better with maybe ...
         --TODO: consider bending them in here .. RunnableScript ...
@@ -324,11 +325,13 @@ update requestsPort msg model =
         --TODO: this renders odd, lets do in js instead ...
         d = Debug.log "Driveby" message
 --        isMoreScripts = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing ) |> List.isEmpty
-        isDone = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing ) |> List.isEmpty
+        areAnyUnstarted = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing ) |> List.isEmpty
+        areAnyStillRunning = Dict.values model.scriptIdToScript |> List.filter (\s -> s.finished == Nothing ) |> List.isEmpty
 --        d2 = Debug.log "Driveby isMoreScripts: " ((toString isMoreScripts) ++ (toString (Dict.values model.scriptIdToScript)))
-        d2 = Debug.log "Driveby isDone: " ((toString isDone))-- ++ (toString (Dict.values model.scriptIdToScript)))
+        d2 = Debug.log "Driveby areAnyUnstarted: " ((toString areAnyUnstarted))-- ++ (toString (Dict.values model.scriptIdToScript)))
+        d3 = Debug.log "Driveby areAnyStillRunning: " ((toString areAnyStillRunning))-- ++ (toString (Dict.values model.scriptIdToScript)))
 
-        cmd = if isDone
+        cmd = if areAnyUnstarted
               --TODO: we should be updating the context.stepId whenever we send it through requestsPort
               then (requestsPort (Request (Step "999" close False) (context)))
               else asFx (Start context.browserId context.updated)
