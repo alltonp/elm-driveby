@@ -33,9 +33,10 @@ driveby script requestsPort responsesPort =
     }
 
 
+--TODO: this stupid N/A Script thing needs to die, maybe it will do when it becomes a list
 init : Script -> Flags -> (Model, Cmd Msg)
 init script flags =
-   (Model script (Config flags.browsers) (Array.repeat flags.browsers (Script "N/A" [] Nothing) ), go)
+   (Model script (Config flags.browsers) (Array.repeat flags.browsers (Script "N/A" [] Nothing Nothing Nothing) ), go)
 
 
 subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
@@ -56,10 +57,14 @@ type alias Model =
 
 
 --TODO: we may need a bool to say its been run, or maybe store the start, stop times,
+--TODO: perhaps make an ExecutableScript that wraps or extends this ...
 type alias Script =
   { name : String
   , steps : List Step
+  --TODO: make me not a Maybe ideally ..
   , id : Maybe String
+  , started : Maybe Date
+  , finished : Maybe Date
   }
 
 
@@ -211,7 +216,7 @@ script : String -> List Command -> Script
 script name commands =
   Script name (commands
       |> List.indexedMap (,)
-      |> List.map (\(i,r) -> Step (toString i) r False)) Nothing
+      |> List.map (\(i,r) -> Step (toString i) r False)) Nothing Nothing Nothing
 
 
 --TODO: eventually these will be in Driveby.Command or something
