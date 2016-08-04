@@ -381,7 +381,8 @@ unsafeFromString dateStr =
 
 script : String -> List Command -> Script
 script name commands =
-  Script name (commands
+  Script name (
+    ( List.append [ Command "init" [] ] commands)
       |> List.indexedMap (,)
       |> List.map (\(i,r) -> Step (toString i) r False))
 
