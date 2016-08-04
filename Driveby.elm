@@ -177,6 +177,8 @@ update requestsPort msg model =
 --        (model, Cmd.none)
 
 
+    --This isnt really a good name, the intention is to start a script on browserId
+    --but actually it runs the next script on this browserid if there is one
     Start browserId theDate ->
       let
         rn = Debug.log "Start" ((toString browserId) ++ (toString theDate))
@@ -191,7 +193,7 @@ update requestsPort msg model =
 --        maybeNextScript = Dict.filter (\k v -> v.started == Nothing ) model.scriptIdToScript |> Dict.toList |> List.head
         maybeNextScript = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing ) |> List.head
 
-        d = Debug.log "Start maybeNextScript" maybeNextScript
+--        d = Debug.log "Start maybeNextScript" maybeNextScript
 
         (model', cmd) =
           case maybeNextScript of
