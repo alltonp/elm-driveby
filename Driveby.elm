@@ -143,7 +143,7 @@ update requestsPort msg model =
       let
         --TODO: store date or lose it ...
         --script' = [model.script] |> List.indexedMap (,) |> List.map(\i s -> {s | id = Just i })
-        d = Debug.log "Go" ((toString (List.length model.scripts) ++ (toString theDate) ++ (toString model.config)))
+        d = Debug.log "Go " ((toString (List.length model.scripts) ++ (toString theDate) ++ (toString model.config)))
 
 --        script = model.script
 --        script' = { script | id = Just "0" }
@@ -181,8 +181,6 @@ update requestsPort msg model =
     --but actually it runs the next script on this browserid if there is one
     Start browserId theDate ->
       let
-        rn = Debug.log "Start browser: " ((toString browserId) ++ (toString theDate))
-
         --TODO: this needs to be find next avialable Script
 --        script = model.script
 --          script = Dict.value model.scriptIdToScript
@@ -199,6 +197,8 @@ update requestsPort msg model =
           case maybeNextScript of
             Just executableScript ->
               let
+                rn = Debug.log "Start script on browser: " ((toString executableScript.id) ++  " " ++ (toString browserId) ++ (toString theDate))
+
                 browserIdToScriptId' = Dict.update browserId (\v -> Just executableScript.id) model.browserIdToScriptId
 --                browserIdToScriptId' = model.browserIdToScriptId
                 context = Context browserId executableScript.id 0 theDate
