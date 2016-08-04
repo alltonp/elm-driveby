@@ -132,7 +132,7 @@ type Msg
   | RunNext Context
 --  | Setup Config
   | Process Response
-  | Exit String
+  | Exit String Context
 --TODO: add a Finish (and do the reporting bit here ...)
 
 
@@ -248,7 +248,7 @@ update requestsPort msg model =
                         requestsPort (Request c (context))
                     --TODO: this looks iffy now ...
                     --TODO: this is defo wrong, we should'nt have even hit RunNext, should have bailed in Process
-                    Nothing -> asFx (Exit ("☑ - "  ++ executableScript.script.name) )
+                    Nothing -> asFx (Exit ("☑ - "  ++ executableScript.script.name) context)
               in
                  cmd
 
@@ -291,7 +291,7 @@ update requestsPort msg model =
                 context = response.context
                 --TOOD: we should really have the stepId ...
                 next = if List.isEmpty response.failures then asFx (RunNext { context | stepId = context.stepId + 1 } )
-                       else asFx (Exit ("☒ - " ++ (toString response.failures) ++ " running " ++ (toString current)) )
+                       else asFx (Exit ("☒ - " ++ (toString response.failures) ++ " running " ++ (toString current)) response.context)
               in
                 (model', next)
 
@@ -299,16 +299,25 @@ update requestsPort msg model =
       in
         ( model2', next2 )
 
+    --TODO: more like ScriptFinished?
     --TODO: is this Failed really?
-    Exit message ->
+    Exit message context ->
       let
         --TODO: this renders odd, lets do in js instead ...
         d = Debug.log "Driveby" message
+        isMore = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing ) |> List.isEmpty
+        d2 = Debug.log "Driveby more: " (toString isMore)
+
+        cmd = if isMore
+              then asFx (Start context.browserId)
+              else (requestsPort (Request (Step "999" close False) (Context 1 "1" 1)))
+--              then Cmd.none
+--              else Cmd.none
       in
         --TODO: this 1 is well dodgy ...
         --TODO: and this "1" we need to pass in a context really
         --TODO: the less said about the last one the better
-        ( model, requestsPort (Request (Step "999" close False) (Context 1 "1" 1)) )
+        ( model, cmd )
 
 
 view : Model -> Html Msg
