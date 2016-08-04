@@ -109,7 +109,11 @@ app.ports.requests.subscribe(function(request) {
 //TODO: add start time, to capture duration ...
 //TODO: rename to notifyElm or something ...
 function respond(context, id, failures) {
-  var response = { context:context, id:id, failures:failures }
+  var y = Date.now()
+  console.log(y)
+//  var x = y.toISOString()
+//  console.log(x)
+  var response = { context:context, id:id, failures:failures, updated:y }
   //TODO: make this a config option
   //TODO: and actually this is probably the wrong place for it. because some commmands don't want it...
   //page.render('step-' + id + '.png')

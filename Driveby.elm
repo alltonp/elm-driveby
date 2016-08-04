@@ -73,7 +73,7 @@ type alias Script =
 type alias ExecutableScript =
   { script: Script
   , id : String
-  , started : Maybe Date
+  , started : Maybe String
   , finished : Maybe Date
   }
 
@@ -98,6 +98,7 @@ type alias Context =
   { browserId : Int
   , scriptId : String
   , stepId : Int
+  , updated : String
   }
 
 
@@ -127,10 +128,9 @@ type alias Config =
 type Msg
   = Go Date
   --TODO: RunScript
-  | Start Int
+  | Start Int String {-Date-}
   --TODO: RunNextCommand
   | RunNext Context
---  | Setup Config
   | Process Response
   | Exit String Context
 --TODO: add a Finish (and do the reporting bit here ...)
@@ -139,11 +139,11 @@ type Msg
 update : (Request -> Cmd Msg) -> Msg -> Model -> (Model, Cmd Msg)
 update requestsPort msg model =
   case msg of
-    Go date ->
+    Go theDate ->
       let
         --TODO: store date or lose it ...
         --script' = [model.script] |> List.indexedMap (,) |> List.map(\i s -> {s | id = Just i })
-        d = Debug.log "Go" (toString (List.length model.scripts))
+        d = Debug.log "Go" (toString (List.length model.scripts)) ++ (toString theDate)
 
 --        script = model.script
 --        script' = { script | id = Just "0" }
@@ -162,7 +162,9 @@ update requestsPort msg model =
 
         all = List.repeat howMany 1
               |> List.indexedMap (,)
-              |> List.map (\(i,r) -> asFx (Start ({-9000 +-} i)) )
+              |> List.map (\ (i,r) -> (i) )
+--              |> List.map (\i -> asFx (Start ({-9000 +-} i (toString theDate))) )
+              |> List.map (\i -> asFx (Start i "") )
 
         x = Cmd.batch (all)
 
@@ -175,9 +177,9 @@ update requestsPort msg model =
 --        (model, Cmd.none)
 
 
-    Start browserId ->
+    Start browserId theDate ->
       let
-        rn = Debug.log "Start" browserId
+        rn = Debug.log "Start" ((toString browserId) ++ (toString theDate))
 
         --TODO: this needs to be find next avialable Script
 --        script = model.script
@@ -189,19 +191,31 @@ update requestsPort msg model =
 --        maybeNextScript = Dict.filter (\k v -> v.started == Nothing ) model.scriptIdToScript |> Dict.toList |> List.head
         maybeNextScript = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing ) |> List.head
 
---        d = Debug.log "maybeNextScript" maybeNextScript
+        d = Debug.log "Start maybeNextScript" maybeNextScript
 
         (model', cmd) =
           case maybeNextScript of
-            Just nextScript ->
+            Just executableScript ->
               let
-                browserIdToScriptId' = Dict.update browserId (\v -> Just nextScript.id) model.browserIdToScriptId
+                browserIdToScriptId' = Dict.update browserId (\v -> Just executableScript.id) model.browserIdToScriptId
 --                browserIdToScriptId' = model.browserIdToScriptId
-                context = Context browserId nextScript.id 0
+                context = Context browserId executableScript.id 0 theDate
 --                dc = Debug.log "context" context
 
+--                date
+
+--                script = executableScript.script
+--                script' = { script | started = Just theDate }
+
+                executableScript' = { executableScript | started = Just theDate }
+--                browserId = response.context.browserId
+--                browserIdToScriptId' = Dict.update browserId (\v -> script') model.browserIdToScriptId
+
+                scriptId = executableScript.id
+                scriptIdToScript' = Dict.update scriptId (\e -> Just executableScript') model.scriptIdToScript
+
               in
-                ( { model | browserIdToScriptId = browserIdToScriptId' } , asFx (RunNext context))
+                ( { model | browserIdToScriptId = browserIdToScriptId', scriptIdToScript = scriptIdToScript' } , asFx (RunNext context))
 --              (model, Cmd.none)
 
             Nothing ->
@@ -289,6 +303,8 @@ update requestsPort msg model =
                 --TODO: send ExampleFailure if response has failures
                 --TODO: Start should be NextStep
                 context = response.context
+--                2011-10-05T14:48:00.000Z
+--                clearlyWrongDate = unsafeFromString "2016-06-17T11:15:00+0200"
                 --TOOD: we should really have the stepId ...
                 next = if List.isEmpty response.failures then asFx (RunNext { context | stepId = context.stepId + 1 } )
                        else asFx (Exit ("☒ - " ++ (toString response.failures) ++ " running " ++ (toString current)) response.context)
@@ -306,11 +322,12 @@ update requestsPort msg model =
         --TODO: this renders odd, lets do in js instead ...
         d = Debug.log "Driveby" message
         isMoreScripts = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing ) |> List.isEmpty
-        d2 = Debug.log "Driveby isMoreScripts: " (toString isMoreScripts)
+        d2 = Debug.log "Driveby isMoreScripts: " ((toString isMoreScripts) ++ (toString (Dict.values model.scriptIdToScript)))
 
         cmd = if isMoreScripts
-              then asFx (Start context.browserId)
-              else (requestsPort (Request (Step "999" close False) (Context 1 "1" 1)))
+              then asFx (Start context.browserId context.updated)
+              --TODO: we should be updating the context.stepId whenever we send it through requestsPort
+              else (requestsPort (Request (Step "999" close False) (context)))
 --              then Cmd.none
 --              else Cmd.none
       in
@@ -333,6 +350,15 @@ asFx msg =
 go : Cmd Msg
 go =
   Task.perform (\_ -> Debug.crash "This failure cannot happen.") Go Date.now
+
+---
+
+unsafeFromString : String -> Date
+unsafeFromString dateStr =
+  case Date.fromString dateStr of
+    Ok date -> date
+    Err msg -> Debug.crash("unsafeFromString")
+
 
 ---
 
