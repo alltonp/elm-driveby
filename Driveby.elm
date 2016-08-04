@@ -181,7 +181,7 @@ update requestsPort msg model =
     --but actually it runs the next script on this browserid if there is one
     Start browserId theDate ->
       let
-        rn = Debug.log "Start" ((toString browserId) ++ (toString theDate))
+        rn = Debug.log "Start browser: " ((toString browserId) ++ (toString theDate))
 
         --TODO: this needs to be find next avialable Script
 --        script = model.script
@@ -334,8 +334,8 @@ update requestsPort msg model =
         needStarting = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing )
         needFinishing = Dict.values model.scriptIdToScript |> List.filter (\s -> s.finished == Nothing )
 --        d2 = Debug.log "Driveby isMoreScripts: " ((toString isMoreScripts) ++ (toString (Dict.values model.scriptIdToScript)))
-        d2 = Debug.log "Driveby needStarting: " ((toString needStarting))-- ++ (toString (Dict.values model.scriptIdToScript)))
-        d3 = Debug.log "Driveby needFinishing: " ((toString needFinishing))-- ++ (toString (Dict.values model.scriptIdToScript)))
+        d2 = Debug.log "Driveby needStarting: " ((toString (List.length needStarting)))-- ++ (toString (Dict.values model.scriptIdToScript)))
+        d3 = Debug.log "Driveby needFinishing: " ((toString (List.length needFinishing)))-- ++ (toString (Dict.values model.scriptIdToScript)))
 
         cmd = if not (List.isEmpty needStarting) then asFx (Start context.browserId context.updated)
               else if not (List.isEmpty needFinishing) then Cmd.none
