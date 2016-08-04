@@ -143,12 +143,11 @@ update requestsPort msg model =
       let
         --TODO: store date or lose it ...
         --script' = [model.script] |> List.indexedMap (,) |> List.map(\i s -> {s | id = Just i })
-        d = Debug.log "Go" (toString (List.length model.scripts)) ++ (toString theDate)
+        d = Debug.log "Go" ((toString (List.length model.scripts) ++ (toString theDate) ++ (toString model.config)))
 
 --        script = model.script
 --        script' = { script | id = Just "0" }
 
-        --TODO should be max of browsers and scripts
 --        howMany = (model.config.browsers-1)
         howMany = (model.config.browsers)
 
