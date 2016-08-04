@@ -25,7 +25,7 @@ test : Script
 test =
   script "First Test"
     [
-      serve "../shoreditch-ui-chrome/chrome" 8080
+      serve "../shoreditch-ui-chrome/chrome"
     , gotoLocal "/elm.html"
 
     , Command "textContains" [ "#messageList", "Auto Loading Metadata" ]
@@ -48,8 +48,8 @@ test2 : Script
 test2 =
   script "Second Test"
     [
-      serve "../shoreditch-ui-chrome/chrome" 8081
-    , goto "http://localhost:8081/elm.html"
+      serve "../shoreditch-ui-chrome/chrome"
+    , gotoLocal "/elm.html"
 
     , Command "textContains" [ "#messageList", "Auto Loading Metadata" ]
     , Command "textContains" [ "#messageList", "LoadAllMetaDataResponse ([{ url = " ]
@@ -71,8 +71,8 @@ test3 : Script
 test3 =
   script "Third Test"
     [
-      serve "../shoreditch-ui-chrome/chrome" 8082
-    , goto "http://localhost:8082/elm.html"
+      serve "../shoreditch-ui-chrome/chrome"
+    , gotoLocal "/elm.html"
 
     , Command "textContains" [ "#messageList", "Auto Loading Metadata" ]
     , Command "textContains" [ "#messageList", "LoadAllMetaDataResponse ([{ url = " ]

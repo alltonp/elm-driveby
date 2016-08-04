@@ -389,9 +389,9 @@ script name commands =
 
 
 --TODO: eventually these will be in Driveby.Command or something
-serve : String -> Int -> Command
-serve path onPort =
-  Command "serve" [path, toString onPort]
+serve : String -> Command
+serve path =
+  Command "serve" [path]
 
 
 goto : String -> Command
