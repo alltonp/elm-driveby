@@ -143,7 +143,7 @@ update requestsPort msg model =
       let
         --TODO: store date or lose it ...
         --script' = [model.script] |> List.indexedMap (,) |> List.map(\i s -> {s | id = Just i })
-        d = Debug.log "Go" ""
+        d = Debug.log "Go" (toString (List.length model.scripts))
 
 --        script = model.script
 --        script' = { script | id = Just "0" }
@@ -224,14 +224,14 @@ update requestsPort msg model =
 
     RunNext context ->
       let
-        rn = Debug.log "RunNext" context
+--        rn = Debug.log "RunNext" context
 
 --        maybeScript = Just model.script
         scriptId = Dict.get context.browserId model.browserIdToScriptId
         maybeScript = Dict.get (Maybe.withDefault "" scriptId) model.scriptIdToScript
 
---        m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
---        m3 = Debug.log "scriptIdToScript" model.scriptIdToScript
+        m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
+        m3 = Debug.log "scriptIdToScript" (toString (Dict.keys model.scriptIdToScript))
 --        m1 = Debug.log "maybeScript" maybeScript
 
         cmd2 = case maybeScript of
@@ -305,10 +305,10 @@ update requestsPort msg model =
       let
         --TODO: this renders odd, lets do in js instead ...
         d = Debug.log "Driveby" message
-        isMore = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing ) |> List.isEmpty
-        d2 = Debug.log "Driveby more: " (toString isMore)
+        isMoreScripts = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing ) |> List.isEmpty
+        d2 = Debug.log "Driveby isMoreScripts: " (toString isMoreScripts)
 
-        cmd = if isMore
+        cmd = if isMoreScripts
               then asFx (Start context.browserId)
               else (requestsPort (Request (Step "999" close False) (Context 1 "1" 1)))
 --              then Cmd.none
