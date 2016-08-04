@@ -93,7 +93,8 @@ type alias Request =
 
 
 type alias Context =
-  { browserId : Int
+  { localPort : Int
+  , browserId : Int
   , scriptId : String
   , stepId : Int
   , updated : String
@@ -199,7 +200,7 @@ update requestsPort msg model =
 
                 browserIdToScriptId' = Dict.update browserId (\v -> Just executableScript.id) model.browserIdToScriptId
 --                browserIdToScriptId' = model.browserIdToScriptId
-                context = Context browserId executableScript.id 0 theDate
+                context = Context -1 browserId executableScript.id 0 theDate
 --                dc = Debug.log "context" context
 
 --                date
@@ -255,7 +256,7 @@ update requestsPort msg model =
                 cmd = case next of
                     Just c ->
                       let
-                        d = Debug.log "Driveby" ((toString context.browserId) ++ " " ++ c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
+                        d = Debug.log "Driveby" ( (toString context.localPort) ++ " " ++ (toString context.browserId) ++ " " ++ c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
 --                        m = Debug.log "Model" (toString model.browserIdToScriptId)
         --                m = Debug.log "Model" (toString model.browserIdToScriptId ++ toString model.scriptIdToScript)
                       in
