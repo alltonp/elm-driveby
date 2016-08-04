@@ -8,6 +8,7 @@ var started = new Date().getTime();
 //TODO: rename to browsers
 var pages = [];
 var browserCount = 4;
+var nextPort = 9000;
 
 //TODO: put this in arg[] to this script ..
 for (var i = 0; i < browserCount; i+=1) {
@@ -125,7 +126,8 @@ function respond(context, id, failures) {
 
 
 function init(context, id) {
-  context.localPort = 9000;
+  context.localPort = nextPort;
+  nextPort = nextPort + 1;
   respond(context, id, [])
 }
 
