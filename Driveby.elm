@@ -207,18 +207,28 @@ update requestsPort msg model =
 
     Process response ->
       let
-        script = model.script
-        current = List.filter (\s -> s.id == response.id) script.steps
-        steps' = List.map (\s -> if s.id == response.id then Step s.id s.command True else s ) script.steps
-        script' = { script | steps = steps' }
-        model' = { model | script = script' }
-        --TODO: go with Script, Step, Command, Result etc
-        --TODO: send ExampleFailure if response has failures
-        --TODO: Start should be NextStep
-        next = if List.isEmpty response.failures then asFx (RunNext response.context.browserId)
-               else asFx (Exit ("☒ - " ++ (toString response.failures) ++ " running " ++ (toString current)) )
+        maybeScript = Just model.script
+--        scriptId = Dict.get browserId model.browserIdToScriptId
+--        maybeScript = Dict.get (Maybe.withDefault "" scriptId) model.scriptIdToScript
+
+        (model', next2) = case maybeScript of
+            Just script ->
+              let
+                current = List.filter (\s -> s.id == response.id) script.steps
+                steps' = List.map (\s -> if s.id == response.id then Step s.id s.command True else s ) script.steps
+                script' = { script | steps = steps' }
+                model' = { model | script = script' }
+                --TODO: go with Script, Step, Command, Result etc
+                --TODO: send ExampleFailure if response has failures
+                --TODO: Start should be NextStep
+                next = if List.isEmpty response.failures then asFx (RunNext response.context.browserId)
+                       else asFx (Exit ("☒ - " ++ (toString response.failures) ++ " running " ++ (toString current)) )
+              in
+                (model', next)
+
+            Nothing -> (model, Cmd.none)
       in
-        ( model', next )
+        ( model', next2 )
 
     --TODO: is this Failed really?
     Exit message ->
