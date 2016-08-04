@@ -39,7 +39,8 @@ init script flags =
    (Model script
      (Config flags.browsers)
 --     (Array.repeat flags.browsers (Script "N/A" [] Nothing Nothing Nothing) )
-     (Dict.fromList [("0", Just "0")])
+--     (Dict.fromList [("0", Just "0")])
+     (Dict.empty)
      , go)
 
 
@@ -58,7 +59,7 @@ type alias Model =
   , config : Config
   --TODO: I think this needs to die
 --  , running : Array Script
-  , browserIdToScriptId : Dict String (Maybe String)
+  , browserIdToScriptId : Dict Int (Maybe String)
   }
 
 
@@ -163,9 +164,11 @@ update requestsPort msg model =
         script = model.script
 --        running = model.running
 --        running' = Array.set browserId script running
+        browserIdToScriptId' = Dict.update browserId (\v -> Just script.id) model.browserIdToScriptId
+
       in
---        ( { model | running = running' } , asFx (RunNext browserId))
-        ( model , asFx (RunNext browserId))
+        ( { model | browserIdToScriptId = browserIdToScriptId' } , asFx (RunNext browserId))
+--        ( model , asFx (RunNext browserId))
 
     RunNext browserId ->
       let
@@ -174,6 +177,7 @@ update requestsPort msg model =
             Just c ->
               let
                 d = Debug.log "Driveby" ((toString browserId) ++ " " ++ c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
+                m = Debug.log "Model" (toString model.browserIdToScriptId)
               in
                 requestsPort (Request c (Context browserId))
             --TODO: this looks iffy now ...
