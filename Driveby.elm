@@ -38,8 +38,6 @@ init : Script -> List Script -> Flags -> (Model, Cmd Msg)
 init script scripts flags =
    (Model script scripts
      (Config flags.browsers)
---     (Array.repeat flags.browsers (Script "N/A" [] Nothing Nothing Nothing) )
---     (Dict.fromList [("0", Just "0")])
      Dict.empty
      Dict.empty
      , go)
@@ -54,13 +52,11 @@ type alias Flags =
   { browsers : Int }
 
 
---TODO: so we want a list of scripts, and ultimately run them in parallel, but for now in sequence
+--TODO: kill script ...
 type alias Model =
   { script : Script
   , scripts : List Script
   , config : Config
-  --TODO: I think this needs to die
---  , running : Array Script
   , browserIdToScriptId : Dict Int (Maybe String)
   , scriptIdToScript : Dict String Script
   }
