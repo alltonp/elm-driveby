@@ -60,8 +60,6 @@ type alias Model =
   }
 
 
---TODO: we may need a bool to say its been run, or maybe store the start, stop times,
---TODO: perhaps make an ExecutableScript that wraps or extends this ...
 type alias Script =
   { name : String
   , steps : List Step
@@ -77,6 +75,7 @@ type alias ExecutableScript =
 
 
 --TODO: this should poobably be Request and requestId everywhere ...
+--TODO: can this id die, I'm not sure yet ...
 type alias Step =
   { id : String
   , command : Command
@@ -141,17 +140,10 @@ update requestsPort msg model =
     Go theDate ->
       let
         --TODO: store date or lose it ...
-        --script' = [model.script] |> List.indexedMap (,) |> List.map(\i s -> {s | id = Just i })
         d = Debug.log "Go " ((toString (List.length model.scripts) ++ (toString theDate) ++ (toString model.config)))
 
---        script = model.script
---        script' = { script | id = Just "0" }
-
---        howMany = (model.config.browsers-1)
         howMany = (model.config.browsers)
 
-        --TODO: need to do something better with maybe ...
-        --TODO: consider bending them in here .. RunnableScript ...
         scriptIdToScript' = model.scripts |> List.indexedMap (\i s ->
           let
             id = (toString i)
@@ -162,35 +154,20 @@ update requestsPort msg model =
         all = List.repeat howMany 1
               |> List.indexedMap (,)
               |> List.map (\ (i,r) -> (i) )
---              |> List.map (\i -> asFx (Start ({-9000 +-} i (toString theDate))) )
               |> List.map (\i -> asFx (Start i "") )
 
         x = Cmd.batch (all)
 
---        dx = Debug.log "x" (toString x)
-
       in
-----      ( { model | script = script' } , asFx (Start 1) )
-----        ( { model | script = script', scriptIdToScript = scriptIdToScript' } , x )
         ( { model | scriptIdToScript = scriptIdToScript' } , x )
---        (model, Cmd.none)
 
 
     --This isnt really a good name, the intention is to start a script on browserId
     --but actually it runs the next script on this browserid if there is one
+    -- fix the implementation ...
     Start browserId theDate ->
       let
-        --TODO: this needs to be find next avialable Script
---        script = model.script
---          script = Dict.value model.scriptIdToScript
-
-        --THIS IS IT ...
-        --find one without a start and update it with one ...
-        --then use that id
---        maybeNextScript = Dict.filter (\k v -> v.started == Nothing ) model.scriptIdToScript |> Dict.toList |> List.head
         maybeNextScript = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing ) |> List.head
-
---        d = Debug.log "Start maybeNextScript" maybeNextScript
 
         (model', cmd) =
           case maybeNextScript of
@@ -199,55 +176,30 @@ update requestsPort msg model =
 --                rn = Debug.log "Start script on browser: " ((toString executableScript.id) ++  " " ++ (toString browserId) ++ (toString theDate))
 
                 browserIdToScriptId' = Dict.update browserId (\v -> Just executableScript.id) model.browserIdToScriptId
---                browserIdToScriptId' = model.browserIdToScriptId
                 context = Context -1 browserId executableScript.id 0 theDate
---                dc = Debug.log "context" context
-
---                date
-
---                script = executableScript.script
---                script' = { script | started = Just theDate }
 
                 executableScript' = { executableScript | started = Just theDate }
---                browserId = response.context.browserId
---                browserIdToScriptId' = Dict.update browserId (\v -> script') model.browserIdToScriptId
-
                 scriptId = executableScript.id
                 scriptIdToScript' = Dict.update scriptId (\e -> Just executableScript') model.scriptIdToScript
 
               in
                 ( { model | browserIdToScriptId = browserIdToScriptId', scriptIdToScript = scriptIdToScript' } , asFx (RunNext context))
---              (model, Cmd.none)
 
             Nothing ->
               (model, Cmd.none)
 
-
---        running = model.running
---        running' = Array.set browserId script running
---        browserIdToScriptId' = Dict.update browserId (\v -> script.id) model.browserIdToScriptId
-        --TODO: kill the maybe ...
---        context = Context browserId "1"
-
---        d2 = Debug.log "cmd" cmd
---        d3 = Debug.log "new model b2s" model'.browserIdToScriptId
---        d4 = Debug.log "new model s2s" model'.scriptIdToScript
-
       in
         (model', cmd)
---        ( model , asFx (RunNext browserId))
 
     RunNext context ->
       let
 --        rn = Debug.log "RunNext" context
 
---        maybeScript = Just model.script
         scriptId = Dict.get context.browserId model.browserIdToScriptId
         maybeScript = Dict.get (Maybe.withDefault "" scriptId) model.scriptIdToScript
 
 --        m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
 --        m3 = Debug.log "scriptIdToScript" (toString (Dict.keys model.scriptIdToScript))
---        m1 = Debug.log "maybeScript" maybeScript
 
         (model2, cmd2) = case maybeScript of
             Just executableScript ->
@@ -257,11 +209,9 @@ update requestsPort msg model =
                     Just c ->
                       let
                         d = Debug.log "Driveby" ( (toString context.localPort) ++ " " ++ (toString context.browserId) ++ " " ++ c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
---                        m = Debug.log "Model" (toString model.browserIdToScriptId)
-        --                m = Debug.log "Model" (toString model.browserIdToScriptId ++ toString model.scriptIdToScript)
                       in
-                        ( model, requestsPort (Request c (context)))
-                    --TODO: this looks iffy now ...
+                        ( model, requestsPort (Request c (context))
+                        )
                     --TODO: this is defo wrong, we should'nt have even hit RunNext, should have bailed in Process
                     Nothing ->
                       let
