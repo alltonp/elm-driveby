@@ -1,17 +1,18 @@
 //TODO: make this the main script https://github.com/ariya/phantomjs/blob/master/examples/arguments.js
 //TODO: this looks good for parallel - https://github.com/ariya/phantomjs/blob/master/examples/child_process-examples.js
-//TODO: instantiate multiple 'page's and stash them away ... implement a tuplespace in elm?
+//TODO: implement a tuplespace in elm?
 //TODO: in larger test suites we will defo want to unserver at the end of each script
+//TODO: consider running this as a daemon/server and connect to it .. a-la flyby .. and shorter start time
 
 //TODO: make it so that each command can report it's duration
 var started = new Date().getTime();
 
 //TODO: rename to browsers
 var pages = [];
+//TODO: put this in arg[] to this script ..
 var browserCount = 4;
 var nextPort = 9000;
 
-//TODO: put this in arg[] to this script ..
 for (var i = 0; i < browserCount; i+=1) {
     var p = require('webpage').create();
 
@@ -25,7 +26,6 @@ for (var i = 0; i < browserCount; i+=1) {
     //TODO: append these to a file in the result dir ....
     };
 
-//    console.log(p)
     pages.push(p);
 }
 
