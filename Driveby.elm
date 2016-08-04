@@ -148,7 +148,7 @@ update requestsPort msg model =
 
         --TODO: need to do something better with maybe ...
         --TODO: consider bending them in here .. RunnableScript ...
-        scriptIdToScript' = model.scripts |> List.map (\s -> (s.id |> Maybe.withDefault "???", s)) |> Dict.fromList
+        scriptIdToScript' = model.scripts |> List.indexedMap (\i s -> (toString i, s)) |> Dict.fromList
 
         all = List.repeat howMany 1
               |> List.indexedMap (,)
