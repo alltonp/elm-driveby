@@ -175,7 +175,8 @@ update requestsPort msg model =
 
     RunNext browserId ->
       let
-        next = List.filter (\s -> not s.executed) model.script.steps |> List.head
+        script = model.script
+        next = List.filter (\s -> not s.executed) script.steps |> List.head
         cmd = case next of
             Just c ->
               let
@@ -185,7 +186,7 @@ update requestsPort msg model =
               in
                 requestsPort (Request c (Context browserId))
             --TODO: this looks iffy now ...
-            Nothing -> asFx (Exit ("☑ - "  ++ model.script.name) )
+            Nothing -> asFx (Exit ("☑ - "  ++ script.name) )
       in
         ( model, cmd )
 
