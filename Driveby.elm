@@ -1,7 +1,7 @@
 module Driveby exposing (..)
 
 import Driveby.Model exposing (..)
-import Driveby.Runner exposing (..)
+import Driveby.Runner as Runner --exposing (..)
 import Html.App as App
 
 --TODO: ultimately no console sutff in here, report it to js land instead
@@ -12,13 +12,13 @@ import Html.App as App
 --TODO: support TextEquals next
 --TODO: need to fail properly on element not found for asserts ...
 
-driveby : List Script -> (Request -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Flags
+driveby : List Script -> (Request -> Cmd Runner.Msg) -> ((Response -> Runner.Msg) -> Sub Runner.Msg) -> Program Runner.Flags
 driveby scripts requestsPort responsesPort =
   App.programWithFlags
-    { init = init scripts
-    , view = view
-    , update = update requestsPort
-    , subscriptions = subscriptions responsesPort
+    { init = Runner.init scripts
+    , view = Runner.view
+    , update = Runner.update requestsPort
+    , subscriptions = Runner.subscriptions responsesPort
     }
 
 

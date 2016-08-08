@@ -1,7 +1,5 @@
 module Driveby.Model exposing (..)
 
-a : String
-a = ""
 
 type alias Script =
   { name : String
