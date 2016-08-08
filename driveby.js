@@ -47,7 +47,7 @@ for (var i = 0; i < browserCount; i+=1) {
 //TODO: consider running this as a daemon
 //TODO: this waiting could be in elm ... would possibly need to subscribe to time
 //TODO: changes to this file should also trigger autotest.sh
-function waitFor(context, id, testFx, onReady, timeOutMillis) {
+function waitFor(context, id, testFx, onReady, onFail, timeOutMillis) {
     var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //TODO: make this a config option
         start = new Date().getTime(),
         condition = false,
@@ -57,7 +57,7 @@ function waitFor(context, id, testFx, onReady, timeOutMillis) {
             } else {
                 if (!condition) {
                     clearInterval(interval);
-                    respond(context, id, ["timeout"]);
+                    respond(context, id, [onFail()]);
                 } else {
                     onReady();
                     clearInterval(interval);
@@ -145,7 +145,9 @@ function goto(page, context, id, url) {
 }
 
 function click(page, context, id, selector) {
-  waitFor(context, id, function() {
+  waitFor(context, id,
+
+    function() {
     //condition
     return page.evaluate(function(theSelector) {
       //TODO: pull out as findUniqueInteractable
@@ -161,7 +163,15 @@ function click(page, context, id, selector) {
       page.evaluate(function(theSelector) {
         $(theSelector).click();
       }, selector);
+    //failure
+    },
+    function() {
+//      page.evaluate(function(theSelector) {
+//        var e = $(theSelector);
+//        return if e.length == 1 "found one" else "didnt find one";
+//      }, selector);
     }
+
   );
 }
 
@@ -209,7 +219,15 @@ function enter(page, context, id, selector, value) {
 //      page.sendEvent('keypress', page.event.key.Backspace);
 
       page.sendEvent('keypress', value);
+    //failure
+    },
+    function() {
+//      page.evaluate(function(theSelector) {
+//        var e = $(theSelector);
+//        return if e.length == 1 "found one" else "didnt find one";
+//      }, selector);
     }
+
   );
 }
 
@@ -228,6 +246,16 @@ function textContains(page, context, id, selector, expected) {
 
     //action
     }, function() {}
+
+    ,
+    //failure
+    function() {
+      return page.evaluate(function(theSelector) {
+        var e = $(theSelector);
+        return "expected 1 for " + theSelector + " but found " + e.length;
+      }, selector);
+    }
+
   );
 }
 
