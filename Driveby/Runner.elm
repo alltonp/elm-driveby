@@ -126,7 +126,7 @@ update requestsPort msg model =
       let
 --        rn = Debug.log "RunNext" context
 --        m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
---        m3 = Debug.log "scriptIdToScript" (toString (Dict.keys model.scriptIdToScript))
+--        m3 = Debug.log "scriptIdToExecutableScript" (toString (Dict.keys model.scriptIdToExecutableScript))
 
         (model2, cmd2) = case currentScript context model of
             Just executableScript ->
