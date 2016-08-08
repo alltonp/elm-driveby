@@ -175,14 +175,12 @@ update requestsPort msg model =
         d = Debug.log "Driveby" message
 
         --TODO: this should be in MainLoop
-        scriptsThatNeedToStart= Dict.values model.scriptIdToExecutableScript |> List.filter (\s -> s.started == Nothing )
-        scriptsThatNeedToFinish = Dict.values model.scriptIdToExecutableScript |> List.filter (\s -> s.finished == Nothing )
 
 --        d2 = Debug.log "Driveby scriptsThatNeedToStart: " ((toString (List.length scriptsThatNeedToStart)))
 --        d3 = Debug.log "Driveby scriptsThatNeedToFinish: " ((toString (List.length scriptsThatNeedToFinish)))
 
-        cmd = if not (List.isEmpty scriptsThatNeedToStart) then asFx (RunNextScript context.browserId context.updated)
-              else if not (List.isEmpty scriptsThatNeedToFinish) then Cmd.none
+        cmd = if not (List.isEmpty (scriptsThatNeedToStart model)) then asFx (RunNextScript context.browserId context.updated)
+              else if not (List.isEmpty (scriptsThatNeedToFinish model)) then Cmd.none
               --TODO: we should be updating the context.stepId whenever we send it through requestsPort or (MainLopp)
               --TODO: we shouldnt have to hardcode this 999 either ..
               --TODO: should be an AllDone me thinks ...
@@ -202,6 +200,14 @@ currentScript context model =
 nextUnstartedScript : Model -> Maybe ExecutableScript
 nextUnstartedScript model =
   Dict.values model.scriptIdToExecutableScript |> List.filter (\s -> s.started == Nothing ) |> List.head
+
+
+scriptsThatNeedToStart : Model -> List ExecutableScript
+scriptsThatNeedToStart model = Dict.values model.scriptIdToExecutableScript |> List.filter (\s -> s.started == Nothing )
+
+
+scriptsThatNeedToFinish : Model -> List ExecutableScript
+scriptsThatNeedToFinish model = Dict.values model.scriptIdToExecutableScript |> List.filter (\s -> s.finished == Nothing )
 
 
 view : Model -> Html Msg
