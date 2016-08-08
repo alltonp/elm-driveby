@@ -169,7 +169,7 @@ update requestsPort msg model =
             Just executableScript ->
               let
                 --used? debug only?
-                current = List.filter (\s -> s.id == response.id) executableScript.script.steps
+                currentStep = List.filter (\s -> s.id == response.id) executableScript.script.steps
 
                 steps' = List.map (\s -> if s.id == response.id then Step s.id s.command True else s ) executableScript.script.steps
                 script = executableScript.script
@@ -195,7 +195,7 @@ update requestsPort msg model =
 --                       else asFx (Exit ("☒ - " ++ executableScript.script.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString current)) response.context)
 
                 next = if List.isEmpty response.failures then Cmd.none
-                       else asFx (Exit ("☒ - " ++ executableScript.script.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString current)) response.context)
+                       else asFx (Exit ("☒ - " ++ executableScript.script.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString currentStep)) response.context)
 
                 --this looks iffy ...
                 --if failed then Exit this test
