@@ -46,8 +46,9 @@ type alias ExecutableScript =
 
 --TODO: fix all this naming too
 type Msg
+  -- TODO: RunAllScripts
   = Go Date
-  --TODO: RunScript
+  --TODO: RunNextScript?
   | Start Int String {-Date-}
   --TODO: RunNextCommand
   | RunNext Context
