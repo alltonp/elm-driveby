@@ -140,12 +140,11 @@ update requestsPort msg model =
 
 
     Process response ->
-      let
---        rn = Debug.log "Process" response
-
-        (model2', next2) = case currentScript response.context model of
+        case currentScript response.context model of
             Just executableScript ->
               let
+              --        rn = Debug.log "Process" response
+
                 --used? debug only?
                 currentStep = List.filter (\s -> s.id == response.id) executableScript.script.steps
 
@@ -162,15 +161,15 @@ update requestsPort msg model =
 
                 --TODO: send ExampleFailure if response has failures
                 context = response.context
---                2011-10-05T14:48:00.000Z
---                clearlyWrongDate = unsafeFromString "2016-06-17T11:15:00+0200"
+    --                2011-10-05T14:48:00.000Z
+    --                clearlyWrongDate = unsafeFromString "2016-06-17T11:15:00+0200"
                 --TOOD: we should really have the stepId ...
 
                 --BUG: if there is an error here we don't run the next step .. so we can't mark the test as finished ...
                 --a good argument for doing that check here ...
 
---                next = if List.isEmpty response.failures then asFx (RunNext { context | stepId = context.stepId + 1 } )
---                       else asFx (Exit ("☒ - " ++ executableScript.script.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString current)) response.context)
+    --                next = if List.isEmpty response.failures then asFx (RunNext { context | stepId = context.stepId + 1 } )
+    --                       else asFx (Exit ("☒ - " ++ executableScript.script.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString current)) response.context)
 
                 next = if List.isEmpty response.failures then Cmd.none
                        else asFx (ScriptFinished ("☒ - " ++ executableScript.script.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString currentStep)) response.context)
@@ -185,8 +184,6 @@ update requestsPort msg model =
                 (model', Cmd.batch [ next, asFx (MainLoop response.context) ] )
 
             Nothing -> (model, Cmd.none)
-      in
-        ( model2', next2 )
 
     --TODO: do we need ScriptFailed, ScriptSucceded?
     ScriptFinished message context ->
