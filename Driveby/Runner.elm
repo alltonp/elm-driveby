@@ -89,17 +89,16 @@ update requestsPort msg model =
 --                rn = Debug.log "Start script on browser: " ((toString executableScript.id) ++  " " ++ (toString browserId) ++ (toString theDate))
                 context = Context -1 browserId executableScript.id 0 theDate
 
-                --mark script as started
-                executableScript' = { executableScript | started = Just theDate }
-                scriptIdToExecutableScript' = Dict.update (executableScript.id)
-                    (\e -> Just executableScript') model.scriptIdToExecutableScript
-
-                --mark browser as running this script
-                browserIdToScriptId' = Dict.update browserId (\v -> Just executableScript.id) model.browserIdToScriptId
+                model' = { model |
+                  --mark browser as running this script
+                  browserIdToScriptId = Dict.update browserId (\v -> Just executableScript.id) model.browserIdToScriptId,
+                  --mark script as started
+                  scriptIdToExecutableScript = Dict.update (executableScript.id)
+                    (\e -> Just { executableScript | started = Just theDate } ) model.scriptIdToExecutableScript
+                 }
 
               in
-                ( { model | browserIdToScriptId = browserIdToScriptId', scriptIdToExecutableScript = scriptIdToExecutableScript' },
-                asFx (RunNext context))
+                ( model', asFx (RunNext context))
 
             Nothing ->
               (model, Cmd.none)
