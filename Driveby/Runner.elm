@@ -31,9 +31,9 @@ init scripts flags =
          let
             d = Debug.log "foo" "foo"
             --convertCommandsToSteps
-            -- s = c
-            --       |> List.indexedMap (,)
-            --       |> List.map (\(i,r) -> Step (toString i) r False)
+            s2 = s.steps
+                   |> List.indexedMap (,)
+                   |> List.map (\(i,r) -> Step (toString i) r.command False)
 
          in
            (i, ExecutableScript s i Nothing Nothing)
