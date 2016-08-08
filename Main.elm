@@ -10,7 +10,7 @@ port responses : (Response -> msg) -> Sub msg
 
 
 main =
-   driveby [test, test2, test3] requests responses
+   driveby [test, test2, test3, test4] requests responses
 
 
 --TODO: stubs ..
@@ -71,6 +71,14 @@ test3 =
     --TODO: I should work when messaging fixed
 --    , textContains "messageList" "ConfigurationChanged \"12"
     , textContains "messageList" "Config changed"
+    ]
+
+test4 : Script
+test4 =
+  script "Fails causing build to hang"
+    [ serve "../shoreditch-ui-chrome/chrome"
+    , stub "/reservations/metadata" "meh"
+    , gotoLocal "/elm2.html"
     ]
 
 
