@@ -1,7 +1,7 @@
 module Driveby exposing (..)
 
 import Driveby.Model exposing (..)
-import Driveby.Runner as Runner --exposing (..)
+import Driveby.Runner as Runner
 import Html.App as App
 
 --TODO: ultimately no console sutff in here, report it to js land instead
@@ -37,7 +37,6 @@ script name commands =
       |> List.map (\(i,r) -> Step (toString i) r False))
 
 
---TODO: pull out all the other stuff to a runner or engine ...
 --TODO: eventually these will be in Driveby.Command or something
 serve : String -> Command
 serve path =
