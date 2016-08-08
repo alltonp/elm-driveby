@@ -15,7 +15,7 @@ init scripts flags =
        |> List.indexedMap (\i s -> (i, ExecutableScript s i Nothing Nothing) )
        |> Dict.fromList
    in
-     (Model scripts (Config flags.browsers) Dict.empty scriptIdToExecutableScript, runAllScripts)
+     (Model (Config flags.browsers) Dict.empty scriptIdToExecutableScript, runAllScripts)
 
 
 subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
@@ -34,8 +34,7 @@ type alias Config =
 -- TODO: ultimately scripts arent needed, they become scriptIdToExecutableScript
 -- TODO: ultimately config isnt needed, they become browserIdToScriptId (mainly)
 type alias Model =
-  { scripts : List Script
-  , config : Config
+  { config : Config
   , browserIdToScriptId : Dict Int Int
   , scriptIdToExecutableScript : Dict Int ExecutableScript
   }
@@ -70,7 +69,7 @@ update requestsPort msg model =
     --TODO: store date or lose it ...
     RunAllScripts startDate ->
       let
-        d = Debug.log "Go " ((toString (List.length model.scripts) ++ " " ++ (toString startDate) ++ " " ++ (toString model.config)))
+        d = Debug.log "Go " ((toString (List.length (Dict.keys model.scriptIdToExecutableScript)) ++ " " ++ (toString startDate) ++ " " ++ (toString model.config)))
 
         cmds = List.repeat model.config.numberOfBrowsersToRunWith 1
               |> List.indexedMap (,)
