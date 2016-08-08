@@ -3,7 +3,8 @@ module Driveby exposing (..)
 
 type alias Script =
   { name : String
-  , steps : List Step
+--  , steps : List Step
+  , commands : List Command
   }
 
 
@@ -27,9 +28,9 @@ type alias Response =
 script : String -> List Command -> Script
 script name commands =
   Script name (
-    ( List.append [ Command "init" [] ] commands)
-      |> List.indexedMap (,)
-      |> List.map (\(i,r) -> Step (toString i) r False))
+    List.append [ Command "init" [] ] commands)
+--      |> List.indexedMap (,)
+--      |> List.map (\(i,r) -> Step (toString i) r False))
 
 
 serve : String -> Command

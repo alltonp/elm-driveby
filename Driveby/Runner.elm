@@ -23,14 +23,13 @@ run scripts requestsPort responsesPort =
 init : List Script -> Flags -> (Model, Cmd Msg)
 init scripts flags =
    let
-     scriptIdToExecutableScript = scripts |> List.indexedMap (\i s ->
+     scriptIdToExecutableScript = scripts |> List.indexedMap (\i script ->
          let
-            steps = s.steps
-                   |> List.indexedMap (,)
-                   |> List.map (\(i,r) -> Step (toString i) r.command False)
-
+            steps = script.commands
+               |> List.indexedMap (,)
+               |> List.map (\(i,command) -> Step (toString i) command False)
          in
-           (i, ExecutableScript i s.name steps Nothing Nothing)
+           (i, ExecutableScript i script.name steps Nothing Nothing)
           )
          |> Dict.fromList
    in
