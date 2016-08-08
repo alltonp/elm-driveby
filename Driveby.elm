@@ -1,17 +1,16 @@
---TODO: tighten this up ... expose minimum (driveby)
 module Driveby exposing (..)
 
 import Driveby.Model exposing (..)
 import Driveby.Runner exposing (..)
-
 import Html.App as App
---import Date exposing (..)
-import Array exposing (..)
 
 --TODO: ultimately no console sutff in here, report it to js land instead
---when asking for next, just get the next command for the current script, if script is done, get the next script .. etc
---or TEA up the script runners?
-
+--TODO: should be assert [ "textContains", "#messageList", "Auto Loading Metadata" ]
+--TODO: or assert [ "#messageList" "textContains", "Auto Loading Metadata" ]
+--TODO: might map well to jquery functions
+--TODO: should screenshot be a command? (taking a filepath, would offload more to elm)
+--TODO: support TextEquals next
+--TODO: need to fail properly on element not found for asserts ...
 
 driveby : List Script -> (Request -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Flags
 driveby scripts requestsPort responsesPort =

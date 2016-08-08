@@ -13,13 +13,6 @@ main =
    driveby [test, test2, test3] requests responses
 
 
---TODO: should be assert [ "textContains", "#messageList", "Auto Loading Metadata" ]
---TODO: or assert [ "#messageList" "textContains", "Auto Loading Metadata" ]
---TODO: might map well to jquery functions
---TODO: should screenshot be a command? (taking a filepath, would offload more to elm)
---TODO: support TextEquals next
---TODO: need to fail properly on element not found for asserts ...
-
 --TODO: stubs ..
 --content:
 --{
