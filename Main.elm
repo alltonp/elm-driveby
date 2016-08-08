@@ -21,8 +21,6 @@ main =
 --TODO: need to fail properly on element not found for asserts ...
 
 --TODO: stubs ..
---path:
---/reservations/metadata
 --content:
 --{
 --  "name":"Reservations System",
@@ -33,8 +31,6 @@ main =
 --  }],
 --  "actions":[]
 --}
---how?
--- shore in map for port and look them up, no need to clear up really, hooray
 
 
 test : Script

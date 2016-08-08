@@ -298,7 +298,7 @@ function close(page, context, id) {
 
 function stub(context, id, path, content, port) {
   stubs[(port + ":" + path)] = content;
-  console.log("stub " + JSON.stringify(stubs));
+//  console.log("stub " + JSON.stringify(stubs));
   respond(context, id, [])
 }
 
@@ -307,25 +307,20 @@ function serve(context, id, path, port) {
     var fs = require('fs')
 
     var service = server.listen(port, { keepAlive: true }, function (request, response) {
-//        console.log(path)
         var fqn = path + request.url;
 
         var key = port + ":" + request.url
-//        console.log(key)
-        console.log(key + ":" + stubs[key])
-//        console.log(stubs[key] != undefined)
-//        console.log(JSON.stringify(stubs))
+//        console.log(key + ":" + stubs[key])
 
         var body = (stubs[key] !== undefined) ? stubs[key] : fs.read(fqn);
 
         //TODO: if file doesnt exist then 404 instead ...
 //        if (fs.exists(path))
-//        var body =
 
         response.statusCode = 200;
         response.headers = {
             'Cache': 'no-cache',
-            //TODO: should probably base this on filetype ..
+            //TODO: c/should probably base this on filetype ..
             'Content-Type': 'text/html',
             'Connection': 'Keep-Alive',
             'Keep-Alive': 'timeout=5, max=100',
