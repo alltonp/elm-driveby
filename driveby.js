@@ -121,7 +121,7 @@ function respond(context, id, failures) {
 //  console.log(y)
 //  var x = y.toISOString()
 //  console.log(x)
-  var response = { context:context, id:id, failures:failures, updated:y }
+  var response = { context:context, failures:failures, updated:y }
   //TODO: make this a config option
   //TODO: and actually this is probably the wrong place for it. because some commmands don't want it...
   //page.render('step-' + id + '.png')

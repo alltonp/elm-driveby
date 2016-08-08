@@ -14,8 +14,7 @@ type alias Request =
 
 
 type alias Response =
-  { id : String
-  , context : Context
+  { context : Context
   , failures : List String
   }
 
@@ -67,7 +66,7 @@ textContains id expected =
 --TODO: can this id die, I'm not sure yet ...
 --TODO: this feels more like Runner.Model
 type alias Step =
-  { id : String
+  { id : Int
   , command : Command
   , executed : Bool
   }

@@ -29,7 +29,7 @@ init scripts flags =
          let
             steps = script.commands
                |> List.indexedMap (,)
-               |> List.map (\(i,command) -> Step (toString i) command False)
+               |> List.map (\(i,command) -> Step i command False)
          in
            (i, ExecutableScript i script.name steps Nothing Nothing)
           )
@@ -101,7 +101,7 @@ update requestsPort msg model =
                 cmd = case nextStep of
                     Just c ->
                       let
-                        d = Debug.log "Driveby running" ( (toString context.localPort) ++ " " ++ (toString context.browserId) ++ " " ++ c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
+                        d = Debug.log "Driveby running" ( (toString context.localPort) ++ " " ++ (toString context.browserId) ++ " " ++ (toString c.id) ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
                         --rn = Debug.log "RunNextStep" context
                         --m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
                         --m3 = Debug.log "scriptIdToExecutableScript" (toString (Dict.keys model.scriptIdToExecutableScript))
@@ -128,10 +128,10 @@ update requestsPort msg model =
                 --rn = Debug.log "Process" response
 
                 --used? debug only?
-                currentStep = List.filter (\s -> s.id == response.id) executableScript.steps
+                currentStep = List.filter (\s -> s.id == response.context.stepId) executableScript.steps
 
                 -- mark this step as done?
-                steps' = List.map (\s -> if s.id == response.id then Step s.id s.command True else s ) executableScript.steps
+                steps' = List.map (\s -> if s.id == response.context.stepId then Step s.id s.command True else s ) executableScript.steps
 --                script = executableScript.script
 --                script' = { script | steps = steps' }
 
@@ -185,7 +185,7 @@ update requestsPort msg model =
               --TODO: we should be updating the context.stepId whenever we send it through requestsPort or (MainLopp)
               --TODO: we shouldnt have to hardcode this 999 either ..
               --TODO: should be an AllDone me thinks ...
-              else (requestsPort (Request (Step "999" close False) (context)))
+              else (requestsPort (Request (Step 999 close False) (context)))
       in
         ( model, cmd )
 
