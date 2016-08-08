@@ -32,6 +32,7 @@ main =
 --  "actions":[]
 --}
 
+--TODO: these tests should live in shoreditch-chrome-ui project
 
 test : Script
 test =
