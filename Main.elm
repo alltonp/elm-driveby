@@ -25,12 +25,9 @@ test =
     [
       serve "../shoreditch-ui-chrome/chrome"
     , gotoLocal "/elm.html"
-
     , Command "textContains" [ "#messageList", "Auto Loading Metadata" ]
-
     --TODO: I should work when messaging fixed
 --    , Command "textContains" [ "#messageList", "LoadAllMetaDataResponse ([{ url = " ]
-
     --TODO: probably want to assert the number of checks and actions here ...
     ]
 
@@ -40,16 +37,13 @@ test2 =
     [
       serve "../shoreditch-ui-chrome/chrome"
     , gotoLocal "/elm.html"
-
     , Command "textContains" [ "#messageList", "Auto Loading Metadata" ]
-        --TODO: I should work when messaging fixed
+    --TODO: I should work when messaging fixed
 --    , Command "textContains" [ "#messageList", "LoadAllMetaDataResponse ([{ url = " ]
-
     , click "refreshButton"
     , Command "textContains" [ "#messageList", "Manual Loading Metadata" ]
     --TODO: I should work when messaging fixed
 --    , Command "textContains" [ "#messageList", "ManualMetaDataRefresh" ]
-
     ]
 
 test3 : Script
