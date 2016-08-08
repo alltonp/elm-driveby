@@ -8,8 +8,8 @@ type alias Script =
 
 
 type alias Request =
-  { step : Step
-  , context : Context
+  { context : Context
+  , step : Step
   }
 
 

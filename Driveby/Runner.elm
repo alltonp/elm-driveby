@@ -99,14 +99,14 @@ update requestsPort msg model =
               let
                 nextStep = List.filter (\s -> not s.executed) executableScript.steps |> List.head
                 cmd = case nextStep of
-                    Just c ->
+                    Just step ->
                       let
-                        d = Debug.log "Driveby running" ( (toString context.localPort) ++ " " ++ (toString context.browserId) ++ " " ++ (toString c.id) ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
+                        d = Debug.log "Driveby running" ( (toString context.localPort) ++ " " ++ (toString context.browserId) ++ " " ++ (toString step.id) ++ ": " ++ step.command.name ++ " " ++ (toString step.command.args) )
                         --rn = Debug.log "RunNextStep" context
                         --m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
                         --m3 = Debug.log "scriptIdToExecutableScript" (toString (Dict.keys model.scriptIdToExecutableScript))
                       in
-                        ( model, requestsPort (Request c (context)) )
+                        ( model, requestsPort (Request context step) )
                     --TODO: this is defo wrong, we should'nt have even hit RunNext, should have bailed in Process
                     Nothing ->
                       let
@@ -185,7 +185,7 @@ update requestsPort msg model =
               --TODO: we should be updating the context.stepId whenever we send it through requestsPort or (MainLopp)
               --TODO: we shouldnt have to hardcode this 999 either ..
               --TODO: should be an AllDone me thinks ...
-              else (requestsPort (Request (Step 999 close False) (context)))
+              else (requestsPort (Request context (Step 999 close False)) )
       in
         ( model, cmd )
 
