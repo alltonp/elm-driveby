@@ -4,6 +4,7 @@ import Driveby.Model exposing (..)
 import Driveby.Runner as Runner
 import Html.App as App
 
+
 --TODO: ultimately no console sutff in here, report it to js land instead
 --TODO: should be assert [ "textContains", "#messageList", "Auto Loading Metadata" ]
 --TODO: or assert [ "#messageList" "textContains", "Auto Loading Metadata" ]
@@ -11,7 +12,6 @@ import Html.App as App
 --TODO: should screenshot be a command? (taking a filepath, would offload more to elm)
 --TODO: support TextEquals next
 --TODO: need to fail properly when a script fails ...
-
 driveby : List Script -> (Request -> Cmd Runner.Msg) -> ((Response -> Runner.Msg) -> Sub Runner.Msg) -> Program Runner.Flags
 driveby scripts requestsPort responsesPort =
   App.programWithFlags

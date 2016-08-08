@@ -218,7 +218,6 @@ view model =
   div [ ] [ ]
 
 
-
 close : Command
 close =
   Command "close" []
