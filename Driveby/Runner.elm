@@ -107,14 +107,13 @@ update requestsPort msg model =
 
     --TODO: pretty sure this doesnt do just what it says on the tin ...
     RunNextStep context ->
-      let
---        rn = Debug.log "RunNextStep" context
---        m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
---        m3 = Debug.log "scriptIdToExecutableScript" (toString (Dict.keys model.scriptIdToExecutableScript))
-
-        (model2, cmd2) = case currentScript context model of
+        case currentScript context model of
             Just executableScript ->
               let
+              --        rn = Debug.log "RunNextStep" context
+              --        m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
+              --        m3 = Debug.log "scriptIdToExecutableScript" (toString (Dict.keys model.scriptIdToExecutableScript))
+
                 nextStep = List.filter (\s -> not s.executed) executableScript.script.steps |> List.head
                 cmd = case nextStep of
                     Just c ->
@@ -135,8 +134,6 @@ update requestsPort msg model =
                  cmd
 
             Nothing -> (model, Cmd.none)
-      in
-        ( model2, cmd2 )
 
 
     Process response ->
