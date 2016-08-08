@@ -12,10 +12,10 @@ var pages = [];
 var stubs = {};
 
 //TODO: put this in arg[] to this script ..
-var browserCount = 4;
+var numberOfBrowsers = 4;
 var nextPort = 9000;
 
-for (var i = 0; i < browserCount; i+=1) {
+for (var i = 0; i < numberOfBrowsers; i+=1) {
     var p = require('webpage').create();
 
     //TODO: make this a config option - surpress action logging
@@ -86,7 +86,7 @@ function waitFor(context, id, testFx, onReady, onFail, timeOutMillis) {
 var r2 = phantom.injectJs("tests.js") ? "... done injecting elm.js!" : "... fail! Check the $PWD?!";
 //console.log(r2);
 
-var flags = { browsers: pages.length };
+var flags = { numberOfBrowsers: pages.length };
 var unused = document.createElement('div');
 var app = Elm.DrivebyTest.embed(unused, flags);
 

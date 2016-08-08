@@ -6,7 +6,7 @@ import Dict exposing (..)
 
 
 type alias Flags =
-  { browsers : Int }
+  { numberOfBrowsers : Int }
 
 
 --TODO: can we not just use Flags instead?

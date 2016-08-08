@@ -34,7 +34,7 @@ init scripts flags =
           )
          |> Dict.fromList
    in
-     (Model (Config flags.browsers) Dict.empty scriptIdToExecutableScript, runAllScripts)
+     (Model (Config flags.numberOfBrowsers) Dict.empty scriptIdToExecutableScript, runAllScripts)
 
 
 subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
