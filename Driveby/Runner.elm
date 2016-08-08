@@ -10,7 +10,12 @@ import Html exposing (..)
 
 init : List Script -> Flags -> (Model, Cmd Msg)
 init scripts flags =
-   (Model scripts (Config flags.browsers) Dict.empty Dict.empty, runAllScripts)
+   let
+     scriptIdToExecutableScript = scripts
+       |> List.indexedMap (\i s -> (i, ExecutableScript s i Nothing Nothing) )
+       |> Dict.fromList
+   in
+     (Model scripts (Config flags.browsers) Dict.empty scriptIdToExecutableScript, runAllScripts)
 
 
 subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
@@ -67,16 +72,12 @@ update requestsPort msg model =
       let
         d = Debug.log "Go " ((toString (List.length model.scripts) ++ " " ++ (toString startDate) ++ " " ++ (toString model.config)))
 
-        scriptIdToExecutableScript' = model.scripts
-          |> List.indexedMap (\i s -> (i, ExecutableScript s i Nothing Nothing) )
-          |> Dict.fromList
-
         cmds = List.repeat model.config.numberOfBrowsersToRunWith 1
               |> List.indexedMap (,)
               |> List.map (\ (i,r) -> (i) )
               |> List.map (\i -> asFx (Start i "") )
       in
-        ( { model | scriptIdToExecutableScript = scriptIdToExecutableScript' }, Cmd.batch cmds )
+        ( model, Cmd.batch cmds )
 
 
     --This isnt really a good name, the intention is to start a script on browserId
