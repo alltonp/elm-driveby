@@ -10,7 +10,7 @@ import Html.App as App
 --TODO: might map well to jquery functions
 --TODO: should screenshot be a command? (taking a filepath, would offload more to elm)
 --TODO: support TextEquals next
---TODO: need to fail properly on element not found for asserts ...
+--TODO: need to fail properly when a script fails ...
 
 driveby : List Script -> (Request -> Cmd Runner.Msg) -> ((Response -> Runner.Msg) -> Sub Runner.Msg) -> Program Runner.Flags
 driveby scripts requestsPort responsesPort =
@@ -37,7 +37,6 @@ script name commands =
       |> List.map (\(i,r) -> Step (toString i) r False))
 
 
---TODO: eventually these will be in Driveby.Command or something
 serve : String -> Command
 serve path =
   Command "serve" [path]

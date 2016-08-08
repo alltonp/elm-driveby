@@ -6,6 +6,7 @@ type alias Script =
   , steps : List Step
   }
 
+
 --TODO: this should probably be Request and requestId everywhere ...
 --TODO: can this id die, I'm not sure yet ...
 type alias Step =
@@ -13,6 +14,7 @@ type alias Step =
   , command : Command
   , executed : Bool
   }
+
 
 --TODO: consider id/selector being a a first class thing, at least a Maybe ...
 --TODO: consider value being a a first class thing, at least a Maybe ...
