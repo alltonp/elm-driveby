@@ -237,6 +237,17 @@ function enter(page, context, id, selector, value) {
 //        var e = $(theSelector);
 //        return if e.length == 1 "found one" else "didnt find one";
 //      }, selector);
+
+      return page.evaluate(function(theSelector) {
+        var e = $(theSelector);
+//        if (e.length != 1) {
+      return "expected 1 for " + theSelector + " but found " + e.length;
+//        } else {
+//          return "expected " + theSelector + " to contain " + theExpected + " but was " + e.text();
+//       return "mooo";
+//        }
+      }, selector);
+
     }
 
   );
