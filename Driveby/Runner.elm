@@ -118,6 +118,16 @@ update requestsPort msg model =
       in
         (model', cmd)
 
+
+    MainLoop context ->
+      let
+        d = Debug.log "MainLoop" (toString context)
+
+        nextCmd = asFx (RunNext { context | stepId = context.stepId + 1 } )
+      in
+        (model, nextCmd)
+
+
     RunNext context ->
       let
 --        rn = Debug.log "RunNext" context
@@ -150,13 +160,6 @@ update requestsPort msg model =
       in
         ( model2, cmd2 )
 
-    MainLoop context ->
-      let
-        d = Debug.log "MainLoop" (toString context)
-
-        nextCmd = asFx (RunNext { context | stepId = context.stepId + 1 } )
-      in
-        (model, nextCmd)
 
     Process response ->
       let
