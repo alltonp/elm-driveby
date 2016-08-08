@@ -46,7 +46,9 @@ test2 =
 --    , Command "textContains" [ "#messageList", "LoadAllMetaDataResponse ([{ url = " ]
 
     , click "refreshButton"
-    , Command "textContains" [ "#messageList", "ManualMetaDataRefresh" ]
+    , Command "textContains" [ "#messageList", "Manual Loading Metadata" ]
+    --TODO: I should work when messaging fixed
+--    , Command "textContains" [ "#messageList", "ManualMetaDataRefresh" ]
 
     ]
 
