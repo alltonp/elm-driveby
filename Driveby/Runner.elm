@@ -53,7 +53,9 @@ type Msg
   --TODO: RunNextCommand
   | RunNext Context
   | Process Response
+  | MainLoop Context
   | Exit String Context
+
 --TODO: add a Finish (and do the reporting bit here ...)
 
 
@@ -149,6 +151,13 @@ update requestsPort msg model =
             Nothing -> (model, Cmd.none)
       in
         ( model2, cmd2 )
+
+    MainLoop context ->
+      let
+        d = Debug.log "MainLoop" ""
+        nextCmd = Cmd.none
+      in
+        (model, nextCmd)
 
     Process response ->
       let
