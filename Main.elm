@@ -82,3 +82,9 @@ test3 =
 --    , Command "textContains" [ "#messageList", "ConfigurationChanged \"12" ]
     , Command "textContains" [ "#messageList", "Config changed" ]
     ]
+
+
+--TODO: add missing test for a stubbed Check in metadata
+--TODO: add missing test for a stubbed Action in metadata
+--TODO: add missing test for a stubbed Check with args in metadata
+--TODO: add missing test for a stubbed Action with args in metadata
