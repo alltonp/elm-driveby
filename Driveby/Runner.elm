@@ -82,7 +82,9 @@ update requestsPort msg model =
       let
 --        d = Debug.log "MainLoop" (toString context)
         --TODO: I need fleshing out
-
+        --BUG: test fails, but then carries on add passes, lol because next step will be run, it probably needs its
+--             finish flag to be set
+--      TODO: maybe Process is MainLoop actually ...
         nextCmd = asFx (RunNextStep { context | stepId = context.stepId + 1 } )
       in
         (model, nextCmd)
