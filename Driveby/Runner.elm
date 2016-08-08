@@ -23,11 +23,7 @@ run scripts requestsPort responsesPort =
 init : List Script -> Flags -> (Model, Cmd Msg)
 init scripts flags =
    let
-     scriptIdToExecutableScript = (scripts
---       |> List.indexedMap (,)
---       |> List.map (\(i,r) -> Step (toString i) r False)
-       )
-         |> List.indexedMap (\i s ->
+     scriptIdToExecutableScript = scripts |> List.indexedMap (\i s ->
          let
             d = Debug.log "foo" "foo"
             --convertCommandsToSteps
