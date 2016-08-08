@@ -21,25 +21,14 @@ main =
 --TODO: need to fail properly on element not found for asserts ...
 test : Script
 test =
-  script "First Test"
+  script "Auto Loads Metadata on visiting"
     [
       serve "../shoreditch-ui-chrome/chrome"
     , gotoLocal "/elm.html"
 
     , Command "textContains" [ "#messageList", "Auto Loading Metadata" ]
-    , Command "textContains" [ "#messageList", "LoadAllMetaDataResponse ([{ url = " ]
 
---    , click "refreshButton"
---    , Command "textContains" [ "#messageList", "ManualMetaDataRefresh" ]
-
-    , enter "configuration" "1"
-    , Command "textContains" [ "#messageList", "ConfigurationChanged \"1" ]
-
-    , enter "configuration" "2"
-    , Command "textContains" [ "#messageList", "ConfigurationChanged \"12" ]
-
---    , click "refreshButton"
---    , Command "textContains" [ "#messageList", "LoadAllMetaDataResponse []" ]
+    --TODO: probably want to assert the number of checks and actions here ...
     ]
 
 test2 : Script
