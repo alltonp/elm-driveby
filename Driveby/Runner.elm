@@ -156,7 +156,9 @@ update requestsPort msg model =
       let
         d = Debug.log "MainLoop" ""
 --        lastStepSucceeded = List.isEmpty response.failures
-        nextCmd = Cmd.none
+        nextCmd = asFx (RunNext { context | stepId = context.stepId + 1 } )
+
+
       in
         (model, nextCmd)
 
@@ -196,7 +198,7 @@ update requestsPort msg model =
 --                next = if List.isEmpty response.failures then asFx (RunNext { context | stepId = context.stepId + 1 } )
 --                       else asFx (Exit ("☒ - " ++ executableScript.script.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString current)) response.context)
 
-                next = if List.isEmpty response.failures then asFx (RunNext { context | stepId = context.stepId + 1 } )
+                next = if List.isEmpty response.failures then Cmd.none
                        else asFx (Exit ("☒ - " ++ executableScript.script.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString current)) response.context)
 
                 --this looks iffy ...

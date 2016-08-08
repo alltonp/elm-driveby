@@ -10,7 +10,7 @@ port responses : (Response -> msg) -> Sub msg
 
 
 main =
-   driveby [test, test2, test3, test4] requests responses
+   driveby [test, test2, test3] requests responses
 
 
 --TODO: stubs ..
@@ -33,7 +33,7 @@ test =
     [ serve "../shoreditch-ui-chrome/chrome"
     , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm.html"
-    , textContains "messageList" "Auto Loading Metadata"
+    , textContains "messageList" "Auto Loading Metadata----"
     --TODO: I should work when messaging fixed
 --    , textContains "messageList" "LoadAllMetaDataResponse ([{ url = "
     --TODO: probably want to assert the number of checks and actions here ...
