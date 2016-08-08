@@ -9,14 +9,9 @@ type alias Flags =
   { numberOfBrowsers : Int }
 
 
---TODO: can we not just use Flags instead?
-type alias Config =
-  { numberOfBrowsers : Int }
-
-
 -- TODO: ultimately config isn't needed, they become browserIdToScriptId (mainly)
 type alias Model =
-  { config : Config
+  { flags : Flags
   , browserIdToScriptId : Dict Int Int
   , scriptIdToExecutableScript : Dict Int ExecutableScript
   }

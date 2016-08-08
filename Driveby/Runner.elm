@@ -34,7 +34,7 @@ init scripts flags =
           )
          |> Dict.fromList
    in
-     (Model (Config flags.numberOfBrowsers) Dict.empty scriptIdToExecutableScript, runAllScripts)
+     (Model flags Dict.empty scriptIdToExecutableScript, runAllScripts)
 
 
 subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
@@ -49,9 +49,9 @@ update requestsPort msg model =
     --TODO: this could probably happen in init ...
     RunAllScripts startDate ->
       let
-        d = Debug.log "RunAllScripts " ((toString (List.length (Dict.keys model.scriptIdToExecutableScript)) ++ " " ++ (toString startDate) ++ " " ++ (toString model.config)))
+        d = Debug.log "RunAllScripts " ((toString (List.length (Dict.keys model.scriptIdToExecutableScript)) ++ " " ++ (toString startDate) ++ " " ++ (toString model.flags)))
 
-        cmds = List.repeat model.config.numberOfBrowsers 1
+        cmds = List.repeat model.flags.numberOfBrowsers 1
               |> List.indexedMap (,)
               |> List.map (\ (i,r) -> asFx (RunNextScript i "") )
       in
