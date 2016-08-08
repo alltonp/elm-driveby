@@ -81,30 +81,21 @@ update requestsPort msg model =
     -- fix the implementation ...
     -- might not need the date anymore
     RunNextScript browserId theDate ->
-      let
-        (model', cmd) =
-          case nextUnstartedScript model of
-            Just executableScript ->
-              let
---                rn = Debug.log "Start script on browser: " ((toString executableScript.id) ++  " " ++ (toString browserId) ++ (toString theDate))
-                context = Context -1 browserId executableScript.id 0 theDate
+      case nextUnstartedScript model of
+        Just executableScript ->
+          let
+            model' = { model |
+              --mark browser as running this script
+              browserIdToScriptId = Dict.update browserId (\v -> Just executableScript.id) model.browserIdToScriptId,
+              --mark script as started
+              scriptIdToExecutableScript = Dict.update (executableScript.id)
+                (\e -> Just { executableScript | started = Just theDate } ) model.scriptIdToExecutableScript
+             }
+          in
+            ( model', asFx (RunNext (Context -1 browserId executableScript.id 0 theDate)))
 
-                model' = { model |
-                  --mark browser as running this script
-                  browserIdToScriptId = Dict.update browserId (\v -> Just executableScript.id) model.browserIdToScriptId,
-                  --mark script as started
-                  scriptIdToExecutableScript = Dict.update (executableScript.id)
-                    (\e -> Just { executableScript | started = Just theDate } ) model.scriptIdToExecutableScript
-                 }
-
-              in
-                ( model', asFx (RunNext context))
-
-            Nothing ->
-              (model, Cmd.none)
-
-      in
-        (model', cmd)
+        Nothing ->
+          (model, Cmd.none)
 
 
     MainLoop context ->
