@@ -127,8 +127,8 @@ update requestsPort msg model =
         (model2, cmd2) = case maybeScript of
             Just executableScript ->
               let
-                next = List.filter (\s -> not s.executed) executableScript.script.steps |> List.head
-                cmd = case next of
+                nextStep = List.filter (\s -> not s.executed) executableScript.script.steps |> List.head
+                cmd = case nextStep of
                     Just c ->
                       let
                         d = Debug.log "Driveby" ( (toString context.localPort) ++ " " ++ (toString context.browserId) ++ " " ++ c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
