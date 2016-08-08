@@ -19,11 +19,30 @@ main =
 --TODO: support TextEquals next
 --TODO: make tests more sensible, not just blind C&P and give them names ..
 --TODO: need to fail properly on element not found for asserts ...
+
+--TODO: stubs ..
+--path:
+--/reservations/metadata
+--content:
+--{
+--  "name":"Reservations System",
+--  "alias":"res",
+--  "version":"10001",
+--  "checks":[{
+--    "url":"reservations/check/reservation/confirmed/@pnr"
+--  }],
+--  "actions":[]
+--}
+--how?
+-- shore in map for port and look them up, no need to clear up really, hooray
+
+
 test : Script
 test =
   script "Auto loads metadata on visiting"
     [
       serve "../shoreditch-ui-chrome/chrome"
+    , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm.html"
     , Command "textContains" [ "#messageList", "Auto Loading Metadata" ]
     --TODO: I should work when messaging fixed
@@ -36,6 +55,7 @@ test2 =
   script "Loads metadata on manual refresh"
     [
       serve "../shoreditch-ui-chrome/chrome"
+    , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm.html"
     , Command "textContains" [ "#messageList", "Auto Loading Metadata" ]
     --TODO: I should work when messaging fixed
@@ -51,6 +71,7 @@ test3 =
   script "Detects configuration changes"
     [
       serve "../shoreditch-ui-chrome/chrome"
+    , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm.html"
     , Command "textContains" [ "#messageList", "Auto Loading Metadata" ]
     --TODO: I should work when messaging fixed

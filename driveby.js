@@ -9,6 +9,8 @@ var started = new Date().getTime();
 
 //TODO: rename to browsers
 var pages = [];
+var stubs = {};
+
 //TODO: put this in arg[] to this script ..
 var browserCount = 4;
 var nextPort = 9000;
@@ -104,6 +106,7 @@ app.ports.requests.subscribe(function(request) {
   else if (name == "textContains") { textContains(page, context, id, command.args[0], command.args[1]); }
   else if (name == "close") { close(page, context, id); }
   else if (name == "serve") { serve(context, id, command.args[0], context.localPort); }
+  else if (name == "stub") { stub(context, id, command.args[0], command.args[1], context.localPort); }
   else if (name == "init") { init(context, id); }
   else { respond(context, id, ["don't know how to process request: " + JSON.stringify(request) ]); }
 });
@@ -293,17 +296,32 @@ function close(page, context, id) {
   phantom.exit()
 }
 
+function stub(context, id, path, content, port) {
+  stubs[(port + ":" + path)] = content;
+  console.log("stub " + JSON.stringify(stubs));
+  respond(context, id, [])
+}
+
 function serve(context, id, path, port) {
     var server = require('webserver').create();
     var fs = require('fs')
 
     var service = server.listen(port, { keepAlive: true }, function (request, response) {
+//        console.log(path)
         var fqn = path + request.url;
+
+        var key = port + ":" + request.url
+//        console.log(key)
+        console.log(key + ":" + stubs[key])
+//        console.log(stubs[key] != undefined)
+//        console.log(JSON.stringify(stubs))
+
+        var body = (stubs[key] !== undefined) ? stubs[key] : fs.read(fqn);
 
         //TODO: if file doesnt exist then 404 instead ...
 //        if (fs.exists(path))
+//        var body =
 
-        var body = fs.read(fqn);
         response.statusCode = 200;
         response.headers = {
             'Cache': 'no-cache',

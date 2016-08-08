@@ -320,6 +320,11 @@ serve path =
   Command "serve" [path]
 
 
+stub : String -> String -> Command
+stub path content =
+  Command "stub" [path, content]
+
+
 goto : String -> Command
 goto url =
   Command "goto" [url]
