@@ -28,10 +28,9 @@ type alias Flags =
 
 
 type alias Config =
-  { numberOfBrowsersToRunWith : Int }
+  { numberOfBrowsers : Int }
 
 
--- TODO: ultimately scripts arent needed, they become scriptIdToExecutableScript
 -- TODO: ultimately config isnt needed, they become browserIdToScriptId (mainly)
 type alias Model =
   { config : Config
@@ -69,9 +68,9 @@ update requestsPort msg model =
     --TODO: store date or lose it ...
     RunAllScripts startDate ->
       let
-        d = Debug.log "Go " ((toString (List.length (Dict.keys model.scriptIdToExecutableScript)) ++ " " ++ (toString startDate) ++ " " ++ (toString model.config)))
+        d = Debug.log "RunAllScripts " ((toString (List.length (Dict.keys model.scriptIdToExecutableScript)) ++ " " ++ (toString startDate) ++ " " ++ (toString model.config)))
 
-        cmds = List.repeat model.config.numberOfBrowsersToRunWith 1
+        cmds = List.repeat model.config.numberOfBrowsers 1
               |> List.indexedMap (,)
               |> List.map (\ (i,r) -> (i) )
               |> List.map (\i -> asFx (Start i "") )
