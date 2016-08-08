@@ -110,18 +110,16 @@ update requestsPort msg model =
         case currentScript context model of
             Just executableScript ->
               let
-              --        rn = Debug.log "RunNextStep" context
-              --        m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
-              --        m3 = Debug.log "scriptIdToExecutableScript" (toString (Dict.keys model.scriptIdToExecutableScript))
-
                 nextStep = List.filter (\s -> not s.executed) executableScript.script.steps |> List.head
                 cmd = case nextStep of
                     Just c ->
                       let
                         d = Debug.log "Driveby running" ( (toString context.localPort) ++ " " ++ (toString context.browserId) ++ " " ++ c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
+                        --rn = Debug.log "RunNextStep" context
+                        --m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
+                        --m3 = Debug.log "scriptIdToExecutableScript" (toString (Dict.keys model.scriptIdToExecutableScript))
                       in
-                        ( model, requestsPort (Request c (context))
-                        )
+                        ( model, requestsPort (Request c (context)) )
                     --TODO: this is defo wrong, we should'nt have even hit RunNext, should have bailed in Process
                     Nothing ->
                       let
@@ -140,7 +138,7 @@ update requestsPort msg model =
         case currentScript response.context model of
             Just executableScript ->
               let
-              --        rn = Debug.log "Process" response
+                --rn = Debug.log "Process" response
 
                 --used? debug only?
                 currentStep = List.filter (\s -> s.id == response.id) executableScript.script.steps
