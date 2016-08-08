@@ -72,9 +72,9 @@ update requestsPort msg model =
 
         scriptIdToScript' = model.scripts |> List.indexedMap (\i s ->
           let
-            id = (toString i)
+            scriptId = (toString i)
           in
-            (id, ExecutableScript s id Nothing Nothing)
+            (scriptId, ExecutableScript s scriptId Nothing Nothing)
         ) |> Dict.fromList
 
         all = List.repeat numberOfBrowsersToUse 1
