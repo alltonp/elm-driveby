@@ -348,3 +348,8 @@ enter id value =
 close : Command
 close =
   Command "close" []
+
+
+textContains : String -> String -> Command
+textContains id expected =
+  Command "textContains" [ "#" ++ id, expected]
