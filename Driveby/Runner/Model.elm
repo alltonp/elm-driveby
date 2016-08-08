@@ -23,8 +23,11 @@ type alias Model =
 
 
 type alias ExecutableScript =
-  { script: Script
-  , id : Int
+  {
+   scriptold: Script
+  ,
+  id : Int
+  , name : String
   , steps : List Step
   , started : Maybe String {-Date-}
   , finished : Maybe String {-Date-}

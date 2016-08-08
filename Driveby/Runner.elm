@@ -32,7 +32,7 @@ init scripts flags =
                    |> List.map (\(i,r) -> Step (toString i) r.command False)
 
          in
-           (i, ExecutableScript s i steps Nothing Nothing)
+           (i, ExecutableScript s i s.name steps Nothing Nothing)
           )
          |> Dict.fromList
    in
@@ -94,7 +94,7 @@ update requestsPort msg model =
         case currentScript context model of
             Just executableScript ->
               let
-                nextStep = List.filter (\s -> not s.executed) executableScript.script.steps |> List.head
+                nextStep = List.filter (\s -> not s.executed) executableScript.steps |> List.head
                 cmd = case nextStep of
                     Just c ->
                       let
@@ -111,7 +111,7 @@ update requestsPort msg model =
                         scriptIdToExecutableScript' = Dict.update executableScript.id (\e -> Just executableScript') model.scriptIdToExecutableScript
                         --TODO: this should be in MainLoop
                       in
-                        ( { model | scriptIdToExecutableScript = scriptIdToExecutableScript' }, asFx (ScriptFinished ("☑ - "  ++ executableScript.script.name) context))
+                        ( { model | scriptIdToExecutableScript = scriptIdToExecutableScript' }, asFx (ScriptFinished ("☑ - "  ++ executableScript.name) context))
               in
                  cmd
 
@@ -125,14 +125,14 @@ update requestsPort msg model =
                 --rn = Debug.log "Process" response
 
                 --used? debug only?
-                currentStep = List.filter (\s -> s.id == response.id) executableScript.script.steps
+                currentStep = List.filter (\s -> s.id == response.id) executableScript.steps
 
                 -- mark this step as done?
-                steps' = List.map (\s -> if s.id == response.id then Step s.id s.command True else s ) executableScript.script.steps
-                script = executableScript.script
-                script' = { script | steps = steps' }
+                steps' = List.map (\s -> if s.id == response.id then Step s.id s.command True else s ) executableScript.steps
+--                script = executableScript.script
+--                script' = { script | steps = steps' }
 
-                executableScript' = { executableScript | script = script'}
+                executableScript' = { executableScript | steps = steps' }
                 scriptId = response.context.scriptId
                 scriptIdToExecutableScript' = Dict.update scriptId (\e -> Just executableScript') model.scriptIdToExecutableScript
 
@@ -148,10 +148,10 @@ update requestsPort msg model =
                 --a good argument for doing that check here ...
 
     --                next = if List.isEmpty response.failures then asFx (RunNext { context | stepId = context.stepId + 1 } )
-    --                       else asFx (Exit ("☒ - " ++ executableScript.script.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString current)) response.context)
+    --                       else asFx (Exit ("☒ - " ++ executableScript.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString current)) response.context)
 
                 next = if List.isEmpty response.failures then Cmd.none
-                       else asFx (ScriptFinished ("☒ - " ++ executableScript.script.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString currentStep)) response.context)
+                       else asFx (ScriptFinished ("☒ - " ++ executableScript.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString currentStep)) response.context)
 
                 --this looks iffy ...
                 --if failed then Exit this test
