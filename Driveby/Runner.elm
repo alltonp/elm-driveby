@@ -214,15 +214,13 @@ currentScript : Context -> Model -> Maybe ExecutableScript
 currentScript context model =
   let
     scriptId = Dict.get context.browserId model.browserIdToScriptId
-    maybeScript = Dict.get (Maybe.withDefault -1 scriptId) model.scriptIdToExecutableScript
   in
-    maybeScript
+    Dict.get (Maybe.withDefault -1 scriptId) model.scriptIdToExecutableScript
 
 
 nextUnstartedScript : Model -> Maybe ExecutableScript
 nextUnstartedScript model =
   Dict.values model.scriptIdToExecutableScript |> List.filter (\s -> s.started == Nothing ) |> List.head
-
 
 
 view : Model -> Html Msg
@@ -244,4 +242,3 @@ asFx msg =
 runAllScripts : Cmd Msg
 runAllScripts =
   Task.perform (\_ -> Debug.crash "This failure cannot happen.") RunAllScripts Date.now
-
