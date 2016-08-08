@@ -54,8 +54,7 @@ type Msg
   | RunNextStep Context
   | Process Response
   | MainLoop Context
-  --TODO: though it was StepFailed ... but no it's ScriptFinished ...
-  | Exit String Context
+  | ScriptFinished String Context
 
 --TODO: add a Finish/AllDone (and do the reporting bit here ...)
 
@@ -130,7 +129,7 @@ update requestsPort msg model =
                         scriptIdToExecutableScript' = Dict.update executableScript.id (\e -> Just executableScript') model.scriptIdToExecutableScript
                         --TODO: this should be in MainLoop
                       in
-                        ( { model | scriptIdToExecutableScript = scriptIdToExecutableScript' }, asFx (Exit ("☑ - "  ++ executableScript.script.name) context))
+                        ( { model | scriptIdToExecutableScript = scriptIdToExecutableScript' }, asFx (ScriptFinished ("☑ - "  ++ executableScript.script.name) context))
               in
                  cmd
 
@@ -173,7 +172,7 @@ update requestsPort msg model =
 --                       else asFx (Exit ("☒ - " ++ executableScript.script.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString current)) response.context)
 
                 next = if List.isEmpty response.failures then Cmd.none
-                       else asFx (Exit ("☒ - " ++ executableScript.script.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString currentStep)) response.context)
+                       else asFx (ScriptFinished ("☒ - " ++ executableScript.script.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString currentStep)) response.context)
 
                 --this looks iffy ...
                 --if failed then Exit this test
@@ -188,12 +187,13 @@ update requestsPort msg model =
       in
         ( model2', next2 )
 
-    --TODO: this looks like ScriptFinished?
-    Exit message context ->
+    --TODO: do we need ScriptFailed, ScriptSucceded?
+    ScriptFinished message context ->
       let
         --TODO: this renders strangely, lets do in js instead ...
         d = Debug.log "Driveby" message
 
+        --TODO: this should be in MainLoop
         scriptsThatNeedToStart= Dict.values model.scriptIdToExecutableScript |> List.filter (\s -> s.started == Nothing )
         scriptsThatNeedToFinish = Dict.values model.scriptIdToExecutableScript |> List.filter (\s -> s.finished == Nothing )
 
@@ -202,7 +202,7 @@ update requestsPort msg model =
 
         cmd = if not (List.isEmpty scriptsThatNeedToStart) then asFx (RunNextScript context.browserId context.updated)
               else if not (List.isEmpty scriptsThatNeedToFinish) then Cmd.none
-              --TODO: we should be updating the context.stepId whenever we send it through requestsPort
+              --TODO: we should be updating the context.stepId whenever we send it through requestsPort or (MainLopp)
               --TODO: we shouldnt have to hardcode this 999 either ..
               --TODO: should be an AllDone me thinks ...
               else (requestsPort (Request (Step "999" close False) (context)))
