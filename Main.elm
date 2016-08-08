@@ -18,6 +18,7 @@ main =
 --TODO: should screenshot be a command? (taking a filepath, would offload more to elm)
 --TODO: support TextEquals next
 --TODO: make tests more sensible, not just blind C&P and give them names ..
+--TODO: need to fail properly on element not found for asserts ...
 test : Script
 test =
   script "First Test"
