@@ -155,6 +155,7 @@ update requestsPort msg model =
     MainLoop context ->
       let
         d = Debug.log "MainLoop" ""
+--        lastStepSucceeded = List.isEmpty response.failures
         nextCmd = Cmd.none
       in
         (model, nextCmd)
@@ -192,6 +193,9 @@ update requestsPort msg model =
                 --BUG: if there is an error here we don't run the next step .. so we can't mark the test as finished ...
                 --a good argument for doing that check here ...
 
+--                next = if List.isEmpty response.failures then asFx (RunNext { context | stepId = context.stepId + 1 } )
+--                       else asFx (Exit ("☒ - " ++ executableScript.script.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString current)) response.context)
+
                 next = if List.isEmpty response.failures then asFx (RunNext { context | stepId = context.stepId + 1 } )
                        else asFx (Exit ("☒ - " ++ executableScript.script.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString current)) response.context)
 
@@ -202,7 +206,7 @@ update requestsPort msg model =
                 --if no more scripts then AllDone
 
               in
-                (model', next)
+                (model', Cmd.batch [ next, asFx (MainLoop response.context) ] )
 
             Nothing -> (model, Cmd.none)
       in
