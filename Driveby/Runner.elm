@@ -46,6 +46,7 @@ update : (Request -> Cmd Msg) -> Msg -> Model -> (Model, Cmd Msg)
 update requestsPort msg model =
   case msg of
     --TODO: store date or lose it ...
+    --TODO: this could probably happen in init ...
     RunAllScripts startDate ->
       let
         d = Debug.log "RunAllScripts " ((toString (List.length (Dict.keys model.scriptIdToExecutableScript)) ++ " " ++ (toString startDate) ++ " " ++ (toString model.config)))
