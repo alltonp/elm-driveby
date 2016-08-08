@@ -138,13 +138,25 @@ function init(context, id) {
 
 //TODO: I dont seem to fail nicely, e.g. hang on bad url
 function goto(page, context, id, url) {
-  page.open(url, function(status) {
-    if (status !== 'success') {
-      respond(context, id, ['Unable to access network'])
-    } else {
-      respond(context, id, [])
-    }
-  });
+  //TODO: we might not need this ...
+//  try {
+      page.open(url, function(status) {
+//      console.log("GOTO !!!")
+
+      if (status !== 'success') {
+//        console.log(">GOTO !!! didnt get there ...")
+        respond(context, id, ['Unable to access network'])
+      } else {
+//        console.log(">GOTO !!! did get there ...")
+        respond(context, id, [])
+      }
+    });
+//  }
+//  catch(err) {
+//     console.log(">ERRR !!! didnt get there ...")
+//     respond(context, id, [err])
+//  }
+
 }
 
 function click(page, context, id, selector) {

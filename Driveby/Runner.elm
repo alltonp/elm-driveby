@@ -154,11 +154,9 @@ update requestsPort msg model =
 
     MainLoop context ->
       let
-        d = Debug.log "MainLoop" ""
---        lastStepSucceeded = List.isEmpty response.failures
+        d = Debug.log "MainLoop" (toString context)
+
         nextCmd = asFx (RunNext { context | stepId = context.stepId + 1 } )
-
-
       in
         (model, nextCmd)
 

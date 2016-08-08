@@ -79,6 +79,7 @@ test4 =
     [ serve "../shoreditch-ui-chrome/chrome"
     , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm2.html"
+    , textContains "messageList" "Auto Loading Metadata"
     ]
 
 
