@@ -250,10 +250,14 @@ function textContains(page, context, id, selector, expected) {
     ,
     //failure
     function() {
-      return page.evaluate(function(theSelector) {
+      return page.evaluate(function(theSelector, theExpected) {
         var e = $(theSelector);
-        return "expected 1 for " + theSelector + " but found " + e.length;
-      }, selector);
+        if (e.length != 1) {
+          return "expected 1 for " + theSelector + " but found " + e.length;
+        } else {
+          return "expected " + theSelector + " to contain " + theExpected + " but was " + e.text();
+        }
+      }, selector, expected);
     }
 
   );
