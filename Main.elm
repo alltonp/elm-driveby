@@ -39,6 +39,7 @@ test =
     --TODO: probably want to assert the number of checks and actions here ...
     ]
 
+
 test2 : Script
 test2 =
   script "Loads metadata on manual refresh"
@@ -53,6 +54,7 @@ test2 =
     --TODO: I should work when messaging fixed
 --    , textContains "messageList" "ManualMetaDataRefresh"
     ]
+
 
 test3 : Script
 test3 =
@@ -73,6 +75,8 @@ test3 =
     , textContains "messageList" "Config changed"
     ]
 
+
+--TODO: the duff path causes the whole thing to freeze .. why?
 test4 : Script
 test4 =
   script "Fails causing build to hang"
