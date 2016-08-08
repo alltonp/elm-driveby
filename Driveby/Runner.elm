@@ -20,22 +20,23 @@ run scripts requestsPort responsesPort =
     }
 
 
---TODO: we seem to do a lot of List.indexedMap then Dict.fromList etc .. make a help for it ...
---TODO: or just pull out into functions and lose the let-lin
 init : List Script -> Flags -> (Model, Cmd Msg)
 init scripts flags =
-   let
-     scriptIdToExecutableScript = scripts |> List.indexedMap (\i script ->
-         let
-            steps = script.commands
-               |> List.indexedMap (,)
-               |> List.map (\(i,command) -> Step i command False)
-         in
-           (i, ExecutableScript i script.name steps Nothing Nothing)
-          )
-         |> Dict.fromList
-   in
-     (Model flags Dict.empty scriptIdToExecutableScript, runAllScripts)
+  (Model flags Dict.empty (buildScriptIdToExecutableScript scripts), runAllScripts)
+
+
+--TODO: we seem to do a lot of List.indexedMap then Dict.fromList etc .. make a help for it ...
+buildScriptIdToExecutableScript : List Script -> Dict Int ExecutableScript
+buildScriptIdToExecutableScript scripts =
+  scripts |> List.indexedMap (\i script ->
+     let
+        steps = script.commands
+           |> List.indexedMap (,)
+           |> List.map (\(i,command) -> Step i command False)
+     in
+       (i, ExecutableScript i script.name steps Nothing Nothing)
+  )
+  |> Dict.fromList
 
 
 subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
