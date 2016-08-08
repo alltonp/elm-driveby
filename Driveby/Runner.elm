@@ -118,12 +118,11 @@ update requestsPort msg model =
     RunNext context ->
       let
 --        rn = Debug.log "RunNext" context
+--        m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
+--        m3 = Debug.log "scriptIdToScript" (toString (Dict.keys model.scriptIdToScript))
 
         scriptId = Dict.get context.browserId model.browserIdToScriptId
         maybeScript = Dict.get (Maybe.withDefault "" scriptId) model.scriptIdToScript
-
---        m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
---        m3 = Debug.log "scriptIdToScript" (toString (Dict.keys model.scriptIdToScript))
 
         (model2, cmd2) = case maybeScript of
             Just executableScript ->
@@ -186,6 +185,13 @@ update requestsPort msg model =
 
                 next = if List.isEmpty response.failures then asFx (RunNext { context | stepId = context.stepId + 1 } )
                        else asFx (Exit ("☒ - " ++ executableScript.script.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString current)) response.context)
+
+                --this looks iffy ...
+                --if failed then Exit this test
+                --if more steps then RunNextStep
+                --if no more steps then RunNextScript
+                --if no more scripts then AllDone
+
               in
                 (model', next)
 
