@@ -50,9 +50,8 @@ type alias ExecutableScript =
 --TODO: fix all this naming too
 type Msg
   = RunAllScripts Date
-  --TODO: RunNextScript?
-  | Start Int String {-Date-}
-  --TODO: RunNextCommand
+  | RunNextScript Int String {-Date-}
+  --TODO: RunNextStep
   | RunNext Context
   | Process Response
   | MainLoop Context
@@ -72,8 +71,7 @@ update requestsPort msg model =
 
         cmds = List.repeat model.config.numberOfBrowsers 1
               |> List.indexedMap (,)
-              |> List.map (\ (i,r) -> (i) )
-              |> List.map (\i -> asFx (Start i "") )
+              |> List.map (\ (i,r) -> asFx (RunNextScript i "") )
       in
         ( model, Cmd.batch cmds )
 
@@ -82,7 +80,7 @@ update requestsPort msg model =
     --but actually it runs the next script on this browserid if there is one
     -- fix the implementation ...
     -- might not need the date anymore
-    Start browserId theDate ->
+    RunNextScript browserId theDate ->
       let
         maybeNextScript = Dict.values model.scriptIdToExecutableScript |> List.filter (\s -> s.started == Nothing ) |> List.head
 
@@ -207,16 +205,17 @@ update requestsPort msg model =
         --TODO: this renders strangely, lets do in js instead ...
         d = Debug.log "Driveby" message
 
-        needStarting = Dict.values model.scriptIdToExecutableScript |> List.filter (\s -> s.started == Nothing )
-        needFinishing = Dict.values model.scriptIdToExecutableScript |> List.filter (\s -> s.finished == Nothing )
+        scriptsThatNeedToStart= Dict.values model.scriptIdToExecutableScript |> List.filter (\s -> s.started == Nothing )
+        scriptsThatNeedToFinish = Dict.values model.scriptIdToExecutableScript |> List.filter (\s -> s.finished == Nothing )
 
---        d2 = Debug.log "Driveby needStarting: " ((toString (List.length needStarting)))
---        d3 = Debug.log "Driveby needFinishing: " ((toString (List.length needFinishing)))
+--        d2 = Debug.log "Driveby scriptsThatNeedToStart: " ((toString (List.length scriptsThatNeedToStart)))
+--        d3 = Debug.log "Driveby scriptsThatNeedToFinish: " ((toString (List.length scriptsThatNeedToFinish)))
 
-        cmd = if not (List.isEmpty needStarting) then asFx (Start context.browserId context.updated)
-              else if not (List.isEmpty needFinishing) then Cmd.none
+        cmd = if not (List.isEmpty scriptsThatNeedToStart) then asFx (RunNextScript context.browserId context.updated)
+              else if not (List.isEmpty scriptsThatNeedToFinish) then Cmd.none
               --TODO: we should be updating the context.stepId whenever we send it through requestsPort
               --TODO: we shouldnt have to hardcode this 999 either ..
+              --TODO: should be an AllDone me thinks ...
               else (requestsPort (Request (Step "999" close False) (context)))
       in
         ( model, cmd )
