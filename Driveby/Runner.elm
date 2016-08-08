@@ -76,16 +76,16 @@ update requestsPort msg model =
 
 
     --This isnt really a good name, the intention is to start a script on browserId
-    --but actually it runs the next avialable script on this browserid if there is one
+    --but actually it runs the next available script on this browserId if there is one
     -- fix the implementation ...
     RunNextScript browserId theDate ->
       case nextUnstartedScript model of
         Just executableScript ->
           let
             model' = { model |
-              --mark browser as running this script
+              -- mark browser as running this script
               browserIdToScriptId = Dict.update browserId (\v -> Just executableScript.id) model.browserIdToScriptId,
-              --mark script as started
+              -- mark this script as started
               scriptIdToExecutableScript = Dict.update (executableScript.id)
                 (\e -> Just { executableScript | started = Just theDate } ) model.scriptIdToExecutableScript
              }
@@ -105,10 +105,10 @@ update requestsPort msg model =
         (model, nextCmd)
 
 
-    --TODO: pretty use this doesnt do what it says on the tin ...
+    --TODO: pretty sure this doesnt do just what it says on the tin ...
     RunNextStep context ->
       let
---        rn = Debug.log "RunNext" context
+--        rn = Debug.log "RunNextStep" context
 --        m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
 --        m3 = Debug.log "scriptIdToExecutableScript" (toString (Dict.keys model.scriptIdToExecutableScript))
 
@@ -149,6 +149,7 @@ update requestsPort msg model =
                 --used? debug only?
                 currentStep = List.filter (\s -> s.id == response.id) executableScript.script.steps
 
+                -- mark this step as done?
                 steps' = List.map (\s -> if s.id == response.id then Step s.id s.command True else s ) executableScript.script.steps
                 script = executableScript.script
                 script' = { script | steps = steps' }
@@ -156,11 +157,10 @@ update requestsPort msg model =
                 executableScript' = { executableScript | script = script'}
                 scriptId = response.context.scriptId
                 scriptIdToExecutableScript' = Dict.update scriptId (\e -> Just executableScript') model.scriptIdToExecutableScript
+
                 model' = { model | scriptIdToExecutableScript = scriptIdToExecutableScript' }
 
-                --TODO: go with Script, Step, Command, Result etc
                 --TODO: send ExampleFailure if response has failures
-                --TODO: Start should be NextStep
                 context = response.context
 --                2011-10-05T14:48:00.000Z
 --                clearlyWrongDate = unsafeFromString "2016-06-17T11:15:00+0200"
