@@ -37,8 +37,7 @@ main =
 test : Script
 test =
   script "Auto loads metadata on visiting"
-    [
-      serve "../shoreditch-ui-chrome/chrome"
+    [ serve "../shoreditch-ui-chrome/chrome"
     , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm.html"
     , textContains "messageList" "Auto Loading Metadata"
@@ -50,8 +49,7 @@ test =
 test2 : Script
 test2 =
   script "Loads metadata on manual refresh"
-    [
-      serve "../shoreditch-ui-chrome/chrome"
+    [ serve "../shoreditch-ui-chrome/chrome"
     , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm.html"
     , textContains "messageList" "Auto Loading Metadata"
@@ -66,8 +64,7 @@ test2 =
 test3 : Script
 test3 =
   script "Detects configuration changes"
-    [
-      serve "../shoreditch-ui-chrome/chrome"
+    [ serve "../shoreditch-ui-chrome/chrome"
     , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm.html"
     , textContains "messageList" "Auto Loading Metadata"
