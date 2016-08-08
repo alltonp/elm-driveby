@@ -68,22 +68,18 @@ update requestsPort msg model =
     Go theDate ->
       let
         d = Debug.log "Go " ((toString (List.length model.scripts) ++ (toString theDate) ++ (toString model.config)))
-
         numberOfBrowsersToUse = model.config.browsers
 
-        scriptIdToScript' = model.scripts |> List.indexedMap (\i s ->
-          let
-            scriptId = i
-          in
-            (scriptId, ExecutableScript s scriptId Nothing Nothing)
-        ) |> Dict.fromList
+        scriptIdToScript' = model.scripts
+          |> List.indexedMap (\i s -> (i, ExecutableScript s i Nothing Nothing) )
+          |> Dict.fromList
 
-        all = List.repeat numberOfBrowsersToUse 1
+        cmds = List.repeat numberOfBrowsersToUse 1
               |> List.indexedMap (,)
               |> List.map (\ (i,r) -> (i) )
               |> List.map (\i -> asFx (Start i "") )
       in
-        ( { model | scriptIdToScript = scriptIdToScript' } , Cmd.batch (all) )
+        ( { model | scriptIdToScript = scriptIdToScript' }, Cmd.batch cmds )
 
 
     --This isnt really a good name, the intention is to start a script on browserId
