@@ -10,7 +10,7 @@ import Html exposing (..)
 
 init : List Script -> Flags -> (Model, Cmd Msg)
 init scripts flags =
-   (Model scripts (Config flags.browsers) Dict.empty Dict.empty, go)
+   (Model scripts (Config flags.browsers) Dict.empty Dict.empty, runAllScripts)
 
 
 subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
@@ -46,8 +46,7 @@ type alias ExecutableScript =
 
 --TODO: fix all this naming too
 type Msg
-  -- TODO: RunAllScripts
-  = Go Date
+  = RunAllScripts Date
   --TODO: RunNextScript?
   | Start Int String {-Date-}
   --TODO: RunNextCommand
@@ -64,9 +63,9 @@ update : (Request -> Cmd Msg) -> Msg -> Model -> (Model, Cmd Msg)
 update requestsPort msg model =
   case msg of
     --TODO: store date or lose it ...
-    Go theDate ->
+    RunAllScripts startDate ->
       let
-        d = Debug.log "Go " ((toString (List.length model.scripts) ++ (toString theDate) ++ (toString model.config)))
+        d = Debug.log "Go " ((toString (List.length model.scripts) ++ " " ++ (toString startDate) ++ " " ++ (toString model.config)))
 
         scriptIdToExecutableScript' = model.scripts
           |> List.indexedMap (\i s -> (i, ExecutableScript s i Nothing Nothing) )
@@ -249,7 +248,7 @@ asFx msg =
 
 
 --TODO: maybe this can die now we are using JS
-go : Cmd Msg
-go =
-  Task.perform (\_ -> Debug.crash "This failure cannot happen.") Go Date.now
+runAllScripts : Cmd Msg
+runAllScripts =
+  Task.perform (\_ -> Debug.crash "This failure cannot happen.") RunAllScripts Date.now
 
