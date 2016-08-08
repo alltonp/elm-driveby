@@ -88,6 +88,11 @@ update requestsPort msg model =
         --BUG: test fails, but then carries on add passes, lol because next step will be run, it probably needs its
 --             finish flag to be set
 --      TODO: maybe Process is MainLoop actually ...
+        --if failed then Exit this test
+        --if more steps then RunNextStep
+        --if no more steps then RunNextScript
+        --if no more scripts then AllDone
+
         nextCmd = asFx (RunNextStep { context | stepId = context.stepId + 1 } )
       in
         (model, nextCmd)
@@ -158,11 +163,6 @@ update requestsPort msg model =
                        else asFx (ScriptFinished ("☒ - " ++ executableScript.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString currentStep)) response.context)
 
                 --this looks iffy ...
-                --if failed then Exit this test
-                --if more steps then RunNextStep
-                --if no more steps then RunNextScript
-                --if no more scripts then AllDone
-
               in
                 (model', Cmd.batch [ next, asFx (MainLoop response.context) ] )
 
@@ -170,6 +170,7 @@ update requestsPort msg model =
 
     --TODO: do we need ScriptFailed, ScriptSucceeded?
     --TODO: currently this isnt doing much for us, logging and closing at end ...
+    --TODO: the useful thing it could be doing is marking the script finished! (and removing from the browserId's)
     ScriptFinished message context ->
       let
         --TODO: this renders strangely, lets do in js instead ...
