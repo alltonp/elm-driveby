@@ -3,21 +3,16 @@ module Driveby exposing (..)
 
 type alias Script =
   { name : String
---  , steps : List Step
   , commands : List Command
   }
 
 
---TODO: try to lose/inline Step if we can
---if steps were an array, could it just be the index? or recipe for equality issues?
 type alias Request =
   { step : Step
   , context : Context
   }
 
 
---TODO: consider Id as a type and give it the bits it needs ...
---TODO: rename to Result or Outcome
 type alias Response =
   { id : String
   , context : Context
@@ -29,8 +24,6 @@ script : String -> List Command -> Script
 script name commands =
   Script name (
     List.append [ Command "init" [] ] commands)
---      |> List.indexedMap (,)
---      |> List.map (\(i,r) -> Step (toString i) r False))
 
 
 serve : String -> Command

@@ -20,6 +20,7 @@ run scripts requestsPort responsesPort =
     }
 
 
+--TODO: we seem to do a lot of List.indexedMap then Dict.fromList etc .. make a help for it ...
 init : List Script -> Flags -> (Model, Cmd Msg)
 init scripts flags =
    let
@@ -79,7 +80,8 @@ update requestsPort msg model =
 
     MainLoop context ->
       let
-        d = Debug.log "MainLoop" (toString context)
+--        d = Debug.log "MainLoop" (toString context)
+        --TODO: I need fleshing out
 
         nextCmd = asFx (RunNextStep { context | stepId = context.stepId + 1 } )
       in
