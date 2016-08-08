@@ -180,7 +180,7 @@ update requestsPort msg model =
 
             Nothing -> (model, Cmd.none)
 
-    --TODO: do we need ScriptFailed, ScriptSucceded?
+    --TODO: do we need ScriptFailed, ScriptSucceeded?
     ScriptFinished message context ->
       let
         --TODO: this renders strangely, lets do in js instead ...

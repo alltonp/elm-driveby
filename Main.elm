@@ -10,7 +10,7 @@ port responses : (Response -> msg) -> Sub msg
 
 
 main =
-   driveby [test, test2, test3] requests responses
+   run [test, test2, test3] requests responses
 
 
 --TODO: stubs ..

@@ -14,8 +14,8 @@ import Html.App as App
 --TODO: need to fail properly when a script fails ...
 --TODO: idealy we'd have the public commands and the model in the top level thing, so only 1 import ...
 
-driveby : List Script -> (Request -> Cmd Runner.Msg) -> ((Response -> Runner.Msg) -> Sub Runner.Msg) -> Program Runner.Flags
-driveby scripts requestsPort responsesPort =
+run : List Script -> (Request -> Cmd Runner.Msg) -> ((Response -> Runner.Msg) -> Sub Runner.Msg) -> Program Runner.Flags
+run scripts requestsPort responsesPort =
   App.programWithFlags
     { init = Runner.init scripts
     , view = Runner.view
