@@ -1,6 +1,7 @@
 --TODO: tighten this up ... expose minimum (driveby)
 module Driveby exposing (..)
 
+import Driveby.Model exposing (..)
 
 import Html.App as App
 import Html exposing (..)
@@ -48,12 +49,6 @@ type alias Model =
   }
 
 
-type alias Script =
-  { name : String
-  , steps : List Step
-  }
-
-
 type alias ExecutableScript =
   { script: Script
   , id : String
@@ -62,13 +57,6 @@ type alias ExecutableScript =
   }
 
 
---TODO: this should probably be Request and requestId everywhere ...
---TODO: can this id die, I'm not sure yet ...
-type alias Step =
-  { id : String
-  , command : Command
-  , executed : Bool
-  }
 
 
 --TODO: try to lose/inline Step if we can
@@ -87,14 +75,6 @@ type alias Context =
   , updated : String
   }
 
-
---TODO: consider id/selector being a a first class thing, at least a Maybe ...
---TODO: consider value being a a first class thing, at least a Maybe ...
---TODO: consider expected being a a first class thing, at least a Maybe ...
-type alias Command =
-  { name : String
-  , args : List String
-  }
 
 
 --TODO: consider Id as a type and give it the bits it needs ...
