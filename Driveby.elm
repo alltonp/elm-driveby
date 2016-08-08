@@ -250,7 +250,7 @@ update requestsPort msg model =
                 --a good argument for doing that check here ...
 
                 next = if List.isEmpty response.failures then asFx (RunNext { context | stepId = context.stepId + 1 } )
-                       else asFx (Exit ("☒ - " ++ (toString response.failures) ++ " running " ++ (toString current)) response.context)
+                       else asFx (Exit ("☒ - " ++ executableScript.script.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString current)) response.context)
               in
                 (model', next)
 
