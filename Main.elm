@@ -2,7 +2,7 @@ port module DrivebyTest exposing (requests)
 
 
 import Driveby exposing (..)
-import Driveby.Model exposing (..)
+import Driveby.Runner exposing (..)
 
 
 port requests : Request -> Cmd msg

@@ -1,11 +1,23 @@
-module Driveby.Runner exposing (Msg, Flags, init, update, view, subscriptions)
+module Driveby.Runner exposing (run)
 
 
+import Driveby exposing (..)
 import Driveby.Model exposing (..)
 import Date exposing (..)
 import Task
 import Dict exposing (..)
 import Html exposing (..)
+import Html.App as App
+
+
+run : List Script -> (Request -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Flags
+run scripts requestsPort responsesPort =
+  App.programWithFlags
+    { init = init scripts
+    , view = view
+    , update = update requestsPort
+    , subscriptions = subscriptions responsesPort
+    }
 
 
 init : List Script -> Flags -> (Model, Cmd Msg)

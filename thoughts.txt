@@ -11,6 +11,22 @@ TODO:
 - see if there is a way to save a Virtual Dom to file ...
 - more of a testing solution than a webdriver wrapper
 
+--TODO: ultimately no console sutff in here, report it to js land instead
+--TODO: should be assert [ "textContains", "#messageList", "Auto Loading Metadata" ]
+--TODO: or assert [ "#messageList" "textContains", "Auto Loading Metadata" ]
+--TODO: might map well to jquery functions
+--TODO: should screenshot be a command? (taking a filepath, would offload more to elm)
+--TODO: support TextEquals next
+--TODO: need to fail properly when a script fails ...
+--TODO: idealy we'd have the public commands and the model in the top level thing, so only 1 import ...
+
+--unsafeFromString : String -> Date
+--unsafeFromString dateStr =
+--  case Date.fromString dateStr of
+--    Ok date -> date
+--    Err msg -> Debug.crash("unsafeFromString")
+--
+
 
 USEFUL:
 
