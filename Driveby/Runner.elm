@@ -21,6 +21,7 @@ run scripts requestsPort responsesPort =
 
 
 --TODO: we seem to do a lot of List.indexedMap then Dict.fromList etc .. make a help for it ...
+--TODO: or just pull out into functions and lose the let-lin
 init : List Script -> Flags -> (Model, Cmd Msg)
 init scripts flags =
    let
