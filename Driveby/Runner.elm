@@ -5,6 +5,7 @@ import Driveby.Model exposing (..)
 import Date exposing (..)
 import Task
 import Dict exposing (..)
+import Html exposing (..)
 
 
 init : List Script -> Flags -> (Model, Cmd Msg)
@@ -210,6 +211,12 @@ update requestsPort msg model =
               else (requestsPort (Request (Step "999" close False) (context)))
       in
         ( model, cmd )
+
+
+view : Model -> Html Msg
+view model =
+  div [ ] [ ]
+
 
 
 close : Command

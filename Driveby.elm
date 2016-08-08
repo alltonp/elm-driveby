@@ -5,8 +5,7 @@ import Driveby.Model exposing (..)
 import Driveby.Runner exposing (..)
 
 import Html.App as App
-import Html exposing (..)
-import Date exposing (..)
+--import Date exposing (..)
 import Array exposing (..)
 
 --TODO: ultimately no console sutff in here, report it to js land instead
@@ -24,22 +23,12 @@ driveby scripts requestsPort responsesPort =
     }
 
 
-view : Model -> Html Msg
-view model =
-  div [ ] [ ]
-
-
-
----
-
-unsafeFromString : String -> Date
-unsafeFromString dateStr =
-  case Date.fromString dateStr of
-    Ok date -> date
-    Err msg -> Debug.crash("unsafeFromString")
-
-
----
+--unsafeFromString : String -> Date
+--unsafeFromString dateStr =
+--  case Date.fromString dateStr of
+--    Ok date -> date
+--    Err msg -> Debug.crash("unsafeFromString")
+--
 
 script : String -> List Command -> Script
 script name commands =
