@@ -26,14 +26,13 @@ type alias Config =
   { browsers : Int }
 
 
--- TODO: ultimately scripts arent needed, they become scriptIdToScript
+-- TODO: ultimately scripts arent needed, they become scriptIdToExecutableScript
 -- TODO: ultimately config isnt needed, they become browserIdToScriptId (mainly)
 type alias Model =
   { scripts : List Script
   , config : Config
   , browserIdToScriptId : Dict Int Int
-  --TODO: toExecutableScript
-  , scriptIdToScript : Dict Int ExecutableScript
+  , scriptIdToExecutableScript : Dict Int ExecutableScript
   }
 
 
@@ -70,7 +69,7 @@ update requestsPort msg model =
         d = Debug.log "Go " ((toString (List.length model.scripts) ++ (toString theDate) ++ (toString model.config)))
         numberOfBrowsersToUse = model.config.browsers
 
-        scriptIdToScript' = model.scripts
+        scriptIdToExecutableScript' = model.scripts
           |> List.indexedMap (\i s -> (i, ExecutableScript s i Nothing Nothing) )
           |> Dict.fromList
 
@@ -79,7 +78,7 @@ update requestsPort msg model =
               |> List.map (\ (i,r) -> (i) )
               |> List.map (\i -> asFx (Start i "") )
       in
-        ( { model | scriptIdToScript = scriptIdToScript' }, Cmd.batch cmds )
+        ( { model | scriptIdToExecutableScript = scriptIdToExecutableScript' }, Cmd.batch cmds )
 
 
     --This isnt really a good name, the intention is to start a script on browserId
@@ -88,7 +87,7 @@ update requestsPort msg model =
     -- might not need the date anymore
     Start browserId theDate ->
       let
-        maybeNextScript = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing ) |> List.head
+        maybeNextScript = Dict.values model.scriptIdToExecutableScript |> List.filter (\s -> s.started == Nothing ) |> List.head
 
         (model', cmd) =
           case maybeNextScript of
@@ -101,10 +100,11 @@ update requestsPort msg model =
 
                 executableScript' = { executableScript | started = Just theDate }
                 scriptId = executableScript.id
-                scriptIdToScript' = Dict.update scriptId (\e -> Just executableScript') model.scriptIdToScript
+                scriptIdToExecutableScript' = Dict.update scriptId (\e -> Just executableScript') model.scriptIdToExecutableScript
 
               in
-                ( { model | browserIdToScriptId = browserIdToScriptId', scriptIdToScript = scriptIdToScript' } , asFx (RunNext context))
+                ( { model | browserIdToScriptId = browserIdToScriptId', scriptIdToExecutableScript = scriptIdToExecutableScript' },
+                asFx (RunNext context))
 
             Nothing ->
               (model, Cmd.none)
@@ -143,10 +143,10 @@ update requestsPort msg model =
                     Nothing ->
                       let
                         executableScript' = { executableScript | finished = Just context.updated }
-                        scriptIdToScript' = Dict.update executableScript.id (\e -> Just executableScript') model.scriptIdToScript
+                        scriptIdToExecutableScript' = Dict.update executableScript.id (\e -> Just executableScript') model.scriptIdToExecutableScript
 
                       in
-                        ( { model | scriptIdToScript = scriptIdToScript' }, asFx (Exit ("☑ - "  ++ executableScript.script.name) context))
+                        ( { model | scriptIdToExecutableScript = scriptIdToExecutableScript' }, asFx (Exit ("☑ - "  ++ executableScript.script.name) context))
               in
                  cmd
 
@@ -171,8 +171,8 @@ update requestsPort msg model =
 
                 executableScript' = { executableScript | script = script'}
                 scriptId = response.context.scriptId
-                scriptIdToScript' = Dict.update scriptId (\e -> Just executableScript') model.scriptIdToScript
-                model' = { model | scriptIdToScript = scriptIdToScript' }
+                scriptIdToExecutableScript' = Dict.update scriptId (\e -> Just executableScript') model.scriptIdToExecutableScript
+                model' = { model | scriptIdToExecutableScript = scriptIdToExecutableScript' }
 
                 --TODO: go with Script, Step, Command, Result etc
                 --TODO: send ExampleFailure if response has failures
@@ -210,8 +210,8 @@ update requestsPort msg model =
         --TODO: this renders strangely, lets do in js instead ...
         d = Debug.log "Driveby" message
 
-        needStarting = Dict.values model.scriptIdToScript |> List.filter (\s -> s.started == Nothing )
-        needFinishing = Dict.values model.scriptIdToScript |> List.filter (\s -> s.finished == Nothing )
+        needStarting = Dict.values model.scriptIdToExecutableScript |> List.filter (\s -> s.started == Nothing )
+        needFinishing = Dict.values model.scriptIdToExecutableScript |> List.filter (\s -> s.finished == Nothing )
 
 --        d2 = Debug.log "Driveby needStarting: " ((toString (List.length needStarting)))
 --        d3 = Debug.log "Driveby needFinishing: " ((toString (List.length needFinishing)))
@@ -229,7 +229,7 @@ currentScript : Context -> Model -> Maybe ExecutableScript
 currentScript context model =
   let
     scriptId = Dict.get context.browserId model.browserIdToScriptId
-    maybeScript = Dict.get (Maybe.withDefault -1 scriptId) model.scriptIdToScript
+    maybeScript = Dict.get (Maybe.withDefault -1 scriptId) model.scriptIdToExecutableScript
   in
     maybeScript
 
