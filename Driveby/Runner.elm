@@ -57,15 +57,15 @@ type Msg
   --TODO: though it was StepFailed ... but no it's ScriptFinished ...
   | Exit String Context
 
---TODO: add a Finish (and do the reporting bit here ...)
+--TODO: add a Finish/AllDone (and do the reporting bit here ...)
 
 
 update : (Request -> Cmd Msg) -> Msg -> Model -> (Model, Cmd Msg)
 update requestsPort msg model =
   case msg of
+    --TODO: store date or lose it ...
     Go theDate ->
       let
-        --TODO: store date or lose it ...
         d = Debug.log "Go " ((toString (List.length model.scripts) ++ (toString theDate) ++ (toString model.config)))
 
         numberOfBrowsersToUse = model.config.browsers
@@ -81,11 +81,8 @@ update requestsPort msg model =
               |> List.indexedMap (,)
               |> List.map (\ (i,r) -> (i) )
               |> List.map (\i -> asFx (Start i "") )
-
-        x = Cmd.batch (all)
-
       in
-        ( { model | scriptIdToScript = scriptIdToScript' } , x )
+        ( { model | scriptIdToScript = scriptIdToScript' } , Cmd.batch (all) )
 
 
     --This isnt really a good name, the intention is to start a script on browserId
@@ -141,7 +138,7 @@ update requestsPort msg model =
                 cmd = case nextStep of
                     Just c ->
                       let
-                        d = Debug.log "Driveby" ( (toString context.localPort) ++ " " ++ (toString context.browserId) ++ " " ++ c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
+                        d = Debug.log "Driveby running" ( (toString context.localPort) ++ " " ++ (toString context.browserId) ++ " " ++ c.id ++ ": " ++ c.command.name ++ " " ++ (toString c.command.args) )
                       in
                         ( model, requestsPort (Request c (context))
                         )
