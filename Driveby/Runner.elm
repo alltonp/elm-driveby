@@ -54,6 +54,7 @@ type Msg
   | RunNext Context
   | Process Response
   | MainLoop Context
+  --TODO: though it was StepFailed ... but no it's ScriptFinished ...
   | Exit String Context
 
 --TODO: add a Finish (and do the reporting bit here ...)
@@ -123,10 +124,7 @@ update requestsPort msg model =
 --        m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
 --        m3 = Debug.log "scriptIdToScript" (toString (Dict.keys model.scriptIdToScript))
 
-        scriptId = Dict.get context.browserId model.browserIdToScriptId
-        maybeScript = Dict.get (Maybe.withDefault "" scriptId) model.scriptIdToScript
-
-        (model2, cmd2) = case maybeScript of
+        (model2, cmd2) = case currentScript context model of
             Just executableScript ->
               let
                 nextStep = List.filter (\s -> not s.executed) executableScript.script.steps |> List.head
@@ -164,10 +162,7 @@ update requestsPort msg model =
       let
 --        rn = Debug.log "Process" response
 
-        scriptId = Dict.get response.context.browserId model.browserIdToScriptId
-        maybeScript = Dict.get (Maybe.withDefault "" scriptId) model.scriptIdToScript
-
-        (model2', next2) = case maybeScript of
+        (model2', next2) = case currentScript response.context model of
             Just executableScript ->
               let
                 --used? debug only?
@@ -231,6 +226,15 @@ update requestsPort msg model =
               else (requestsPort (Request (Step "999" close False) (context)))
       in
         ( model, cmd )
+
+
+currentScript : Context -> Model -> Maybe ExecutableScript
+currentScript context model =
+  let
+    scriptId = Dict.get context.browserId model.browserIdToScriptId
+    maybeScript = Dict.get (Maybe.withDefault "" scriptId) model.scriptIdToScript
+  in
+    maybeScript
 
 
 view : Model -> Html Msg
