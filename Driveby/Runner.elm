@@ -51,8 +51,7 @@ type alias ExecutableScript =
 type Msg
   = RunAllScripts Date
   | RunNextScript Int String {-Date-}
-  --TODO: RunNextStep
-  | RunNext Context
+  | RunNextStep Context
   | Process Response
   | MainLoop Context
   --TODO: though it was StepFailed ... but no it's ScriptFinished ...
@@ -79,7 +78,6 @@ update requestsPort msg model =
     --This isnt really a good name, the intention is to start a script on browserId
     --but actually it runs the next avialable script on this browserid if there is one
     -- fix the implementation ...
-    -- might not need the date anymore
     RunNextScript browserId theDate ->
       case nextUnstartedScript model of
         Just executableScript ->
@@ -92,7 +90,7 @@ update requestsPort msg model =
                 (\e -> Just { executableScript | started = Just theDate } ) model.scriptIdToExecutableScript
              }
           in
-            ( model', asFx (RunNext (Context -1 browserId executableScript.id 0 theDate)))
+            ( model', asFx (RunNextStep (Context -1 browserId executableScript.id 0 theDate)))
 
         Nothing ->
           (model, Cmd.none)
@@ -102,12 +100,13 @@ update requestsPort msg model =
       let
         d = Debug.log "MainLoop" (toString context)
 
-        nextCmd = asFx (RunNext { context | stepId = context.stepId + 1 } )
+        nextCmd = asFx (RunNextStep { context | stepId = context.stepId + 1 } )
       in
         (model, nextCmd)
 
 
-    RunNext context ->
+    --TODO: pretty use this doesnt do what it says on the tin ...
+    RunNextStep context ->
       let
 --        rn = Debug.log "RunNext" context
 --        m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
@@ -129,7 +128,7 @@ update requestsPort msg model =
                       let
                         executableScript' = { executableScript | finished = Just context.updated }
                         scriptIdToExecutableScript' = Dict.update executableScript.id (\e -> Just executableScript') model.scriptIdToExecutableScript
-
+                        --TODO: this should be in MainLoop
                       in
                         ( { model | scriptIdToExecutableScript = scriptIdToExecutableScript' }, asFx (Exit ("☑ - "  ++ executableScript.script.name) context))
               in
