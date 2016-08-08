@@ -45,7 +45,7 @@ type alias Response =
 type alias Context =
   { localPort : Int
   , browserId : Int
-  , scriptId : String
+  , scriptId : Int
   , stepId : Int
   , updated : String
   }

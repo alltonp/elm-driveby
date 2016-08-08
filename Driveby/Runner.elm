@@ -31,14 +31,15 @@ type alias Config =
 type alias Model =
   { scripts : List Script
   , config : Config
-  , browserIdToScriptId : Dict Int String
-  , scriptIdToScript : Dict String ExecutableScript
+  , browserIdToScriptId : Dict Int Int
+  --TODO: toExecutableScript
+  , scriptIdToScript : Dict Int ExecutableScript
   }
 
 
 type alias ExecutableScript =
   { script: Script
-  , id : String
+  , id : Int
   , started : Maybe String {-Date-}
   , finished : Maybe String {-Date-}
   }
@@ -72,7 +73,7 @@ update requestsPort msg model =
 
         scriptIdToScript' = model.scripts |> List.indexedMap (\i s ->
           let
-            scriptId = (toString i)
+            scriptId = i
           in
             (scriptId, ExecutableScript s scriptId Nothing Nothing)
         ) |> Dict.fromList
@@ -232,7 +233,7 @@ currentScript : Context -> Model -> Maybe ExecutableScript
 currentScript context model =
   let
     scriptId = Dict.get context.browserId model.browserIdToScriptId
-    maybeScript = Dict.get (Maybe.withDefault "" scriptId) model.scriptIdToScript
+    maybeScript = Dict.get (Maybe.withDefault -1 scriptId) model.scriptIdToScript
   in
     maybeScript
 
