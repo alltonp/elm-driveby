@@ -43,7 +43,7 @@ test =
     , gotoLocal "/elm.html"
     , textContains "messageList" "Auto Loading Metadata"
     --TODO: I should work when messaging fixed
---    , Command "textContains" [ "#messageList", "LoadAllMetaDataResponse ([{ url = " ]
+--    , textContains "messageList" "LoadAllMetaDataResponse ([{ url = "
     --TODO: probably want to assert the number of checks and actions here ...
     ]
 
@@ -54,13 +54,13 @@ test2 =
       serve "../shoreditch-ui-chrome/chrome"
     , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm.html"
-    , Command "textContains" [ "#messageList", "Auto Loading Metadata" ]
+    , textContains "messageList" "Auto Loading Metadata"
     --TODO: I should work when messaging fixed
---    , Command "textContains" [ "#messageList", "LoadAllMetaDataResponse ([{ url = " ]
+--    , textContains "messageList" "LoadAllMetaDataResponse ([{ url = "
     , click "refreshButton"
-    , Command "textContains" [ "#messageList", "Manual Loading Metadata" ]
+    , textContains "messageList" "Manual Loading Metadata"
     --TODO: I should work when messaging fixed
---    , Command "textContains" [ "#messageList", "ManualMetaDataRefresh" ]
+--    , textContains "messageList" "ManualMetaDataRefresh"
     ]
 
 test3 : Script
@@ -70,17 +70,17 @@ test3 =
       serve "../shoreditch-ui-chrome/chrome"
     , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm.html"
-    , Command "textContains" [ "#messageList", "Auto Loading Metadata" ]
+    , textContains "messageList" "Auto Loading Metadata"
     --TODO: I should work when messaging fixed
---    , Command "textContains" [ "#messageList", "LoadAllMetaDataResponse ([{ url = " ]
+--    , textContains "messageList" "LoadAllMetaDataResponse ([{ url = "
     , enter "configuration" "1"
     --TODO: I should work when messaging fixed
---    , Command "textContains" [ "#messageList", "ConfigurationChanged \"1" ]
-    , Command "textContains" [ "#messageList", "Config changed" ]
+--    , textContains "messageList" "ConfigurationChanged \"1"
+    , textContains "messageList" "Config changed"
     , enter "configuration" "2"
     --TODO: I should work when messaging fixed
---    , Command "textContains" [ "#messageList", "ConfigurationChanged \"12" ]
-    , Command "textContains" [ "#messageList", "Config changed" ]
+--    , textContains "messageList" "ConfigurationChanged \"12"
+    , textContains "messageList" "Config changed"
     ]
 
 
