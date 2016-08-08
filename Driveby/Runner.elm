@@ -77,25 +77,25 @@ update requestsPort msg model =
 
 
     --This isnt really a good name, the intention is to start a script on browserId
-    --but actually it runs the next script on this browserid if there is one
+    --but actually it runs the next avialable script on this browserid if there is one
     -- fix the implementation ...
     -- might not need the date anymore
     RunNextScript browserId theDate ->
       let
-        maybeNextScript = Dict.values model.scriptIdToExecutableScript |> List.filter (\s -> s.started == Nothing ) |> List.head
-
         (model', cmd) =
-          case maybeNextScript of
+          case nextUnstartedScript model of
             Just executableScript ->
               let
 --                rn = Debug.log "Start script on browser: " ((toString executableScript.id) ++  " " ++ (toString browserId) ++ (toString theDate))
-
-                browserIdToScriptId' = Dict.update browserId (\v -> Just executableScript.id) model.browserIdToScriptId
                 context = Context -1 browserId executableScript.id 0 theDate
 
+                --mark script as started
                 executableScript' = { executableScript | started = Just theDate }
-                scriptId = executableScript.id
-                scriptIdToExecutableScript' = Dict.update scriptId (\e -> Just executableScript') model.scriptIdToExecutableScript
+                scriptIdToExecutableScript' = Dict.update (executableScript.id)
+                    (\e -> Just executableScript') model.scriptIdToExecutableScript
+
+                --mark browser as running this script
+                browserIdToScriptId' = Dict.update browserId (\v -> Just executableScript.id) model.browserIdToScriptId
 
               in
                 ( { model | browserIdToScriptId = browserIdToScriptId', scriptIdToExecutableScript = scriptIdToExecutableScript' },
@@ -228,6 +228,12 @@ currentScript context model =
     maybeScript = Dict.get (Maybe.withDefault -1 scriptId) model.scriptIdToExecutableScript
   in
     maybeScript
+
+
+nextUnstartedScript : Model -> Maybe ExecutableScript
+nextUnstartedScript model =
+  Dict.values model.scriptIdToExecutableScript |> List.filter (\s -> s.started == Nothing ) |> List.head
+
 
 
 view : Model -> Html Msg
