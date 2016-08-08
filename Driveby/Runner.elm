@@ -25,14 +25,12 @@ init scripts flags =
    let
      scriptIdToExecutableScript = scripts |> List.indexedMap (\i s ->
          let
-            d = Debug.log "foo" "foo"
-            --convertCommandsToSteps
             steps = s.steps
                    |> List.indexedMap (,)
                    |> List.map (\(i,r) -> Step (toString i) r.command False)
 
          in
-           (i, ExecutableScript s i s.name steps Nothing Nothing)
+           (i, ExecutableScript i s.name steps Nothing Nothing)
           )
          |> Dict.fromList
    in
