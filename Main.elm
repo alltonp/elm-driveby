@@ -51,11 +51,11 @@ test2 =
     [ serve "../shoreditch-ui-chrome/chrome"
     , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm.html"
-    , textContains "messageList" "Auto Loading Metadata----"
+    , textEquals "messageList" "Auto Loading Metadata ..."
     --TODO: I should work when messaging fixed
 --    , textContains "messageList" "LoadAllMetaDataResponse ([{ url = "
     , click "refreshButton"
-    , textContains "messageList" "Manual Loading Metadata"
+    , textContains "messageList" "Manual Loading Metadata---"
     --TODO: I should work when messaging fixed
 --    , textContains "messageList" "ManualMetaDataRefresh"
     ]
@@ -67,7 +67,7 @@ test3 =
     [ serve "../shoreditch-ui-chrome/chrome"
     , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm.html"
-    , textContains "messageList" "Auto Loading Metadata"
+    , textEquals "messageList" "Auto Loading Metadata ..."
     --TODO: I should work when messaging fixed
 --    , textContains "messageList" "LoadAllMetaDataResponse ([{ url = "
     , enter "configuration" "1"
@@ -88,7 +88,7 @@ test4 =
     [ serve "../shoreditch-ui-chrome/chrome"
     , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm2.html"
-    , textContains "messageList" "Auto Loading Metadata"
+    , textEquals "messageList" "Auto Loading Metadata ..."
     ]
 
 
