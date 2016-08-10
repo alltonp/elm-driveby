@@ -68,6 +68,7 @@ update requestsPort msg model =
         Just executableScript ->
           let
             model' = { model |
+              -- aka start script -- (need a corresponding stop script)
               -- mark browser as running this script
               browserIdToScriptId = Dict.update browserId (\v -> Just executableScript.id) model.browserIdToScriptId,
               -- mark this script as started
