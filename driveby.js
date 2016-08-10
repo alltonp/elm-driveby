@@ -339,32 +339,27 @@ function serve(context, id, path, port) {
 
         var key = port + ":" + request.url
 
+        //TODO: better handle fqn?queryString
         if (stubs[key] !== undefined) {
           var body = stubs[key]
           var code = 200
         } else if (fs.exists(fqn)) {
-          console.log("fqn found")
+//          console.log("fqn found")
           var body = fs.read(fqn)
           var code = 200
         } else {
-          console.log("fqn not found " + fqn)
+//          console.log("fqn not found " + fqn)
           var body = ""
           var code = 404
         }
-
-//        console.log(code)
-//        console.log(body)
-
-        //TODO: if file doesnt exist then 404 instead ...
-//        if (fs.exists(path))
 
         response.statusCode = code;
         response.headers = {
             'Cache': 'no-cache',
             //TODO: c/should probably base this on filetype ..
             'Content-Type': 'text/html',
-            'Connection': 'Keep-Alive',
-            'Keep-Alive': 'timeout=5, max=100',
+//            'Connection': 'Keep-Alive',
+//            'Keep-Alive': 'timeout=5, max=100',
             'Content-Length': body.length
         };
 
