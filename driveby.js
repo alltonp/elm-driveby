@@ -343,27 +343,30 @@ function serve(context, id, path, port) {
         if (stubs[key] !== undefined) {
           var body = stubs[key]
           var code = 200
+          r = {body: body, code: code}
         } else if (fs.exists(fqn)) {
-//          console.log("fqn found")
           var body = fs.read(fqn)
           var code = 200
+          r = {body: body, code: code}
         } else {
-//          console.log("fqn not found " + fqn)
           var body = ""
           var code = 404
+          r = {body: body, code: code}
         }
 
-        response.statusCode = code;
+        console.log(r)
+
+        response.statusCode = r.code;
         response.headers = {
             'Cache': 'no-cache',
             //TODO: c/should probably base this on filetype ..
             'Content-Type': 'text/html',
 //            'Connection': 'Keep-Alive',
 //            'Keep-Alive': 'timeout=5, max=100',
-            'Content-Length': body.length
+            'Content-Length': r.body.length
         };
 
-        response.write(body);
+        response.write(r.body);
         response.close();
     });
 
