@@ -115,7 +115,8 @@ update requestsPort msg model =
                 cmd = case nextStepToRun executableScript of
                     Just step ->
                       let
-                        d = Debug.log ("Driveby " ++ ( (toString context.localPort) ++ " " ++ (toString context.browserId) ++ " " ++ (toString step.id) ++ ": " ++ step.command.name ++ " " ++ (toString step.command.args) )) ""
+--                        d = Debug.log ("Driveby " ++ ( (toString context.localPort) ++ " " ++ (toString context.browserId) ++ " " ++ (toString step.id) ++ ": " ++ step.command.name ++ " " ++ (toString step.command.args) )) ""
+                        a = ""
                       in
                         ( model, requestsPort (Request context step) )
                     --TODO: this is defo wrong, we should'nt have even hit RunNext, should have bailed in Process

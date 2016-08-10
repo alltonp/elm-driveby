@@ -42,6 +42,7 @@ serve path =
   Command "serve" [path]
 
 
+--TODO: this should probably have a contentType
 stub : String -> String -> Command
 stub path content =
   Command "stub" [path, content]
