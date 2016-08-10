@@ -38,7 +38,7 @@ test =
     [ serve "../shoreditch-ui-chrome/chrome"
     , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm.html"
-    , assert (textEquals "messageList" "Auto Loading Metadata ...")
+    , assert <| textEquals "messageList" "Auto Loading Metadata ..."
     --TODO: I should work when messaging fixed
 --    , textContains "messageList" "LoadAllMetaDataResponse ([{ url = "
     --TODO: probably want to assert the number of checks and actions here ...
@@ -51,11 +51,11 @@ test2 =
     [ serve "../shoreditch-ui-chrome/chrome"
     , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm.html"
-    , assert (textEquals "messageList" "Auto Loading Metadata ...")
+    , assert <| textEquals "messageList" "Auto Loading Metadata ..."
     --TODO: I should work when messaging fixed
 --    , textContains "messageList" "LoadAllMetaDataResponse ([{ url = "
     , click "refreshButton"
-    , assert (textContains "messageList" "Manual Loading Metadata---")
+    , assert <| textContains "messageList" "Manual Loading Metadata---"
     --TODO: I should work when messaging fixed
 --    , textContains "messageList" "ManualMetaDataRefresh"
     ]
@@ -67,17 +67,17 @@ test3 =
     [ serve "../shoreditch-ui-chrome/chrome"
     , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm.html"
-    , assert (textEquals "messageList" "Auto Loading Metadata ...")
+    , assert <| textEquals "messageList" "Auto Loading Metadata ..."
     --TODO: I should work when messaging fixed
 --    , textContains "messageList" "LoadAllMetaDataResponse ([{ url = "
     , enter "configuration" "1"
     --TODO: I should work when messaging fixed
 --    , textContains "messageList" "ConfigurationChanged \"1"
-    , assert (textContains "messageList" "Config changed")
+    , assert <| textContains "messageList" "Config changed"
     , enter "configuration" "2"
     --TODO: I should work when messaging fixed
 --    , textContains "messageList" "ConfigurationChanged \"12"
-    , assert (textContains "messageList" "Config changed")
+    , assert <| textContains "messageList" "Config changed"
     ]
 
 
@@ -88,7 +88,7 @@ test4 =
     [ serve "../shoreditch-ui-chrome/chrome"
     , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm2.html"
-    , assert (textEquals "messageList" "Auto Loading Metadata ...")
+    , assert <| textEquals "messageList" "Auto Loading Metadata ..."
     ]
 
 
