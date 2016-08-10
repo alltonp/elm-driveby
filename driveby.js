@@ -161,7 +161,6 @@ function goto(page, context, id, url) {
 //     console.log(">ERRR !!! didnt get there ...")
 //     respond(context, id, [err])
 //  }
-
 }
 
 function click(page, context, id, selector) {
@@ -339,14 +338,27 @@ function serve(context, id, path, port) {
         var fqn = path + request.url;
 
         var key = port + ":" + request.url
-//        console.log(key + ":" + stubs[key])
 
-        var body = (stubs[key] !== undefined) ? stubs[key] : fs.read(fqn);
+        if (stubs[key] !== undefined) {
+          var body = stubs[key]
+          var code = 200
+        } else if (fs.exists(fqn)) {
+          console.log("fqn found")
+          var body = fs.read(fqn)
+          var code = 200
+        } else {
+          console.log("fqn not found " + fqn)
+          var body = ""
+          var code = 404
+        }
+
+//        console.log(code)
+//        console.log(body)
 
         //TODO: if file doesnt exist then 404 instead ...
 //        if (fs.exists(path))
 
-        response.statusCode = 200;
+        response.statusCode = code;
         response.headers = {
             'Cache': 'no-cache',
             //TODO: c/should probably base this on filetype ..

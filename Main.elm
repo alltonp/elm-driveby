@@ -29,8 +29,9 @@ main =
 
 allTests : Suite
 allTests =
-  suite "All" [test1, test2, test3]
+--  suite "All" [test1, test2, test3]
 --  suite "All" [test1, test2, test3, test4]
+  suite "All" [test4]
 
 
 test1 : Script
