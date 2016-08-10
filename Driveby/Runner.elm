@@ -103,7 +103,7 @@ update requestsPort msg model =
         (model, nextCmd)
 
 
-    --TODO: pretty sure this doesnt do just what it says on the tin ...
+    --TODO: pretty sure this doesn't do just what it says on the tin ...
     RunNextStep context ->
         case currentScript context model of
             Just executableScript ->
@@ -140,7 +140,6 @@ update requestsPort msg model =
         case currentScript response.context model of
             Just executableScript ->
               let
-
                 --used? debug only?
 --                currentStep = List.filter (\s -> s.id == response.context.stepId) executableScript.steps
 
@@ -152,6 +151,7 @@ update requestsPort msg model =
                             else Just response.context.updated
 
                 executableScript' = { executableScript | steps = steps', finished = finished', failures = response.failures }
+
                 scriptId = response.context.scriptId
                 scriptIdToExecutableScript' = Dict.update scriptId (\e -> Just executableScript') model.scriptIdToExecutableScript
                 model' = { model | scriptIdToExecutableScript = scriptIdToExecutableScript' }
