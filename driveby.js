@@ -336,25 +336,16 @@ function serve(context, id, path, port) {
 
     var service = server.listen(port, { keepAlive: true }, function (request, response) {
         var fqn = path + request.url;
-
         var key = port + ":" + request.url
 
         //TODO: better handle fqn?queryString
         if (stubs[key] !== undefined) {
-          var body = stubs[key]
-          var code = 200
-          r = {body: body, code: code}
+          r = {body: stubs[key], code: 200}
         } else if (fs.exists(fqn)) {
-          var body = fs.read(fqn)
-          var code = 200
-          r = {body: body, code: code}
+          r = {body: fs.read(fqn), code: 200}
         } else {
-          var body = ""
-          var code = 404
-          r = {body: body, code: code}
+          r = {body: "", code: 404}
         }
-
-        console.log(r)
 
         response.statusCode = r.code;
         response.headers = {
