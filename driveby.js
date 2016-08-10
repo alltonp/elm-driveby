@@ -25,7 +25,7 @@ for (var i = 0; i < numberOfBrowsers; i+=1) {
 
     //TODO: make this an option to report/surppress page errors in config
     p.onError = function(msg, trace) {
-    //TODO: append these to a file in the result dir ....
+//    TODO: append these to a file in the result dir ....
     };
 
     pages.push(p);
@@ -103,8 +103,8 @@ app.ports.requests.subscribe(function(request) {
   else if (name == "enter") { enter(page, context, id, command.args[0], command.args[1]); }
   else if (name == "goto") { goto(page, context, id, command.args[0]); }
   else if (name == "gotoLocal") { goto(page, context, id, "http://localhost:" + context.localPort + command.args[0]); }
-  else if (name == "textContains") { textContains(page, context, id, command.args[0], command.args[1]); }
-//  else if (name == "textContains") { assert(page, context, id, command.args[0], "textContains", command.args[1]); }
+//  else if (name == "textContains") { textContains(page, context, id, command.args[0], command.args[1]); }
+  else if (name == "textContains") { assert(page, context, id, command.args[0], "textContains", command.args[1]); }
   else if (name == "close") { close(page, context, id); }
   else if (name == "serve") { serve(context, id, command.args[0], context.localPort); }
   else if (name == "stub") { stub(context, id, command.args[0], command.args[1], context.localPort); }
@@ -273,25 +273,32 @@ function enter(page, context, id, selector, value) {
 //TIP: and performance - https://api.jquery.com/filter/
 
 function assert(page, context, id, selector, condition, expected) {
+//  console.log("in assert")
+
   if (condition == "textContains") {
-    return assertCondition(page, context, id, selector, expected, function(e) {
-        console.log("in textContains")
+    return assertCondition(page, context, id, selector, expected, function(e, theExpected) {
+//        console.log("in textContains")
 //        TODO: pull out as findUnique
 //        var e = $(theSelector)
         return e.length == 1 && e.is(":contains('" + theExpected + "')");
+//        return true
       });
   }
   else { respond(context, id, ["don't know how to process condition: " + JSON.stringify(condition) ]); }
 }
 
-function assertCondition(page, context, id, selector, expected, condition) {
+function assertCondition(page, context, id, selector, expected, conditionFunc) {
+//  console.log("in assertCondition")
+
   waitFor(context, id, function() {
     //condition
-    return page.evaluate(function(theSelector, theExpected) {
-//      console.log("in assertCondition")
-      var e = $(theSelector)
-      return condition(e)
-    }, selector, expected);
+    return page.evaluate(function(theSelector, theExpected, theConditionFunc) {
+      var e = $(theSelector);
+//      console.log("in assertCondition" + e.length)
+      return theConditionFunc(e, theExpected);
+//      return conditionFunc.apply(this, [ e, theExpected ]);
+//        return false
+    }, selector, expected, conditionFunc);
 
     //action
     }, function() {}
