@@ -166,20 +166,8 @@ update requestsPort msg model =
     --                2011-10-05T14:48:00.000Z
     --                clearlyWrongDate = unsafeFromString "2016-06-17T11:15:00+0200"
                 --TOOD: we should really have the stepId ...
-
-                --BUG: if there is an error here we don't run the next step .. so we can't mark the test as finished ...
-                --a good argument for doing that check here ...
-
-    --                next = if List.isEmpty response.failures then asFx (RunNext { context | stepId = context.stepId + 1 } )
-    --                       else asFx (Exit ("☒ - " ++ executableScript.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString current)) response.context)
-
---                next = if List.isEmpty response.failures then Cmd.none
---                       else asFx (ScriptFinished ("☒ - " ++ executableScript.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString currentStep)) response.context)
-                next = Cmd.none
-
-                --this looks iffy ...
               in
-                (model', Cmd.batch [ next, asFx (MainLoop response.context) ] )
+                (model', asFx (MainLoop response.context) )
 
             Nothing -> (model, Cmd.none)
 
