@@ -104,6 +104,7 @@ app.ports.requests.subscribe(function(request) {
   else if (name == "goto") { goto(page, context, id, command.args[0]); }
   else if (name == "gotoLocal") { goto(page, context, id, "http://localhost:" + context.localPort + command.args[0]); }
   else if (name == "textContains") { textContains(page, context, id, command.args[0], command.args[1]); }
+//  else if (name == "textContains") { assert(page, context, id, command.args[0], "textContains", command.args[1]); }
   else if (name == "close") { close(page, context, id); }
   else if (name == "serve") { serve(context, id, command.args[0], context.localPort); }
   else if (name == "stub") { stub(context, id, command.args[0], command.args[1], context.localPort); }
@@ -270,6 +271,48 @@ function enter(page, context, id, selector, value) {
 
 //TIP: these will be useful for asserts - https://api.jquery.com/category/selectors/
 //TIP: and performance - https://api.jquery.com/filter/
+
+function assert(page, context, id, selector, condition, expected) {
+  if (condition == "textContains") {
+    return assertCondition(page, context, id, selector, expected, function(e) {
+        console.log("in textContains")
+//        TODO: pull out as findUnique
+//        var e = $(theSelector)
+        return e.length == 1 && e.is(":contains('" + theExpected + "')");
+      });
+  }
+  else { respond(context, id, ["don't know how to process condition: " + JSON.stringify(condition) ]); }
+}
+
+function assertCondition(page, context, id, selector, expected, condition) {
+  waitFor(context, id, function() {
+    //condition
+    return page.evaluate(function(theSelector, theExpected) {
+//      console.log("in assertCondition")
+      var e = $(theSelector)
+      return condition(e)
+    }, selector, expected);
+
+    //action
+    }, function() {}
+
+    ,
+    //failure
+    function() {
+      return page.evaluate(function(theSelector, theExpected) {
+        var e = $(theSelector);
+        if (e.length != 1) {
+          return "expected 1 for " + theSelector + " but found " + e.length;
+        } else {
+          return "expected " + theSelector + " to contain " + theExpected + " but was " + e.text();
+        }
+      }, selector, expected);
+    }
+
+  );
+
+}
+
 
 //TODO: asserts() will always look a bit like this
 function textContains(page, context, id, selector, expected) {
