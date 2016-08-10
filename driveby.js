@@ -207,20 +207,19 @@ function click(page, context, id, selector) {
 
 //TODO: consider casper ... http://docs.casperjs.org/en/latest/modules/casper.html#options
 function enter(page, context, id, selector, value) {
-  waitFor(context, id, function() {
-    //condition
-    return page.evaluate(function(theSelector) {
-      //TODO: pull out as findUniqueInteractable
-      //TODO: make this a condition
-      var e = $(theSelector)
-      return e.length == 1 && e.is(":visible");
-      //TODO: need butWas()
-    }, selector);
+  waitFor(context, id,
+    function() { //condition
+      return page.evaluate(function(theSelector) {
+        //TODO: pull out as findUniqueInteractable
+        //TODO: make this a condition
+        var e = $(theSelector)
+        return e.length == 1 && e.is(":visible");
+        //TODO: need butWas()
+      }, selector);
 
-    //action
-    }, function() {
-      page.evaluate(function(theSelector, theValue) {
-        e = $(theSelector)
+      }, function() { //action
+        page.evaluate(function(theSelector, theValue) {
+          e = $(theSelector)
 
         //TODO: if clear .. but not firing events properly .. backspace maybe
 //        e.val("");
@@ -228,7 +227,7 @@ function enter(page, context, id, selector, value) {
         //TODO: struggling to put cursor in correct place .. why is that?
 //        e.setCursorPosition(e.val().length);
 //        e.setSelectionRange(10, 20);
-        e.focus();
+          e.focus();
 
 //        e.selectionStart = 10;
 //        e.selectionEndt = 20;
@@ -243,18 +242,16 @@ function enter(page, context, id, selector, value) {
 //        console.log(theValue);
 //        thePage.sendEvent('keypress', theValue);
 //        console.log($(theSelector).val);
-      }, selector, value);
+        }, selector, value);
 
       //TODO: this does seem to work if it is not empty ...
 //      page.sendEvent('keypress', page.event.key.Backspace);
 
-      page.sendEvent('keypress', value);
-
+        page.sendEvent('keypress', value);
     },
     function() { //failure
       return page.evaluate(function(theSelector) {
-        var e = $(theSelector);
-        return "expected 1 for " + theSelector + " but found " + e.length;
+        return "expected 1 for " + theSelector + " but found " + $(theSelector).length;
       }, selector);
     }
 
