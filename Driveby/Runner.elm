@@ -108,19 +108,17 @@ update requestsPort msg model =
         case currentScript context model of
             Just executableScript ->
               let
---                rn = Debug.log "RNS" ( (toString context) ++ (toString (nextStepToRun executableScript)) )
                 cmd = case nextStepToRun executableScript of
                     Just step ->
                       let
                         d = Debug.log ("Driveby " ++ ( (toString context.localPort) ++ " " ++ (toString context.browserId) ++ " " ++ (toString step.id) ++ ": " ++ step.command.name ++ " " ++ (toString step.command.args) )) ""
-                        --rn = Debug.log "RunNextStep" context
-                        --m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
-                        --m3 = Debug.log "scriptIdToExecutableScript" (toString (Dict.keys model.scriptIdToExecutableScript))
                       in
                         ( model, requestsPort (Request context step) )
                     --TODO: this is defo wrong, we should'nt have even hit RunNext, should have bailed in Process
                     Nothing ->
                       let
+                        --TODO: this is redundant in the failure case case
+                        --aka: mark script as finished
                         executableScript' = { executableScript | finished = Just context.updated }
                         scriptIdToExecutableScript' = Dict.update executableScript.id (\e -> Just executableScript') model.scriptIdToExecutableScript
                         --TODO: this should be in MainLoop
@@ -142,28 +140,23 @@ update requestsPort msg model =
         case currentScript response.context model of
             Just executableScript ->
               let
-                --rn = Debug.log "Process" response
 
                 --used? debug only?
-                currentStep = List.filter (\s -> s.id == response.context.stepId) executableScript.steps
+--                currentStep = List.filter (\s -> s.id == response.context.stepId) executableScript.steps
 
-                -- mark this step as done?
+                -- aka: all of this mark this step as executed ... and aka: mark script as finished
                 steps' = List.map (\s -> if s.id == response.context.stepId then Step s.id s.command True else s ) executableScript.steps
 
                 --TODO: this might be the wrong place to do this now ... also in RNS
                 finished' = if List.isEmpty response.failures then Nothing
                             else Just response.context.updated
 
---                f = Debug.log "finished" ((toString finished') ++ (toString response.context) ++ (toString response.failures) )
-
                 executableScript' = { executableScript | steps = steps', finished = finished', failures = response.failures }
                 scriptId = response.context.scriptId
                 scriptIdToExecutableScript' = Dict.update scriptId (\e -> Just executableScript') model.scriptIdToExecutableScript
-
                 model' = { model | scriptIdToExecutableScript = scriptIdToExecutableScript' }
 
-                --TODO: send ScriptFailed if response has failures - seems like a good place to do this ... (if we need it ..)
-                context = response.context
+--                TODO: send ScriptFailed if response has failures - seems like a good place to do this ... (if we need it ..)
     --                2011-10-05T14:48:00.000Z
     --                clearlyWrongDate = unsafeFromString "2016-06-17T11:15:00+0200"
               in
