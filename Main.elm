@@ -55,7 +55,7 @@ test2 =
     --TODO: I should work when messaging fixed
 --    , textContains "messageList" "LoadAllMetaDataResponse ([{ url = "
     , click "refreshButton"
-    , assert <| textContains "messageList" "Manual Loading Metadata---"
+    , assert <| textContains "messageList" "Manual Loading Metadata"
     --TODO: I should work when messaging fixed
 --    , textContains "messageList" "ManualMetaDataRefresh"
     ]
