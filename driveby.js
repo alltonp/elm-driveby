@@ -293,17 +293,13 @@ function assert(page, context, id, selector, condition, expected) {
 }
 
 function assertCondition(page, context, id, selector, expected, conditionFunc) {
-  waitFor(context, id, function() {
-    //condition
-    return page.evaluate(function(theSelector, theExpected, theConditionFunc) {
-      return theConditionFunc($(theSelector), theExpected);
-    }, selector, expected, conditionFunc);
-
-    //action
-    }, function() {}
-
-    //failure
-    , function() {
+  waitFor(context, id,
+    function() { //condition
+      return page.evaluate(function(theSelector, theExpected, theConditionFunc) {
+        return theConditionFunc($(theSelector), theExpected);
+      }, selector, expected, conditionFunc);
+    }, function() { //action
+    }, function() { //failure
       return page.evaluate(function(theSelector, theExpected) {
         var e = $(theSelector);
         if (e.length != 1) {
