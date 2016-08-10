@@ -249,24 +249,13 @@ function enter(page, context, id, selector, value) {
 //      page.sendEvent('keypress', page.event.key.Backspace);
 
       page.sendEvent('keypress', value);
-    //failure
-    },
-    function() {
-//      page.evaluate(function(theSelector) {
-//        var e = $(theSelector);
-//        return if e.length == 1 "found one" else "didnt find one";
-//      }, selector);
 
+    },
+    function() { //failure
       return page.evaluate(function(theSelector) {
         var e = $(theSelector);
-//        if (e.length != 1) {
-      return "expected 1 for " + theSelector + " but found " + e.length;
-//        } else {
-//          return "expected " + theSelector + " to contain " + theExpected + " but was " + e.text();
-//       return "mooo";
-//        }
+        return "expected 1 for " + theSelector + " but found " + e.length;
       }, selector);
-
     }
 
   );
@@ -277,14 +266,13 @@ function enter(page, context, id, selector, value) {
 //TODO: pull out as findUnique
 //TODO: factor out duplication
 //TODO: can we do more of this in elm land?
-//TODO: we need description in here too
 function assert(page, context, id, selector, condition, expected) {
   if (condition == "textContains") {
     return assertCondition(page, context, id, selector, expected, function(e, theExpected) {
         return e.length == 1 && e.is(":contains('" + theExpected + "')");
     });
   }
-  else  if (condition == "textEquals") {
+  else if (condition == "textEquals") {
     return assertCondition(page, context, id, selector, expected, function(e, theExpected) {
         return e.length == 1 && e.text() == theExpected;
     });
@@ -305,7 +293,8 @@ function assertCondition(page, context, id, selector, expected, conditionFunc) {
         if (e.length != 1) {
           return "expected 1 for " + theSelector + " but found " + e.length;
         } else {
-          return "expected " + theSelector + " to contain " + theExpected + " but was " + e.text();
+          //TODO: we need description function in here too
+          return "expected " + theSelector + " to ??? " + theExpected + " but was " + e.text();
         }
       }, selector, expected);
     }
