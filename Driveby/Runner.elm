@@ -8,6 +8,7 @@ import Task
 import Dict exposing (..)
 import Html exposing (..)
 import Html.App as App
+import Maybe.Extra as MaybeExtra
 
 
 run : List Script -> (Request -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Flags
@@ -206,7 +207,8 @@ nextUnstartedScript model =
 
 nextStepToRun : ExecutableScript -> Maybe Step
 nextStepToRun executableScript =
-  List.filter (\s -> not s.executed) executableScript.steps |> List.head
+  if MaybeExtra.isNothing executableScript.finished then List.filter (\s -> not s.executed) executableScript.steps |> List.head
+  else Nothing
 
 
 scriptsThatNeedToStart : Model -> List ExecutableScript
