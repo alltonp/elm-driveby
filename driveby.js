@@ -274,15 +274,13 @@ function enter(page, context, id, selector, value) {
 //TIP: and performance - https://api.jquery.com/filter/
 
 function assert(page, context, id, selector, condition, expected) {
-//  console.log("in assert")
-
   if (condition == "textContains") {
     return assertCondition(page, context, id, selector, expected, function(e, theExpected) {
 //        TODO: pull out as findUnique
         return e.length == 1 && e.is(":contains('" + theExpected + "')");
       });
   }
-  else if (condition == "textEquals") {
+  else  if (condition == "textEquals") {
     return assertCondition(page, context, id, selector, expected, function(e, theExpected) {
 //        TODO: pull out as findUnique
         return e.length == 1 && e.text() == theExpected;
@@ -292,16 +290,10 @@ function assert(page, context, id, selector, condition, expected) {
 }
 
 function assertCondition(page, context, id, selector, expected, conditionFunc) {
-//  console.log("in assertCondition")
-
   waitFor(context, id, function() {
     //condition
     return page.evaluate(function(theSelector, theExpected, theConditionFunc) {
-      var e = $(theSelector);
-//      console.log("in assertCondition" + e.length)
-      return theConditionFunc(e, theExpected);
-//      return conditionFunc.apply(this, [ e, theExpected ]);
-//        return false
+      return theConditionFunc($(theSelector), theExpected);
     }, selector, expected, conditionFunc);
 
     //action
