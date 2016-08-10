@@ -146,8 +146,6 @@ update requestsPort msg model =
 
                 -- mark this step as done?
                 steps' = List.map (\s -> if s.id == response.context.stepId then Step s.id s.command True else s ) executableScript.steps
---                script = executableScript.script
---                script' = { script | steps = steps' }
 
                 --TODO: this might be the wrong place to do this now ... also in RNS
                 finished' = if List.isEmpty response.failures then Nothing
@@ -161,14 +159,14 @@ update requestsPort msg model =
 
                 model' = { model | scriptIdToExecutableScript = scriptIdToExecutableScript' }
 
-                --TODO: send ExampleFailure if response has failures
+                --TODO: send ScriptFailed if response has failures - seems like a good place to do this ... (if we need it ..)
                 context = response.context
     --                2011-10-05T14:48:00.000Z
     --                clearlyWrongDate = unsafeFromString "2016-06-17T11:15:00+0200"
-                --TOOD: we should really have the stepId ...
               in
                 (model', asFx (MainLoop response.context) )
 
+            --TODO: feels like this should be debug.crash because how could we get here, programming error?
             Nothing -> (model, Cmd.none)
 
     --TODO: do we need ScriptFailed, ScriptSucceeded?
