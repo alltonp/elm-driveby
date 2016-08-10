@@ -326,7 +326,6 @@ function close(page, context, id) {
 
 function stub(context, id, path, content, port) {
   stubs[(port + ":" + path)] = content;
-//  console.log("stub " + JSON.stringify(stubs));
   respond(context, id, [])
 }
 
@@ -352,11 +351,8 @@ function serve(context, id, path, port) {
         'Cache': 'no-cache',
         //TODO: c/should probably base this on filetype ..
         'Content-Type': 'text/html',
-//            'Connection': 'Keep-Alive',
-//            'Keep-Alive': 'timeout=5, max=100',
         'Content-Length': r.body.length
     };
-
     response.write(r.body);
     response.close();
   });
