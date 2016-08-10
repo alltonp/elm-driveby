@@ -61,6 +61,11 @@ textContains id expected =
   Command "textContains" [ "#" ++ id, expected]
 
 
+textEquals : String -> String -> Command
+textEquals id expected =
+  Command "textEquals" [ "#" ++ id, expected]
+
+
 ----------
 
 --TODO: this should probably be Request and requestId everywhere ...

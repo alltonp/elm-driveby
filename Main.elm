@@ -33,7 +33,7 @@ test =
     [ serve "../shoreditch-ui-chrome/chrome"
     , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm.html"
-    , textContains "messageList" "Auto Loading Metadata----"
+    , textEquals "messageList" "Auto Loading Metadata----"
     --TODO: I should work when messaging fixed
 --    , textContains "messageList" "LoadAllMetaDataResponse ([{ url = "
     --TODO: probably want to assert the number of checks and actions here ...
