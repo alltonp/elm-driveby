@@ -105,7 +105,7 @@ update requestsPort msg model =
         case currentScript context model of
             Just executableScript ->
               let
-                rn = Debug.log "RNS" ( (toString context) ++ (toString (nextStepToRun executableScript)) )
+--                rn = Debug.log "RNS" ( (toString context) ++ (toString (nextStepToRun executableScript)) )
                 cmd = case nextStepToRun executableScript of
                     Just step ->
                       let
@@ -121,8 +121,14 @@ update requestsPort msg model =
                         executableScript' = { executableScript | finished = Just context.updated }
                         scriptIdToExecutableScript' = Dict.update executableScript.id (\e -> Just executableScript') model.scriptIdToExecutableScript
                         --TODO: this should be in MainLoop
+                        cmd = if List.isEmpty executableScript.failures
+                              then asFx (ScriptFinished ("☑ - "  ++ executableScript.name) context)
+                              else asFx (ScriptFinished ("☒ - " ++ executableScript.name ++ " " ++ (toString executableScript.failures)
+                              -- ++ " running " ++ (toString currentStep)
+                              ) context)
+
                       in
-                        ( { model | scriptIdToExecutableScript = scriptIdToExecutableScript' }, asFx (ScriptFinished ("☑ - "  ++ executableScript.name) context))
+                        ( { model | scriptIdToExecutableScript = scriptIdToExecutableScript' }, cmd)
               in
                  cmd
 
@@ -143,10 +149,11 @@ update requestsPort msg model =
 --                script = executableScript.script
 --                script' = { script | steps = steps' }
 
+                --TODO: this might be the wrong place to do this now ... also in RNS
                 finished' = if List.isEmpty response.failures then Nothing
                             else Just response.context.updated
 
-                f = Debug.log "finished" ((toString finished') ++ (toString response.context) ++ (toString response.failures) )
+--                f = Debug.log "finished" ((toString finished') ++ (toString response.context) ++ (toString response.failures) )
 
                 executableScript' = { executableScript | steps = steps', finished = finished', failures = response.failures }
                 scriptId = response.context.scriptId
@@ -166,8 +173,9 @@ update requestsPort msg model =
     --                next = if List.isEmpty response.failures then asFx (RunNext { context | stepId = context.stepId + 1 } )
     --                       else asFx (Exit ("☒ - " ++ executableScript.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString current)) response.context)
 
-                next = if List.isEmpty response.failures then Cmd.none
-                       else asFx (ScriptFinished ("☒ - " ++ executableScript.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString currentStep)) response.context)
+--                next = if List.isEmpty response.failures then Cmd.none
+--                       else asFx (ScriptFinished ("☒ - " ++ executableScript.name ++ " " ++ (toString response.failures) ++ " running " ++ (toString currentStep)) response.context)
+                next = Cmd.none
 
                 --this looks iffy ...
               in
