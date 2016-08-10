@@ -105,6 +105,7 @@ update requestsPort msg model =
         case currentScript context model of
             Just executableScript ->
               let
+                rn = Debug.log "RNS" ( (toString context) ++ (toString (nextStepToRun executableScript)) )
                 cmd = case nextStepToRun executableScript of
                     Just step ->
                       let
@@ -142,7 +143,12 @@ update requestsPort msg model =
 --                script = executableScript.script
 --                script' = { script | steps = steps' }
 
-                executableScript' = { executableScript | steps = steps' }
+                finished' = if List.isEmpty response.failures then Nothing
+                            else Just response.context.updated
+
+                f = Debug.log "finished" ((toString finished') ++ (toString response.context) ++ (toString response.failures) )
+
+                executableScript' = { executableScript | steps = steps', finished = finished' }
                 scriptId = response.context.scriptId
                 scriptIdToExecutableScript' = Dict.update scriptId (\e -> Just executableScript') model.scriptIdToExecutableScript
 
