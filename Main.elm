@@ -10,7 +10,7 @@ port responses : (Response -> msg) -> Sub msg
 
 
 main =
-   run [test, test2, test3] requests responses
+   run allTests requests responses
 
 
 --TODO: stubs ..
@@ -26,6 +26,11 @@ main =
 --}
 
 --TODO: these tests should live in shoreditch-chrome-ui project
+
+allTests : Suite
+allTests =
+  suite "All" [test, test2, test3]
+
 
 test : Script
 test =

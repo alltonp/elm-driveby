@@ -11,19 +11,22 @@ import Html.App as App
 import Maybe.Extra as MaybeExtra
 
 
-run : List Script -> (Request -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Flags
-run scripts requestsPort responsesPort =
+run : Suite -> (Request -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Flags
+run suite requestsPort responsesPort =
   App.programWithFlags
-    { init = init scripts
+    { init = init suite
     , view = view
     , update = update requestsPort
     , subscriptions = subscriptions responsesPort
     }
 
 
-init : List Script -> Flags -> (Model, Cmd Msg)
-init scripts flags =
-  (Model flags Dict.empty (buildScriptIdToExecutableScript scripts), runAllScripts)
+init : Suite -> Flags -> (Model, Cmd Msg)
+init suite flags =
+  --TODO: asFx log (thePlan) ...
+  --TODO: do any filtering here .. e.g. filter scripts/suite name from flags ..
+  --TODO: might ultimatle need List Suite ...
+  (Model flags Dict.empty (buildScriptIdToExecutableScript suite.scripts), runAllScripts)
 
 
 --TODO: we seem to do a lot of List.indexedMap then Dict.fromList etc .. make a help for it ...
