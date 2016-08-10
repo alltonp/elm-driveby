@@ -104,7 +104,7 @@ update requestsPort msg model =
         case currentScript context model of
             Just executableScript ->
               let
-                cmd = case nextStep executableScript of
+                cmd = case nextStepToRun executableScript of
                     Just step ->
                       let
                         d = Debug.log ("Driveby " ++ ( (toString context.localPort) ++ " " ++ (toString context.browserId) ++ " " ++ (toString step.id) ++ ": " ++ step.command.name ++ " " ++ (toString step.command.args) )) ""
@@ -204,8 +204,8 @@ nextUnstartedScript model =
   Dict.values model.scriptIdToExecutableScript |> List.filter (\s -> s.started == Nothing ) |> List.head
 
 
-nextStep : ExecutableScript -> Maybe Step
-nextStep executableScript =
+nextStepToRun : ExecutableScript -> Maybe Step
+nextStepToRun executableScript =
   List.filter (\s -> not s.executed) executableScript.steps |> List.head
 
 
