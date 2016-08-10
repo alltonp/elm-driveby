@@ -108,7 +108,7 @@ update requestsPort msg model =
                 cmd = case nextStep of
                     Just step ->
                       let
-                        d = Debug.log "Driveby running" ( (toString context.localPort) ++ " " ++ (toString context.browserId) ++ " " ++ (toString step.id) ++ ": " ++ step.command.name ++ " " ++ (toString step.command.args) )
+                        d = Debug.log ("Driveby " ++ ( (toString context.localPort) ++ " " ++ (toString context.browserId) ++ " " ++ (toString step.id) ++ ": " ++ step.command.name ++ " " ++ (toString step.command.args) )) ""
                         --rn = Debug.log "RunNextStep" context
                         --m2 = Debug.log "browserIdToScriptId" model.browserIdToScriptId
                         --m3 = Debug.log "scriptIdToExecutableScript" (toString (Dict.keys model.scriptIdToExecutableScript))
@@ -175,7 +175,7 @@ update requestsPort msg model =
     ScriptFinished message context ->
       let
         --TODO: this renders strangely, lets do in js instead ...
-        d = Debug.log "Driveby" message
+        d = Debug.log ("Driveby " ++ message) ""
 
         --TODO: this should be in MainLoop
 
