@@ -274,6 +274,8 @@ function enter(page, context, id, selector, value) {
 //TIP: and performance - https://api.jquery.com/filter/
 //TODO: pull out as findUnique
 //TODO: factor out duplication
+//TODO: can we do more of this in elm land?
+//TODO: we need description in here too
 function assert(page, context, id, selector, condition, expected) {
   if (condition == "textContains") {
     return assertCondition(page, context, id, selector, expected, function(e, theExpected) {
@@ -309,35 +311,6 @@ function assertCondition(page, context, id, selector, expected, conditionFunc) {
         }
       }, selector, expected);
     }
-  );
-}
-
-//TODO: asserts() will always look a bit like this
-function textContains(page, context, id, selector, expected) {
-  waitFor(context, id, function() {
-    //condition
-    return page.evaluate(function(theSelector, theExpected) {
-      //TODO: pull out as findUnique
-      var e = $(theSelector)
-      return e.length == 1 && e.is(":contains('" + theExpected + "')");
-    }, selector, expected);
-
-    //action
-    }, function() {}
-
-    ,
-    //failure
-    function() {
-      return page.evaluate(function(theSelector, theExpected) {
-        var e = $(theSelector);
-        if (e.length != 1) {
-          return "expected 1 for " + theSelector + " but found " + e.length;
-        } else {
-          return "expected " + theSelector + " to contain " + theExpected + " but was " + e.text();
-        }
-      }, selector, expected);
-    }
-
   );
 }
 
