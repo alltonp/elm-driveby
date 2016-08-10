@@ -11,6 +11,10 @@ import Html.App as App
 import Maybe.Extra as MaybeExtra
 
 
+--TODO: figure out why finished isnt populated with the datetime
+--TODO: think about a test suite for ourselves, could stub the html coming back (just like in scala driveby)
+
+
 run : Suite -> (Request -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Flags
 run suite requestsPort responsesPort =
   App.programWithFlags
@@ -25,7 +29,7 @@ init : Suite -> Flags -> (Model, Cmd Msg)
 init suite flags =
   --TODO: asFx log (thePlan) ...
   --TODO: do any filtering here .. e.g. filter scripts/suite name from flags ..
-  --TODO: might ultimatle need List Suite ...
+  --TODO: might ultimately need List Suite ...
   (Model flags Dict.empty (buildScriptIdToExecutableScript suite.scripts), runAllScripts)
 
 
