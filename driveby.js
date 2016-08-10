@@ -331,43 +331,40 @@ function stub(context, id, path, content, port) {
 }
 
 function serve(context, id, path, port) {
-    var server = require('webserver').create();
-    var fs = require('fs')
+  var server = require('webserver').create();
+  var fs = require('fs')
 
-    var service = server.listen(port, { keepAlive: true }, function (request, response) {
-        var fqn = path + request.url;
-        var key = port + ":" + request.url
+  var service = server.listen(port, { keepAlive: true }, function (request, response) {
+    var fqn = path + request.url;
+    var key = port + ":" + request.url
 
-        //TODO: better handle fqn?queryString
-        if (stubs[key] !== undefined) {
-          r = {body: stubs[key], code: 200}
-        } else if (fs.exists(fqn)) {
-          r = {body: fs.read(fqn), code: 200}
-        } else {
-          r = {body: "", code: 404}
-        }
+    //TODO: better handle fqn?queryString
+    if (stubs[key] !== undefined) {
+      r = {body: stubs[key], code: 200}
+    } else if (fs.exists(fqn)) {
+      r = {body: fs.read(fqn), code: 200}
+    } else {
+      r = {body: "", code: 404}
+    }
 
-        response.statusCode = r.code;
-        response.headers = {
-            'Cache': 'no-cache',
-            //TODO: c/should probably base this on filetype ..
-            'Content-Type': 'text/html',
+    response.statusCode = r.code;
+    response.headers = {
+        'Cache': 'no-cache',
+        //TODO: c/should probably base this on filetype ..
+        'Content-Type': 'text/html',
 //            'Connection': 'Keep-Alive',
 //            'Keep-Alive': 'timeout=5, max=100',
-            'Content-Length': r.body.length
-        };
+        'Content-Length': r.body.length
+    };
 
-        response.write(r.body);
-        response.close();
-    });
+    response.write(r.body);
+    response.close();
+  });
 
-    if (service) {
-//        console.log('Web server running on port ' + port);
-        //    console.log(path)
-    } else {
-        console.log('Error: Could not create web server listening on port ' + port);
-        phantom.exit();
-    }
+  if (!service) {
+    console.log('Error: Could not create web server listening on port ' + port);
+    phantom.exit();
+  }
 
   respond(context, id, [])
 }
