@@ -29,11 +29,12 @@ main =
 
 allTests : Suite
 allTests =
-  suite "All" [test, test2, test3]
+  suite "All" [test1, test2, test3]
+--  suite "All" [test1, test2, test3, test4]
 
 
-test : Script
-test =
+test1 : Script
+test1 =
   script "Auto loads metadata on visiting"
     [ serve "../shoreditch-ui-chrome/chrome"
     , stub "/reservations/metadata" "meh"

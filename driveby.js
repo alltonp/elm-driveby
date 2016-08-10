@@ -24,6 +24,7 @@ for (var i = 0; i < numberOfBrowsers; i+=1) {
     };
 
     //TODO: make this an option to report/surppress page errors in config
+    //TIP: surpressed if this code is here ..
     p.onError = function(msg, trace) {
 //    TODO: append these to a file in the result dir ....
     };
@@ -139,6 +140,8 @@ function init(context, id) {
 
 
 //TODO: I dont seem to fail nicely, e.g. hang on bad url
+//TODO: we should wait for status to be success here before continuing ...
+// ... 'to avoid ReferenceError: Can't find variable: $' issues
 function goto(page, context, id, url) {
   //TODO: we might not need this ...
 //  try {
