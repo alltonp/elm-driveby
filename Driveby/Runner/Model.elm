@@ -23,6 +23,7 @@ type alias ExecutableScript =
   , steps : List Step
   , started : Maybe String {-Date-}
   , finished : Maybe String {-Date-}
+  , failures : List String
   }
 
 

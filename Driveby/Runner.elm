@@ -35,7 +35,7 @@ buildScriptIdToExecutableScript scripts =
            |> List.indexedMap (,)
            |> List.map (\(i,command) -> Step i command False)
      in
-       (i, ExecutableScript i script.name steps Nothing Nothing)
+       (i, ExecutableScript i script.name steps Nothing Nothing [])
   )
   |> Dict.fromList
 
