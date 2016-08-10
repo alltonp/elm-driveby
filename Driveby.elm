@@ -67,14 +67,19 @@ enter id value =
   Command "enter" ["#" ++ id, value]
 
 
-textContains : String -> String -> Command
+assert : Condition -> Command
+assert condition =
+  Command "assert" condition.args
+
+
+textContains : String -> String -> Condition
 textContains id expected =
-  Command "textContains" [ "#" ++ id, expected]
+  Condition [ "textContains", "#" ++ id, expected]
 
 
-textEquals : String -> String -> Command
+textEquals : String -> String -> Condition
 textEquals id expected =
-  Command "textEquals" [ "#" ++ id, expected]
+  Condition [ "textEquals", "#" ++ id, expected]
 
 
 ----------
@@ -95,6 +100,11 @@ type alias Step =
 type alias Command =
   { name : String
   , args : List String
+  }
+
+
+type alias Condition =
+  { args : List String
   }
 
 
