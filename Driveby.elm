@@ -1,6 +1,12 @@
 module Driveby exposing (..)
 
 
+type alias Suite =
+  { name : String
+  , scripts : List Script
+  }
+
+
 type alias Script =
   { name : String
   , commands : List Command
@@ -18,6 +24,11 @@ type alias Response =
   { context : Context
   , failures : List String
   }
+
+
+suite : String -> List Script -> Suite
+suite name scripts =
+  Suite name scripts
 
 
 script : String -> List Command -> Script
