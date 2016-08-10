@@ -148,7 +148,7 @@ update requestsPort msg model =
 
                 f = Debug.log "finished" ((toString finished') ++ (toString response.context) ++ (toString response.failures) )
 
-                executableScript' = { executableScript | steps = steps', finished = finished' }
+                executableScript' = { executableScript | steps = steps', finished = finished', failures = response.failures }
                 scriptId = response.context.scriptId
                 scriptIdToExecutableScript' = Dict.update scriptId (\e -> Just executableScript') model.scriptIdToExecutableScript
 
