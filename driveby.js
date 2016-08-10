@@ -105,6 +105,7 @@ app.ports.requests.subscribe(function(request) {
   else if (name == "gotoLocal") { goto(page, context, id, "http://localhost:" + context.localPort + command.args[0]); }
 //  else if (name == "textContains") { textContains(page, context, id, command.args[0], command.args[1]); }
   else if (name == "textContains") { assert(page, context, id, command.args[0], "textContains", command.args[1]); }
+  else if (name == "textEquals") { assert(page, context, id, command.args[0], "textEquals", command.args[1]); }
   else if (name == "close") { close(page, context, id); }
   else if (name == "serve") { serve(context, id, command.args[0], context.localPort); }
   else if (name == "stub") { stub(context, id, command.args[0], command.args[1], context.localPort); }
@@ -277,11 +278,14 @@ function assert(page, context, id, selector, condition, expected) {
 
   if (condition == "textContains") {
     return assertCondition(page, context, id, selector, expected, function(e, theExpected) {
-//        console.log("in textContains")
 //        TODO: pull out as findUnique
-//        var e = $(theSelector)
         return e.length == 1 && e.is(":contains('" + theExpected + "')");
-//        return true
+      });
+  }
+  else if (condition == "textEquals") {
+    return assertCondition(page, context, id, selector, expected, function(e, theExpected) {
+//        TODO: pull out as findUnique
+        return e.length == 1 && e.text() == theExpected;
       });
   }
   else { respond(context, id, ["don't know how to process condition: " + JSON.stringify(condition) ]); }
