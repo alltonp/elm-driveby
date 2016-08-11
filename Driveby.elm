@@ -63,6 +63,7 @@ click id =
   Command "click" ["#" ++ id]
 
 
+--TODO: this might need to be some kind of keypress abstraction, for modifiers
 enter : String -> String -> Command
 enter id value =
   Command "enter" ["#" ++ id, value]

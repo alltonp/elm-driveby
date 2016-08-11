@@ -246,7 +246,6 @@ function enter(page, context, id, selector, value) {
 
       //TODO: this does seem to work if it is not empty ...
 //      page.sendEvent('keypress', page.event.key.Backspace);
-
         page.sendEvent('keypress', value);
     },
     function() { //failure
