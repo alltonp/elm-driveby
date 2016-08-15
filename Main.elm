@@ -29,7 +29,7 @@ main =
 
 allTests : Suite
 allTests =
-  suite "All" [test1, test2, test3, test4, test5, test6]
+  suite "All" [test1, test2, test3, test4, test5, test6, test7, test8]
 
 
 test1 : Script
@@ -107,6 +107,24 @@ test6 =
     , gotoLocal "/elm.html"
     , assert <| textEquals "messageList" "Auto Loading Metadata ..."
     , enter "configuration2" "1"
+    ]
+
+
+test7 : Script
+test7 =
+  script "Failed textEquals"
+    [ serve "../shoreditch-ui-chrome/chrome"
+    , gotoLocal "/elm.html"
+    , assert <| textEquals "messageList" "Auto Loading Metadata ...."
+    ]
+
+
+test8 : Script
+test8 =
+  script "Failed textContains"
+    [ serve "../shoreditch-ui-chrome/chrome"
+    , gotoLocal "/elm.html"
+    , assert <| textContains "messageList" "Auto Loading Metadata ...."
     ]
 
 
