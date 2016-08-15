@@ -160,7 +160,8 @@ function click(page, context, id, selector) {
     , function() {
       page.evaluate(function(theSelector) {
         //TODO: kill this $
-        $(theSelector).click();
+//        $(theSelector).click();
+        document.querySelector(theSelector).click();
       }, selector);
     },
     function() { return describeFailure(page, selector); }
