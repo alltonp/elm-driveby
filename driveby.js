@@ -129,7 +129,7 @@ function respond(page, context, id, failures) {
 //  var x = y.toISOString()
 //  console.log(x)
   var response = { context:context, failures:failures, updated:y }
-  //TODO: make this a config option
+  //TODO: make screening a config option ...
   //TODO: and actually this is probably the wrong place for it. because some commmands don't want it...
   if (page != null) page.render('S:' + context.scriptId + '-' + context.stepId + '.png')
 //  if (page) { page.render('S:' + '.png') }
