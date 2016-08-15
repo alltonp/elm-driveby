@@ -212,12 +212,17 @@ function enter(page, context, id, selector, value) {
 function assert(page, context, id, selector, condition, expected) {
   if (condition == "textContains") {
     return assertCondition(page, context, id, selector, expected, function(e, theExpected) {
-        return e.length == 1 && e.is(":contains('" + theExpected + "')");
+//        console.log("assertCondition")
+//        console.log(e.length)
+//        console.log(e[0].textContent)
+//        console.log(e[0].textContent.indexOf(theExpected) >= 0)
+//        return e.length == 1 && e[0].textContent.includes("'" + theExpected + "'");
+        return e.length == 1 && e[0].textContent.indexOf(theExpected) >= 0;
     });
   }
   else if (condition == "textEquals") {
     return assertCondition(page, context, id, selector, expected, function(e, theExpected) {
-        return e.length == 1 && e.text() == theExpected;
+        return e.length == 1 && e[0].textContent == theExpected;
     });
   }
   else { respond(context, id, ["don't know how to process condition: " + JSON.stringify(condition) ]); }
@@ -227,7 +232,7 @@ function assertCondition(page, context, id, selector, expected, conditionFunc) {
   waitFor(context, id,
     function() { //condition
       return page.evaluate(function(theSelector, theExpected, theConditionFunc) {
-        return theConditionFunc($(theSelector), theExpected);
+        return theConditionFunc(document.querySelectorAll(theSelector), theExpected);
       }, selector, expected, conditionFunc);
     }, function() { } //action
     , function() { //failure
