@@ -159,8 +159,7 @@ function click(page, context, id, selector) {
     //action
     , function() {
       page.evaluate(function(theSelector) {
-        //TODO: kill this $
-//        $(theSelector).click();
+//        $(theSelector).click()
         document.querySelector(theSelector).click();
       }, selector);
     },
@@ -174,10 +173,7 @@ function enter(page, context, id, selector, value) {
       //action
       , function() {
         page.evaluate(function(theSelector, theValue) {
-          //TODO: kill this $
-//          e = $(theSelector)
           e = document.querySelector(theSelector);
-
 
         //TODO: if clear .. but not firing events properly .. backspace maybe
 //        e.val("");
@@ -185,6 +181,7 @@ function enter(page, context, id, selector, value) {
         //TODO: struggling to put cursor in correct place .. why is that?
 //        e.setCursorPosition(e.val().length);
 //        e.setSelectionRange(10, 20);
+//TODO: consider e.click() too ...
           e.focus();
 
 //        e.selectionStart = 10;

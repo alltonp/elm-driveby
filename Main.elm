@@ -29,7 +29,7 @@ main =
 
 allTests : Suite
 allTests =
-  suite "All" [test1, test2, test3, test4, test5, test6, test7, test8]
+  suite "All" [test1, test2, test3, test4, test5, test6, test7, test8, test9]
 
 
 test1 : Script
@@ -126,6 +126,16 @@ test8 =
     , gotoLocal "/elm.html"
     , assert <| textContains "messageList" "Auto Loading Metadata ...."
     ]
+
+
+test9 : Script
+test9 =
+  script "elm-architecture-tutorial 1-button"
+    [ serve "../elm-architecture-tutorial/examples"
+    , gotoLocal "/1-button.html"
+    , assert <| textContains "count" "0"
+    ]
+
 
 
 
