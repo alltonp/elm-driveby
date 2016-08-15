@@ -213,11 +213,6 @@ function enter(page, context, id, selector, value) {
 function assert(page, context, id, selector, condition, expected) {
   if (condition == "textContains") {
     return assertCondition(page, context, id, selector, expected, function(e, theExpected) {
-//        console.log("assertCondition")
-//        console.log(e.length)
-//        console.log(e[0].textContent)
-//        console.log(e[0].textContent.indexOf(theExpected) >= 0)
-//        return e.length == 1 && e[0].textContent.includes("'" + theExpected + "'");
         return e.length == 1 && e[0].textContent.indexOf(theExpected) >= 0;
     });
   }
@@ -258,6 +253,7 @@ function isUniqueInteractable(page, selector) {
   }, selector);
 }
 
+//TIP: give me a better name .. or support an optional assert or something .. who knows
 function describeFailure(page, selector) {
   return page.evaluate(function(theSelector) {
     var e = document.querySelectorAll(theSelector);
