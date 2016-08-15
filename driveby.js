@@ -160,7 +160,6 @@ function click(page, context, id, selector) {
     //action
     , function() {
       page.evaluate(function(theSelector) {
-//        $(theSelector).click()
         document.querySelector(theSelector).click();
       }, selector);
     },
