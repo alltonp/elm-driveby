@@ -209,6 +209,7 @@ function enter(page, context, id, selector, value) {
 //TIP: and performance - https://api.jquery.com/filter/
 //TODO: factor out duplication
 //TODO: can we do more of this in elm land?
+//TODO: make main function return a true/false and an error message, or a function for the error instead ...
 function assert(page, context, id, selector, condition, expected) {
   if (condition == "textContains") {
     return assertCondition(page, context, id, selector, expected, function(e, theExpected) {
