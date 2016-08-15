@@ -159,6 +159,7 @@ function click(page, context, id, selector) {
     //action
     , function() {
       page.evaluate(function(theSelector) {
+        //TODO: kill this $
         $(theSelector).click();
       }, selector);
     },
@@ -172,6 +173,7 @@ function enter(page, context, id, selector, value) {
       //action
       , function() {
         page.evaluate(function(theSelector, theValue) {
+          //TODO: kill this $
           e = $(theSelector)
 
         //TODO: if clear .. but not firing events properly .. backspace maybe
