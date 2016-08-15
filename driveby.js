@@ -165,7 +165,7 @@ function click(page, context, id, selector) {
     },
     function() {
       return page.evaluate(function(theSelector) {
-        var e = $(theSelector);
+        var e = document.querySelectorAll(theSelector);
         return "expected 1 for " + theSelector + " but found " + e.length;
       }, selector);
     }
@@ -210,7 +210,7 @@ function enter(page, context, id, selector, value) {
     },
     function() { //failure
       return page.evaluate(function(theSelector) {
-        return "expected 1 for " + theSelector + " but found " + $(theSelector).length;
+        return "expected 1 for " + theSelector + " but found " + document.querySelectorAll(theSelector).length;
       }, selector);
     }
 
@@ -244,7 +244,7 @@ function assertCondition(page, context, id, selector, expected, conditionFunc) {
     }, function() { } //action
     , function() { //failure
       return page.evaluate(function(theSelector, theExpected) {
-        var e = $(theSelector);
+        var e = document.querySelectorAll(theSelector);
         if (e.length != 1) {
           return "expected 1 for " + theSelector + " but found " + e.length;
         } else {
