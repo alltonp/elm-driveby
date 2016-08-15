@@ -161,15 +161,8 @@ function click(page, context, id, selector) {
       page.evaluate(function(theSelector) {
         $(theSelector).click();
       }, selector);
-    //failure
     },
-    function() {
-      return page.evaluate(function(theSelector) {
-        var e = document.querySelectorAll(theSelector);
-        return "expected 1 for " + theSelector + " but found " + e.length;
-      }, selector);
-    }
-
+    function() { return describeFailure(page, selector); }
   );
 }
 
@@ -261,6 +254,13 @@ function isUniqueInteractable(page, selector) {
   return page.evaluate(function(theSelector) {
     var e = document.querySelectorAll(theSelector)
     return e.length == 1 && !!( e[0].offsetWidth || e[0].offsetHeight || e[0].getClientRects().length ); // aka visible
+  }, selector);
+}
+
+function describeFailure(page, selector) {
+  return page.evaluate(function(theSelector) {
+    var e = document.querySelectorAll(theSelector);
+    return "expected 1 element for " + theSelector + " but found " + e.length;
   }, selector);
 }
 

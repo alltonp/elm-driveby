@@ -29,9 +29,7 @@ main =
 
 allTests : Suite
 allTests =
---  suite "All" [test1, test2, test3]
-  suite "All" [test1, test2, test3, test4]
---  suite "All" [test4]
+  suite "All" [test1, test2, test3, test4, test5]
 
 
 test1 : Script
@@ -86,11 +84,19 @@ test3 =
 --TODO: the duff path causes the whole thing to freeze .. why?
 test4 : Script
 test4 =
-  script "Fails causing build to hang"
+  script "Missing goto"
     [ serve "../shoreditch-ui-chrome/chrome"
-    , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm2.html"
+    ]
+
+
+test5 : Script
+test5 =
+  script "Missing click"
+    [ serve "../shoreditch-ui-chrome/chrome"
+    , gotoLocal "/elm.html"
     , assert <| textEquals "messageList" "Auto Loading Metadata ..."
+    , click "refreshButton2"
     ]
 
 
