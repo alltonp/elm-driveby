@@ -238,6 +238,7 @@ function assertCondition(page, context, id, selector, expected, conditionFunc) {
           return "expected 1 for " + theSelector + " but found " + e.length;
         } else {
           //TODO: we need description function in here too
+          //TODO: and generate the butWas ...
           return "expected " + theSelector + " to ??? " + theExpected + " but was " + e[0].textContent;
         }
       }, selector, expected);
@@ -293,10 +294,8 @@ function serve(context, id, path, port) {
 
     response.statusCode = r.code;
     response.headers = {
-        'Cache': 'no-cache',
-        //TODO: c/should probably base this on filetype ..
-        'Content-Type': 'text/html',
-        'Content-Length': r.body.length
+        'Cache': 'no-cache', 'Content-Length': r.body.length,
+        'Content-Type': 'text/html' //TODO: c/should probably base this on filetype ..
     };
     response.write(r.body);
     response.close();
