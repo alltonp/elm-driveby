@@ -167,49 +167,18 @@ function goto(page, context, id, url) {
 //  }
 }
 
-//TIP: http://stackoverflow.com/questions/15739263/phantomjs-click-an-element
-
-function findUniqueInteractable(page, selector) {
+function isUniqueInteractable(page, selector) {
     return page.evaluate(function(theSelector) {
       var e = document.querySelectorAll(theSelector)
       return e.length == 1 && !!( e[0].offsetWidth || e[0].offsetHeight || e[0].getClientRects().length );
     }, selector);
 }
 
+//TIP: http://stackoverflow.com/questions/15739263/phantomjs-click-an-element
 function click(page, context, id, selector) {
-//  var r = page.evaluateJavascript('function(){document.querySelectorAll("' + selector + '");}')
-//  var r = page.evaluateJavascript('function(){document.querySelectorAll(\'#refreshButton\');}')
-//  console.log(r)
-//    console.log("helllo");
-//    var x = function() { return findUniqueInteractable(page, selector) }
-//    console.log(x)
-//    console.log(x())
-
-  waitFor(context, id,
-
-//    function() { findUniqueInteractable(selector); }
-    function() { return findUniqueInteractable(page, selector);// }
-//    function() { return false; }
-//    function() {
-//    //condition
-//    return page.evaluate(function(theSelector) {
-//      //TODO: pull out as findUniqueInteractable
-//      //TODO: make this a condition
-//      //TODO: if trying to lose jquery ... could use: document.getElementById
-//      //TODO: replace $ with getElementById?
-//      //TIP; remember this in in the context of the page ... functions need to be injected
-////      var e = $(theSelector)
-//
-//      //TIP: http://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
-////      return e.length == 1// && e.is(":visible");
-////      return e.length == 1 && !(el.offsetParent === null);
-//      var e = document.querySelectorAll(theSelector)
-//      return e.length == 1 && !!( e[0].offsetWidth || e[0].offsetHeight || e[0].getClientRects().length );
-//      //TODO: need butWas()
-//    }, selector);
-
+  waitFor(context, id, function() { return isUniqueInteractable(page, selector); }
     //action
-    }, function() {
+    , function() {
       page.evaluate(function(theSelector) {
         $(theSelector).click();
       }, selector);
