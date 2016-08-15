@@ -143,28 +143,14 @@ function init(context, id) {
 }
 
 
-//TODO: I dont seem to fail nicely, e.g. hang on bad url
-//TODO: we should wait for status to be success here before continuing ...
-// ... 'to avoid ReferenceError: Can't find variable: dollar' issues
 function goto(page, context, id, url) {
-  //TODO: we might not need this ...
-//  try {
-      page.open(url, function(status) {
-//      console.log("GOTO !!!")
-
-      if (status !== 'success') {
-//        console.log(">GOTO !!! didnt get there ...")
-        respond(context, id, ['Unable to access network'])
-      } else {
-//        console.log(">GOTO !!! did get there ...")
-        respond(context, id, [])
-      }
-    });
-//  }
-//  catch(err) {
-//     console.log(">ERRR !!! didnt get there ...")
-//     respond(context, id, [err])
-//  }
+  page.open(url, function(status) {
+    if (status !== 'success') {
+      respond(context, id, ['Unable to access network'])
+    } else {
+      respond(context, id, [])
+    }
+  });
 }
 
 function isUniqueInteractable(page, selector) {
@@ -185,21 +171,10 @@ function click(page, context, id, selector) {
     //failure
     },
     function() {
-//      page.evaluate(function(theSelector) {
-//        var e = $(theSelector);
-//        return if e.length == 1 "found one" else "didnt find one";
-//      }, selector);
-
       return page.evaluate(function(theSelector) {
         var e = $(theSelector);
-//        if (e.length != 1) {
-      return "expected 1 for " + theSelector + " but found " + e.length;
-//        } else {
-//          return "expected " + theSelector + " to contain " + theExpected + " but was " + e.text();
-//       return "mooo";
-//        }
+        return "expected 1 for " + theSelector + " but found " + e.length;
       }, selector);
-
     }
 
   );
@@ -251,7 +226,6 @@ function enter(page, context, id, selector, value) {
 
 //TIP: these will be useful for asserts - https://api.jquery.com/category/selectors/
 //TIP: and performance - https://api.jquery.com/filter/
-//TODO: pull out as findUnique
 //TODO: factor out duplication
 //TODO: can we do more of this in elm land?
 function assert(page, context, id, selector, condition, expected) {
