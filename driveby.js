@@ -242,7 +242,7 @@ function assertCondition(page, context, id, selector, expected, conditionFunc) {
           return "expected 1 for " + theSelector + " but found " + e.length;
         } else {
           //TODO: we need description function in here too
-          return "expected " + theSelector + " to ??? " + theExpected + " but was " + e.text();
+          return "expected " + theSelector + " to ??? " + theExpected + " but was " + e[0].textContent;
         }
       }, selector, expected);
     }
