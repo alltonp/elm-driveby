@@ -54,7 +54,7 @@ for (var i = 0; i < numberOfBrowsers; i+=1) {
 //TODO: consider running this as a daemon
 //TODO: this waiting could be in elm ... would possibly need to subscribe to time
 //TODO: changes to this file should also trigger autotest.sh
-function waitFor(context, id, testFx, onReady, onFail, timeOutMillis) {
+function waitFor(page, context, id, testFx, onReady, onFail, timeOutMillis) {
     var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //TODO: make this a config option
         start = new Date().getTime(),
         condition = false,
@@ -64,11 +64,11 @@ function waitFor(context, id, testFx, onReady, onFail, timeOutMillis) {
             } else {
                 if (!condition) {
                     clearInterval(interval);
-                    respond(context, id, [onFail()]);
+                    respond(page, context, id, [onFail()]);
                 } else {
                     onReady();
                     clearInterval(interval);
-                    respond(context, id, []);
+                    respond(page, context, id, []);
                 }
             }
         }, 1); //TODO: make this a config option
@@ -115,7 +115,7 @@ app.ports.requests.subscribe(function(request) {
   else if (name == "serve") { serve(context, id, command.args[0], context.localPort); }
   else if (name == "stub") { stub(context, id, command.args[0], command.args[1], context.localPort); }
   else if (name == "init") { init(context, id); }
-  else { respond(context, id, ["don't know how to process request: " + JSON.stringify(request) ]); }
+  else { respond(page, context, id, ["don't know how to process request: " + JSON.stringify(request) ]); }
 });
 
 //var config = { browsers:pages.length }
@@ -123,7 +123,7 @@ app.ports.requests.subscribe(function(request) {
 
 //TODO: add start time, to capture duration ...
 //TODO: rename to notifyElm or something ...
-function respond(context, id, failures) {
+function respond(page, context, id, failures) {
   var y = Date.now()
 //  console.log(y)
 //  var x = y.toISOString()
@@ -131,7 +131,8 @@ function respond(context, id, failures) {
   var response = { context:context, failures:failures, updated:y }
   //TODO: make this a config option
   //TODO: and actually this is probably the wrong place for it. because some commmands don't want it...
-  //page.render('step-' + id + '.png')
+  if (page != null) page.render('S:' + context.scriptId + '-' + context.stepId + '.png')
+//  if (page) { page.render('S:' + '.png') }
   app.ports.responses.send(response);
 }
 
@@ -139,23 +140,23 @@ function respond(context, id, failures) {
 function init(context, id) {
   context.localPort = nextPort;
   nextPort = nextPort + 1;
-  respond(context, id, [])
+  respond(null, context, id, [])
 }
 
 
 function goto(page, context, id, url) {
   page.open(url, function(status) {
     if (status !== 'success') {
-      respond(context, id, ['Unable to access network'])
+      respond(page, context, id, ['Unable to access network'])
     } else {
-      respond(context, id, [])
+      respond(page, context, id, [])
     }
   });
 }
 
 //TIP: http://stackoverflow.com/questions/15739263/phantomjs-click-an-element
 function click(page, context, id, selector) {
-  waitFor(context, id, function() { return isUniqueInteractable(page, selector); }
+  waitFor(page, context, id, function() { return isUniqueInteractable(page, selector); }
     //action
     , function() {
       page.evaluate(function(theSelector) {
@@ -169,7 +170,7 @@ function click(page, context, id, selector) {
 
 //TODO: consider casper ... http://docs.casperjs.org/en/latest/modules/casper.html#options
 function enter(page, context, id, selector, value) {
-  waitFor(context, id, function() { return isUniqueInteractable(page, selector); }
+  waitFor(page, context, id, function() { return isUniqueInteractable(page, selector); }
       //action
       , function() {
         page.evaluate(function(theSelector, theValue) {
@@ -223,11 +224,11 @@ function assert(page, context, id, selector, condition, expected) {
         return e.length == 1 && e[0].textContent == theExpected;
     });
   }
-  else { respond(context, id, ["don't know how to process condition: " + JSON.stringify(condition) ]); }
+  else { respond(page, context, id, ["don't know how to process condition: " + JSON.stringify(condition) ]); }
 }
 
 function assertCondition(page, context, id, selector, expected, conditionFunc) {
-  waitFor(context, id,
+  waitFor(page, context, id,
     function() { //condition
       return page.evaluate(function(theSelector, theExpected, theConditionFunc) {
         return theConditionFunc(document.querySelectorAll(theSelector), theExpected);
@@ -265,7 +266,7 @@ function describeFailure(page, selector) {
 }
 
 function close(page, context, id) {
-  respond(context, id, [])
+  respond(page, context, id, [])
   page.close()
   //TODO: pull out a separate exit
   console.log("Done " + (new Date().getTime() - started) + "ms.");
@@ -274,7 +275,7 @@ function close(page, context, id) {
 
 function stub(context, id, path, content, port) {
   stubs[(port + ":" + path)] = content;
-  respond(context, id, [])
+  respond(null, context, id, [])
 }
 
 function serve(context, id, path, port) {
@@ -308,5 +309,5 @@ function serve(context, id, path, port) {
     phantom.exit();
   }
 
-  respond(context, id, [])
+  respond(null, context, id, [])
 }
