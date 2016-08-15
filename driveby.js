@@ -175,7 +175,9 @@ function enter(page, context, id, selector, value) {
       , function() {
         page.evaluate(function(theSelector, theValue) {
           //TODO: kill this $
-          e = $(theSelector)
+//          e = $(theSelector)
+          e = document.querySelector(theSelector);
+
 
         //TODO: if clear .. but not firing events properly .. backspace maybe
 //        e.val("");
