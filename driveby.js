@@ -71,7 +71,7 @@ function waitFor(context, id, testFx, onReady, onFail, timeOutMillis) {
 
 };
 
-//var r = page.injectJs("tests.js") ? "... done injecting tests.js!" : "... fail! Check the $PWD?!";
+//var r = page.injectJs("tests.js") ? "... done injecting tests.js!" : "... fail! Check the PWD?!";
 //console.log(r);
 
 //var x = page.evaluate(function() {
@@ -84,7 +84,7 @@ function waitFor(context, id, testFx, onReady, onFail, timeOutMillis) {
 
 //TODO: definitely make this an argv ... maybe support multiple file inputs .... run if successful ... good for autotesting
 //TODO: inject jquery ... (don't rely on being in the page itself ... or make it optional at least)
-var r2 = phantom.injectJs("tests.js") ? "... done injecting elm.js!" : "... fail! Check the $PWD?!";
+var r2 = phantom.injectJs("tests.js") ? "... done injecting elm.js!" : "... fail! Check the PWD?!";
 //console.log(r2);
 
 var flags = { numberOfBrowsers: pages.length };
@@ -141,7 +141,7 @@ function init(context, id) {
 
 //TODO: I dont seem to fail nicely, e.g. hang on bad url
 //TODO: we should wait for status to be success here before continuing ...
-// ... 'to avoid ReferenceError: Can't find variable: $' issues
+// ... 'to avoid ReferenceError: Can't find variable: dollar' issues
 function goto(page, context, id, url) {
   //TODO: we might not need this ...
 //  try {
@@ -163,7 +163,13 @@ function goto(page, context, id, url) {
 //  }
 }
 
+//TIP: http://stackoverflow.com/questions/15739263/phantomjs-click-an-element
+
 function click(page, context, id, selector) {
+//  var r = page.evaluateJavascript('function(){document.querySelectorAll("' + selector + '");}')
+//  var r = page.evaluateJavascript('function(){document.querySelectorAll(\'#refreshButton\');}')
+//  console.log(r)
+
   waitFor(context, id,
 
     function() {
@@ -172,8 +178,15 @@ function click(page, context, id, selector) {
       //TODO: pull out as findUniqueInteractable
       //TODO: make this a condition
       //TODO: if trying to lose jquery ... could use: document.getElementById
-      var e = $(theSelector)
-      return e.length == 1 && e.is(":visible");
+      //TODO: replace $ with getElementById?
+      //TIP; remember this in in the context of the page ... functions need to be injected
+//      var e = $(theSelector)
+
+      //TIP: http://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
+//      return e.length == 1// && e.is(":visible");
+//      return e.length == 1 && !(el.offsetParent === null);
+      var e = document.querySelectorAll(theSelector)
+      return e.length == 1 && !!( e[0].offsetWidth || e[0].offsetHeight || e[0].getClientRects().length );
       //TODO: need butWas()
     }, selector);
 
@@ -345,3 +358,18 @@ function serve(context, id, path, port) {
 
   respond(context, id, [])
 }
+
+//TIP: http://stackoverflow.com/questions/5338716/get-multiple-elements-by-id
+//function $$(selector, page) {
+//  var r = page.evaluateJavascript('function(){document.querySelectorAll(selector);}')
+//  console.log(r)
+//  return r
+////  if (arguments.length > 1) {
+////    for (var i = 0, elements = [], length = arguments.length; i < length; i++)
+////      elements.push($(arguments[i]));
+////    return elements;
+////  }
+////  if (Object.isString(element))
+////    element = document.getElementById(element);
+////  return Element.extend(element);
+//}
