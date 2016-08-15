@@ -133,7 +133,11 @@ test9 =
   script "elm-architecture-tutorial 1-button"
     [ serve "../elm-architecture-tutorial/examples"
     , gotoLocal "/1-button.html"
-    , assert <| textContains "count" "0"
+    , assert <| textEquals "count" "0"
+    , click "increment"
+    , assert <| textEquals "count" "1"
+    , click "decrement"
+    , assert <| textEquals "count" "0"
     ]
 
 
