@@ -207,17 +207,9 @@ function click(page, context, id, selector) {
 
 //TODO: consider casper ... http://docs.casperjs.org/en/latest/modules/casper.html#options
 function enter(page, context, id, selector, value) {
-  waitFor(context, id,
-    function() { //condition
-      return page.evaluate(function(theSelector) {
-        //TODO: pull out as findUniqueInteractable
-        //TODO: make this a condition
-        var e = $(theSelector)
-        return e.length == 1 && e.is(":visible");
-        //TODO: need butWas()
-      }, selector);
-
-      }, function() { //action
+  waitFor(context, id, function() { return isUniqueInteractable(page, selector); }
+      //action
+      , function() {
         page.evaluate(function(theSelector, theValue) {
           e = $(theSelector)
 
@@ -345,18 +337,3 @@ function serve(context, id, path, port) {
 
   respond(context, id, [])
 }
-
-//TIP: http://stackoverflow.com/questions/5338716/get-multiple-elements-by-id
-//function $$(selector, page) {
-//  var r = page.evaluateJavascript('function(){document.querySelectorAll(selector);}')
-//  console.log(r)
-//  return r
-////  if (arguments.length > 1) {
-////    for (var i = 0, elements = [], length = arguments.length; i < length; i++)
-////      elements.push($(arguments[i]));
-////    return elements;
-////  }
-////  if (Object.isString(element))
-////    element = document.getElementById(element);
-////  return Element.extend(element);
-//}
