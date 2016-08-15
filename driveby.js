@@ -201,12 +201,7 @@ function enter(page, context, id, selector, value) {
 //      page.sendEvent('keypress', page.event.key.Backspace);
         page.sendEvent('keypress', value);
     },
-    function() { //failure
-      return page.evaluate(function(theSelector) {
-        return "expected 1 for " + theSelector + " but found " + document.querySelectorAll(theSelector).length;
-      }, selector);
-    }
-
+    function() { return describeFailure(page, selector); }
   );
 }
 

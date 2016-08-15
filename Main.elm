@@ -29,7 +29,7 @@ main =
 
 allTests : Suite
 allTests =
-  suite "All" [test1, test2, test3, test4, test5]
+  suite "All" [test1, test2, test3, test4, test5, test6]
 
 
 test1 : Script
@@ -98,6 +98,17 @@ test5 =
     , assert <| textEquals "messageList" "Auto Loading Metadata ..."
     , click "refreshButton2"
     ]
+
+
+test6 : Script
+test6 =
+  script "Missing enter"
+    [ serve "../shoreditch-ui-chrome/chrome"
+    , gotoLocal "/elm.html"
+    , assert <| textEquals "messageList" "Auto Loading Metadata ..."
+    , enter "configuration2" "1"
+    ]
+
 
 
 --TODO: add missing test for a stubbed Check in metadata
