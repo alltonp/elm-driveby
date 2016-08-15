@@ -153,13 +153,6 @@ function goto(page, context, id, url) {
   });
 }
 
-function isUniqueInteractable(page, selector) {
-    return page.evaluate(function(theSelector) {
-      var e = document.querySelectorAll(theSelector)
-      return e.length == 1 && !!( e[0].offsetWidth || e[0].offsetHeight || e[0].getClientRects().length );
-    }, selector);
-}
-
 //TIP: http://stackoverflow.com/questions/15739263/phantomjs-click-an-element
 function click(page, context, id, selector) {
   waitFor(context, id, function() { return isUniqueInteractable(page, selector); }
@@ -248,8 +241,8 @@ function assertCondition(page, context, id, selector, expected, conditionFunc) {
       return page.evaluate(function(theSelector, theExpected, theConditionFunc) {
         return theConditionFunc($(theSelector), theExpected);
       }, selector, expected, conditionFunc);
-    }, function() { //action
-    }, function() { //failure
+    }, function() { } //action
+    , function() { //failure
       return page.evaluate(function(theSelector, theExpected) {
         var e = $(theSelector);
         if (e.length != 1) {
@@ -261,6 +254,14 @@ function assertCondition(page, context, id, selector, expected, conditionFunc) {
       }, selector, expected);
     }
   );
+}
+
+//TIP: http://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
+function isUniqueInteractable(page, selector) {
+  return page.evaluate(function(theSelector) {
+    var e = document.querySelectorAll(theSelector)
+    return e.length == 1 && !!( e[0].offsetWidth || e[0].offsetHeight || e[0].getClientRects().length ); // aka visible
+  }, selector);
 }
 
 function close(page, context, id) {
