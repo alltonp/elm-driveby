@@ -6,7 +6,8 @@ var webpage = require('webpage')
 var numberOfBrowsers = 4;
 var nextPort = 9000;
 var surpressPageErrors = true;
-var screenshotAllSteps = true;
+var screenshotAllSteps = false;
+var screenshotFailures = true;
 
 var started = new Date().getTime();
 var pages = [];
@@ -79,10 +80,10 @@ function respond(page, context, failures) {
   var x = y.toString()
 //  console.log(x)
   var response = { context:context, failures:failures, updated:x }
-  //TODO: make screenshotAllSteps and screenshotFailures be config option ...
-  //TODO: and actually this is probably the wrong place for it. because some commmands don't want it...
-  //TODO: should we include the port ... because we could continue to serve it actually, might be interesting for debugging test failures ...
-  if (screenshotAllSteps && page != null) page.render(started + '/' + context.scriptId + '/' + context.stepId + '.png')
+  //TODO: we could continue to serve locally on context.localPort, it might be interesting for debugging test failures ...
+  //TODO: just need a stayOpenOnFailure
+  var screenshot = page != null && (screenshotAllSteps || (screenshotFailures && failures.length > 0) )
+  if (screenshot) page.render(started + '/' + context.scriptId + '/' + context.stepId + '.png')
   app.ports.responses.send(response);
 }
 

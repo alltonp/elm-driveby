@@ -29,7 +29,7 @@ main =
 
 allTests : Suite
 allTests =
-  suite "All" [test1, test2, test3, test4, test5, test6, test7, test8, test9]
+  suite "All" [test1, test2, test3, test4, test5, test6, test7, test8, test9, test10]
 
 
 test1 : Script
@@ -138,6 +138,15 @@ test9 =
     , assert <| textEquals "count" "1"
     , click "decrement"
     , assert <| textEquals "count" "0"
+    ]
+
+
+test10 : Script
+test10 =
+  script "non local"
+    [ goto "https://www.google.co.uk/"
+    , enter "lst-ib" "hello"
+    , click "btnK"
     ]
 
 
