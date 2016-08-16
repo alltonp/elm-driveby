@@ -131,7 +131,6 @@ update requestsPort msg model =
                         cmd = if List.isEmpty executableScript.failures
                               then asFx (ScriptFinished ("- "  ++ executableScript.name) context)
                               else asFx (ScriptFinished ("☒ " ++ executableScript.name ++ " " ++ (toString executableScript.failures)
-                              -- ++ " running " ++ (toString currentStep)
                               ) context)
 
                       in

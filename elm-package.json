@@ -1,12 +1,12 @@
 {
     "version": "1.0.0",
-    "summary": "helpful summary of your project, less than 80 characters",
+    "summary": "opinionated browser testing in elm",
     "repository": "https://github.com/alltonpa/elm-driveby.git",
     "license": "BSD3",
     "source-directories": [
         "."
     ],
-    "exposed-modules": [],
+    "exposed-modules": ["Driveby"],
     "dependencies": {
         "elm-community/maybe-extra": "1.1.0 <= v < 2.0.0",
         "elm-lang/core": "4.0.3 <= v < 5.0.0",
