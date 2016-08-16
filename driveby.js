@@ -193,11 +193,11 @@ function enter(page, context, id, selector, value) {
 //TODO: move description building to elm side
 function assert(page, context, id, selector, condition, expected) {
   if (condition == "textContains") {
-    return assertCondition(page, context, id, selector, expected, (selector + ' ' + condition + ' ' + expected ),
+    return assertCondition(page, context, id, selector, expected, (selector + ' ' + condition + " '" + expected + "'"),
       function(e, theExpected) { return e.length == 1 && e[0].textContent.indexOf(theExpected) >= 0; });
   }
   else if (condition == "textEquals") {
-    return assertCondition(page, context, id, selector, expected, (selector + ' ' + condition + ' ' + expected ),
+    return assertCondition(page, context, id, selector, expected, (selector + ' ' + condition + " '" + expected + "'"),
       function(e, theExpected) { return e.length == 1 && e[0].textContent == theExpected; });
   }
   else { respond(page, context, id, ["don't know how to process condition: " + JSON.stringify(condition) ]); }
@@ -214,8 +214,8 @@ function assertCondition(page, context, id, selector, expected, description, con
     , function() { //failure
         return page.evaluate(function(theSelector, theDescription) {
           var e = document.querySelectorAll(theSelector);
-          if (e.length != 1) { return "expected 1 element for " + theSelector + " but found " + e.length; }
-          else { return "expected " + theDescription + " but was: '" + e[0].textContent + "'"; }
+          if (e.length != 1) { return "expected 1 element for " + theSelector + " found " + e.length; }
+          else { return "expected " + theDescription + " in '" + e[0].textContent + "'"; }
         }, selector, description); }
   );
 }
@@ -232,7 +232,7 @@ function isUniqueInteractable(page, selector) {
 function describeFailure(page, selector) {
   return page.evaluate(function(theSelector) {
     var e = document.querySelectorAll(theSelector);
-    return "expected 1 element for " + theSelector + " but found " + e.length;
+    return "expected 1 element for " + theSelector + " found " + e.length;
   }, selector);
 }
 
