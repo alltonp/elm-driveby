@@ -4,6 +4,7 @@ port module DrivebyTest exposing (requests)
 import Driveby exposing (..)
 import Driveby.Runner exposing (..)
 import ButtonTest
+import FieldTest
 
 port requests : Request -> Cmd msg
 port responses : (Response -> msg) -> Sub msg
@@ -29,7 +30,7 @@ main =
 
 allTests : Suite
 allTests =
-  suite "All" [test1, test2, test3, test4, test5, test6, test7, test8, ButtonTest.test1, test10, testNonLocal]
+  suite "All" [test1, test2, test3, test4, test5, test6, test7, test8, ButtonTest.test1, FieldTest.test1, testNonLocal]
 
 
 test1 : Script
@@ -125,17 +126,6 @@ test8 =
     [ serve "../shoreditch-ui-chrome/chrome"
     , gotoLocal "/elm.html"
     , assert <| textContains "messageList" "Auto Loading Metadata ...."
-    ]
-
-
-test10 : Script
-test10 =
-  script "elm-architecture-tutorial 2-field"
-    [ serve "../elm-architecture-tutorial/examples"
-    , gotoLocal "/2-field.html"
-    , assert <| textEquals "reversed" ""
-    , enter "text" "barry"
-    , assert <| textEquals "reversed" "yrrab"
     ]
 
 
