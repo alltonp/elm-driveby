@@ -13,7 +13,6 @@ type alias Script =
   }
 
 
---TODO: could we use Command instead of Step here (would be better in js land) ... we would need to really trust context.stepId
 type alias Request =
   { context : Context
   , step : Step
