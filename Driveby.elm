@@ -71,17 +71,25 @@ enter id value =
 
 assert : Condition -> Command
 assert condition =
-  Command "assert" (List.append ["description"] condition.args)
+  Command "assert" (List.append [condition.description] condition.args)
 
 
 textContains : String -> String -> Condition
 textContains id expected =
-  Condition [ "textContains", "#" ++ id, expected]
+  let
+    selector = "#" ++ id
+    name = "textContains"
+  in
+    Condition (selector ++ " " ++ name ++ " '" ++ expected ++ "'") [ name, selector, expected]
 
 
 textEquals : String -> String -> Condition
 textEquals id expected =
-  Condition [ "textEquals", "#" ++ id, expected]
+  let
+      selector = "#" ++ id
+      name = "textEquals"
+  in
+    Condition (selector ++ " " ++ name ++ " '" ++ expected ++ "'") [ name, selector, expected]
 
 
 ----------
@@ -106,7 +114,8 @@ type alias Command =
 
 
 type alias Condition =
-  { args : List String
+  { description : String
+  , args : List String
   }
 
 
