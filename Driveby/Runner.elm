@@ -129,8 +129,8 @@ update requestsPort msg model =
                         scriptIdToExecutableScript' = Dict.update executableScript.id (\e -> Just executableScript') model.scriptIdToExecutableScript
                         --TODO: this should be in MainLoop
                         cmd = if List.isEmpty executableScript.failures
-                              then asFx (ScriptFinished ("☑ - "  ++ executableScript.name) context)
-                              else asFx (ScriptFinished ("☒ - " ++ executableScript.name ++ " " ++ (toString executableScript.failures)
+                              then asFx (ScriptFinished ("- "  ++ executableScript.name) context)
+                              else asFx (ScriptFinished ("☒ " ++ executableScript.name ++ " " ++ (toString executableScript.failures)
                               -- ++ " running " ++ (toString currentStep)
                               ) context)
 
