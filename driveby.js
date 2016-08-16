@@ -1,11 +1,5 @@
-//TODO: make this the main script https://github.com/ariya/phantomjs/blob/master/examples/arguments.js
-//TODO: this looks good for parallel - https://github.com/ariya/phantomjs/blob/master/examples/child_process-examples.js
-//TODO: implement a tuplespace in elm?
-//TODO: in larger test suites we will defo want to unserver at the end of each script
-//TODO: consider running this as a daemon/server and connect to it .. a-la flyby .. and shorter start time
-//TODO: make it so that each command can report it's duration
-
 //TODO: put this in arg[] to this script ..
+//TODO: make this the main script https://github.com/ariya/phantomjs/blob/master/examples/arguments.js
 var numberOfBrowsers = 4;
 var nextPort = 9000;
 var surpressPageErrors = true;
@@ -15,21 +9,17 @@ var pages = [];
 var stubs = {};
 
 for (var i = 0; i < numberOfBrowsers; i+=1) {
-    var p = require('webpage').create();
+  var p = require('webpage').create();
 
-    //TODO: make this a config option - surpressCommandLogging
-    p.onConsoleMessage = function(msg, lineNum, sourceId) {
-      console.log('CONSOLE: [' + msg + '] (from line #' + lineNum + ' in "' + sourceId + '")');
-    };
+  //TODO: make this a config option - surpressCommandLogging
+  p.onConsoleMessage = function(msg, lineNum, sourceId) {
+    console.log('CONSOLE: [' + msg + '] (from line #' + lineNum + ' in "' + sourceId + '")');
+  };
 
-    if (surpressPageErrors) { p.onError = function(msg, trace) {}; }
+  if (surpressPageErrors) { p.onError = function(msg, trace) {}; }
 
-    pages.push(p);
+  pages.push(p);
 }
-
-//console.log(pages.length)
-
-//var page = pages[0];
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
