@@ -192,36 +192,35 @@ function enter(page, context, id, selector, value) {
 //TODO: make main function return a true/false and an error message, or a function for the error instead ...
 function assert(page, context, id, selector, condition, expected) {
   if (condition == "textContains") {
-    return assertCondition(page, context, id, selector, expected, function(e, theExpected) {
-        return e.length == 1 && e[0].textContent.indexOf(theExpected) >= 0;
-    });
+    return assertCondition(page, context, id, selector, expected, (selector + ' ' + condition + ' ' + expected ),
+      function(e, theExpected) { return e.length == 1 && e[0].textContent.indexOf(theExpected) >= 0; });
   }
   else if (condition == "textEquals") {
-    return assertCondition(page, context, id, selector, expected, function(e, theExpected) {
-        return e.length == 1 && e[0].textContent == theExpected;
-    });
+    return assertCondition(page, context, id, selector, expected, (selector + ' ' + condition + ' ' + expected ),
+      function(e, theExpected) { return e.length == 1 && e[0].textContent == theExpected; });
   }
   else { respond(page, context, id, ["don't know how to process condition: " + JSON.stringify(condition) ]); }
 }
 
-function assertCondition(page, context, id, selector, expected, conditionFunc) {
+function assertCondition(page, context, id, selector, expected, description, conditionFunc) {
   waitFor(page, context, id,
     function() { //condition
-      return page.evaluate(function(theSelector, theExpected, theConditionFunc) {
-        return theConditionFunc(document.querySelectorAll(theSelector), theExpected);
-      }, selector, expected, conditionFunc);
+      return page.evaluate(function(theSelector, theExpected, theDescription, theConditionFunc) {
+        return theConditionFunc(document.querySelectorAll(theSelector), theExpected, theDescription);
+      }, selector, expected, description, conditionFunc);
     }, function() { } //action
     , function() { //failure
-      return page.evaluate(function(theSelector, theExpected) {
+      return page.evaluate(function(theSelector, theExpected, theDescription) {
+        //TODO:  de-dupe with unique ...
         var e = document.querySelectorAll(theSelector);
         if (e.length != 1) {
-          return "expected 1 for " + theSelector + " but found " + e.length;
+          return "expected 1 element for " + theSelector + " but found " + e.length;
         } else {
           //TODO: we need description function in here too
           //TODO: and generate the butWas ...
-          return "expected " + theSelector + " to ??? " + theExpected + " but was " + e[0].textContent;
+          return "expected " + theDescription + " but was " + e[0].textContent;
         }
-      }, selector, expected);
+      }, selector, expected, description);
     }
   );
 }
