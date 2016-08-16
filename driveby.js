@@ -90,17 +90,12 @@ app.ports.requests.subscribe(function(request) {
   else if (name == "goto") { goto(page, context, id, command.args[0]); }
   else if (name == "gotoLocal") { goto(page, context, id, "http://localhost:" + context.localPort + command.args[0]); }
   else if (name == "assert") { assert(page, context, id, command.args[1], command.args[0], command.args[2]); }
-//  else if (name == "textContains") { assert(page, context, id, command.args[0], "textContains", command.args[1]); }
-//  else if (name == "textEquals") { assert(page, context, id, command.args[0], "textEquals", command.args[1]); }
   else if (name == "close") { close(page, context, id); }
   else if (name == "serve") { serve(context, id, command.args[0], context.localPort); }
   else if (name == "stub") { stub(context, id, command.args[0], command.args[1], context.localPort); }
   else if (name == "init") { init(context, id); }
   else { respond(page, context, id, ["don't know how to process request: " + JSON.stringify(request) ]); }
 });
-
-//var config = { browsers:pages.length }
-//app.ports.responses.send(config);
 
 //TODO: add start time, to capture duration ...
 //TODO: rename to notifyElm or something ...
@@ -117,13 +112,11 @@ function respond(page, context, id, failures) {
   app.ports.responses.send(response);
 }
 
-
 function init(context, id) {
   context.localPort = nextPort;
   nextPort = nextPort + 1;
   respond(null, context, id, [])
 }
-
 
 function goto(page, context, id, url) {
   page.open(url, function(status) {
@@ -284,10 +277,6 @@ function serve(context, id, path, port) {
     response.close();
   });
 
-  if (!service) {
-    console.log('Error: Could not create web server listening on port ' + port);
-    phantom.exit();
-  }
-
+  if (!service) { console.log('Error: Could not create web server listening on port ' + port); phantom.exit(); }
   respond(null, context, id, [])
 }
