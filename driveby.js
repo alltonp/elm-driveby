@@ -3,17 +3,14 @@
 //TODO: implement a tuplespace in elm?
 //TODO: in larger test suites we will defo want to unserver at the end of each script
 //TODO: consider running this as a daemon/server and connect to it .. a-la flyby .. and shorter start time
-
 //TODO: make it so that each command can report it's duration
-var started = new Date().getTime();
-
-//TODO: rename to browsers
-var pages = [];
-var stubs = {};
 
 //TODO: put this in arg[] to this script ..
 var numberOfBrowsers = 4;
 var nextPort = 9000;
+var started = new Date().getTime();
+var pages = [];
+var stubs = {};
 
 for (var i = 0; i < numberOfBrowsers; i+=1) {
     var p = require('webpage').create();
@@ -131,7 +128,7 @@ function respond(page, context, id, failures) {
   var response = { context:context, failures:failures, updated:y }
   //TODO: make screening a config option ...
   //TODO: and actually this is probably the wrong place for it. because some commmands don't want it...
-  if (page != null) page.render('S:' + context.scriptId + '-' + context.stepId + '.png')
+  if (page != null) page.render(started + '/' + context.scriptId + '/' + context.stepId + '.png')
 //  if (page) { page.render('S:' + '.png') }
   app.ports.responses.send(response);
 }
