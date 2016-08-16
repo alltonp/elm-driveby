@@ -192,17 +192,17 @@ function enter(page, context, id, selector, value) {
 //TODO: make main function return a true/false and an error message, or a function for the error instead ...
 function assert(page, context, id, selector, condition, expected) {
   if (condition == "textContains") {
-    return assertCondition(page, context, id, selector, expected, (selector + ' ' + condition + ' ' + expected ),
+    return assertCondition(page, context, id, selector, (selector + ' ' + condition + ' ' + expected ),
       function(e, theExpected) { return e.length == 1 && e[0].textContent.indexOf(theExpected) >= 0; });
   }
   else if (condition == "textEquals") {
-    return assertCondition(page, context, id, selector, expected, (selector + ' ' + condition + ' ' + expected ),
+    return assertCondition(page, context, id, selector, (selector + ' ' + condition + ' ' + expected ),
       function(e, theExpected) { return e.length == 1 && e[0].textContent == theExpected; });
   }
   else { respond(page, context, id, ["don't know how to process condition: " + JSON.stringify(condition) ]); }
 }
 
-function assertCondition(page, context, id, selector, expected, description, conditionFunc) {
+function assertCondition(page, context, id, selector, description, conditionFunc) {
   waitFor(page, context, id,
     function() { //condition
       return page.evaluate(function(theSelector, theDescription, theConditionFunc) {
