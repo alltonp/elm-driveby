@@ -49,7 +49,7 @@ test2 : Script
 test2 =
   script "Loads metadata on manual refresh"
     [ serve "../shoreditch-ui-chrome/chrome"
-    , stub "/reservations/metadata" "meh"
+--    , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm.html"
     , assert <| textEquals "messageList" "Auto Loading Metadata ..."
     --TODO: I should work when messaging fixed
@@ -65,7 +65,7 @@ test3 : Script
 test3 =
   script "Detects configuration changes"
     [ serve "../shoreditch-ui-chrome/chrome"
-    , stub "/reservations/metadata" "meh"
+--    , stub "/reservations/metadata" "meh"
     , gotoLocal "/elm.html"
     , assert <| textEquals "messageList" "Auto Loading Metadata ..."
     --TODO: I should work when messaging fixed
