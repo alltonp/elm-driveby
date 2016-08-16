@@ -203,6 +203,7 @@ function assert(page, context, id, selector, condition, expected) {
   else { respond(page, context, id, ["don't know how to process condition: " + JSON.stringify(condition) ]); }
 }
 
+//TODO: need to generate the butWas ...
 function assertCondition(page, context, id, selector, expected, description, conditionFunc) {
   waitFor(page, context, id,
     function() { //condition
@@ -212,15 +213,9 @@ function assertCondition(page, context, id, selector, expected, description, con
     , function() { } //action
     , function() { //failure
         return page.evaluate(function(theSelector, theDescription) {
-          //TODO:  de-dupe with unique ...
           var e = document.querySelectorAll(theSelector);
-          if (e.length != 1) {
-            return "expected 1 element for " + theSelector + " but found " + e.length;
-          } else {
-            //TODO: we need description function in here too
-            //TODO: and generate the butWas ...
-            return "expected " + theDescription + " but was " + e[0].textContent;
-          }
+          if (e.length != 1) { return "expected 1 element for " + theSelector + " but found " + e.length; }
+          else { return "expected " + theDescription + " but was " + e[0].textContent; }
         }, selector, description); }
   );
 }
