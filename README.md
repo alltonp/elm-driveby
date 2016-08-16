@@ -42,4 +42,5 @@ test1 =
 
 #### Setup ####
 1. elm-package install alltonpa/elm-driveby
-2. coming soon
+2. [download phantomjs](http://phantomjs.org/download.html)
+3. coming soon
