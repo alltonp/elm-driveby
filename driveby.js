@@ -184,10 +184,9 @@ function assert(page, context, description, selector, condition, expected) {
     return assertCondition(page, context, selector, expected, description,
       function(e, theExpected) { return e.length == 1 && e[0].textContent == theExpected; });
   }
-  else { respond(page, context, ["don't know how to process condition: " + JSON.stringify(condition) ]); }
+  else { respond(page, context, [ "sorry, I don't know how to assert condition: " + JSON.stringify(condition) ]); }
 }
 
-//TODO: need to generate the butWas ...
 function assertCondition(page, context, selector, expected, description, conditionFunc) {
   waitFor(page, context,
     function() { //condition
@@ -212,7 +211,6 @@ function isUniqueInteractable(page, selector) {
   }, selector);
 }
 
-//TIP: give me a better name .. or support an optional assert or something .. who knows
 function describeFailure(page, selector) {
   return page.evaluate(function(theSelector) {
     var e = document.querySelectorAll(theSelector);
