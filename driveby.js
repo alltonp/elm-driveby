@@ -75,6 +75,8 @@ app.ports.requests.subscribe(function(request) {
 
 //TODO: add start time, to capture duration ...
 //TODO: rename to notifyElm or something ...
+//TODO: make screenshot be a command and issue it from elm
+//TODO: give it an id and attempt to highlight it in the screenshot
 function respond(page, context, failures) {
   var y = Date.now()
   var x = y.toString()
