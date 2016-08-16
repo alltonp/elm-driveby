@@ -27,11 +27,8 @@ for (var i = 0; i < numberOfBrowsers; i+=1) {
 
 //shamelessly stolen from: https://github.com/ariya/phantomjs/blob/master/examples/waitfor.js
 "use strict";
-//TODO: rename id to stepId
-//TODO: have a runId (and maybe stick all id's on context)
 //TODO: should screenshot be before the action - might be more useful for debug
 //TODO: might be nice highlight the interactable element (like watir) before we do the action ...
-//TODO: write the files somewhere useful, include the port-number perhaps ...
 //TODO: do as much as possible in elm .. e.g. build the test report in elm, save it in js
 //TODO: this script should have a return value of success of failure, for scripts to use ...
 //TODO: rename functions and condition to be more readable
@@ -39,24 +36,16 @@ for (var i = 0; i < numberOfBrowsers; i+=1) {
 //TODO: this waiting could be in elm ... would possibly need to subscribe to time
 //TODO: changes to this file should also trigger autotest.sh
 function waitFor(page, context, testFx, onReady, onFail, timeOutMillis) {
-    var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //TODO: make this a config option
-        start = new Date().getTime(),
-        condition = false,
-        interval = setInterval(function() {
-            if ( (new Date().getTime() - start < maxtimeOutMillis) && !condition ) {
-                condition = testFx();
-            } else {
-                if (!condition) {
-                    clearInterval(interval);
-                    respond(page, context, [onFail()]);
-                } else {
-                    onReady();
-                    clearInterval(interval);
-                    respond(page, context, []);
-                }
-            }
-        }, 1); //TODO: make this a config option
-
+  var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //TODO: make this a config option
+      start = new Date().getTime(),
+      condition = false,
+      interval = setInterval(function() {
+        if ( (new Date().getTime() - start < maxtimeOutMillis) && !condition ) { condition = testFx(); }
+        else {
+          if (!condition) { clearInterval(interval); respond(page, context, [ onFail() ]); }
+          else { onReady(); clearInterval(interval); respond(page, context, []); }
+        }
+      }, 1); //TODO: make this a config option
 };
 
 //var r = page.injectJs("tests.js") ? "... done injecting tests.js!" : "... fail! Check the PWD?!";
@@ -70,10 +59,8 @@ function waitFor(page, context, testFx, onReady, onFail, timeOutMillis) {
 //
 //console.log(x);
 
-//TODO: definitely make this an argv ... maybe support multiple file inputs .... run if successful ... good for autotesting
-//TODO: inject jquery ... (don't rely on being in the page itself ... or make it optional at least)
-var r2 = phantom.injectJs("tests.js") ? "... done injecting elm.js!" : "... fail! Check the PWD?!";
-//console.log(r2);
+//TODO: make this an argv ... maybe support multiple file inputs .... run if successful ... good for autotesting
+phantom.injectJs("tests.js") ? "... done injecting tests.js!" : "... failed injecting tests.js!";
 
 var flags = { numberOfBrowsers: pages.length };
 var unused = document.createElement('div');
