@@ -29,7 +29,7 @@ main =
 
 allTests : Suite
 allTests =
-  suite "All" [test1, test2, test3, test4, test5, test6, test7, test8, test9, test10]
+  suite "All" [test1, test2, test3, test4, test5, test6, test7, test8, test9, test10, testNonLocal]
 
 
 test1 : Script
@@ -143,6 +143,17 @@ test9 =
 
 test10 : Script
 test10 =
+  script "elm-architecture-tutorial 2-field"
+    [ serve "../elm-architecture-tutorial/examples"
+    , gotoLocal "/2-field.html"
+    , assert <| textEquals "reversed" ""
+    , enter "text" "barry"
+    , assert <| textEquals "reversed" "yrrab"
+    ]
+
+
+testNonLocal : Script
+testNonLocal =
   script "non local"
     [ goto "https://www.google.co.uk/"
     , enter "lst-ib" "hello"
