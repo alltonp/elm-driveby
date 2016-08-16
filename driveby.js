@@ -8,6 +8,8 @@
 //TODO: put this in arg[] to this script ..
 var numberOfBrowsers = 4;
 var nextPort = 9000;
+var surpressPageErrors = true;
+
 var started = new Date().getTime();
 var pages = [];
 var stubs = {};
@@ -15,20 +17,12 @@ var stubs = {};
 for (var i = 0; i < numberOfBrowsers; i+=1) {
     var p = require('webpage').create();
 
-    //TODO: make this a config option - surpress action logging
+    //TODO: make this a config option - surpressCommandLogging
     p.onConsoleMessage = function(msg, lineNum, sourceId) {
       console.log('CONSOLE: [' + msg + '] (from line #' + lineNum + ' in "' + sourceId + '")');
     };
 
-    //TODO: make this an option to report/surppress page errors in config
-    //TIP: surpressed if this code is here ..
-    var surpress = true;
-
-    if (surpress) {
-        p.onError = function(msg, trace) {
-    //    TODO: append these to a file in the result dir ....
-        };
-    }
+    if (surpressPageErrors) { p.onError = function(msg, trace) {}; }
 
     pages.push(p);
 }
