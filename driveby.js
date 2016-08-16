@@ -138,7 +138,7 @@ function assertCondition(page, context, selector, expected, description, conditi
         return page.evaluate(function(theSelector, theDescription) {
           var e = document.querySelectorAll(theSelector);
           if (e.length != 1) { return "expected 1 element for " + theSelector + " found " + e.length; }
-          else { return "expected " + theDescription + " in '" + e[0].textContent + "'"; }
+          else { return "expected " + theDescription + " for '" + e[0].textContent + "'"; }
         }, selector, description); }
   );
 }
