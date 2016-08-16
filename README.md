@@ -1,23 +1,10 @@
 # elm-driveby
 
-opinionated browser testing in elm
-
-first stab - very experimental, best avoided for a bit
+opinionated browser testing in elm - usable but experimental
 
 * e.g. (see examples directory for more)
 
 ```
-port module ButtonTest exposing (requests)
-
-
-import Driveby exposing (..)
-import Driveby.Runner exposing (..)
-
-
-port requests : Request -> Cmd msg
-port responses : (Response -> msg) -> Sub msg
-
-
 main =
    run allTests requests responses
 
