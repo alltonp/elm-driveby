@@ -88,7 +88,6 @@ app.ports.requests.subscribe(function(request) {
 //TODO: rename to notifyElm or something ...
 function respond(page, context, failures) {
   var y = Date.now()
-//  console.log(y)
   var x = y.toString()
 //  console.log(x)
   var response = { context:context, failures:failures, updated:x }
@@ -96,44 +95,32 @@ function respond(page, context, failures) {
   //TODO: and actually this is probably the wrong place for it. because some commmands don't want it...
   //TODO: should we include the port ... because we could continue to serve it actually, might be interesting for debugging test failures ...
   if (page != null) page.render(started + '/' + context.scriptId + '/' + context.stepId + '.png')
-//  if (page) { page.render('S:' + '.png') }
   app.ports.responses.send(response);
 }
 
 function init(context) {
-  context.localPort = nextPort;
-  nextPort = nextPort + 1;
+  context.localPort = nextPort; nextPort = nextPort + 1;
   respond(null, context, []);
 }
 
 function goto(page, context, url) {
   page.open(url, function(status) {
-    if (status !== 'success') {
-      respond(page, context, ['Unable to access network'])
-    } else {
-      respond(page, context, [])
-    }
+    if (status !== 'success') { respond(page, context, ['Unable to access network']) }
+    else { respond(page, context, []) }
   });
 }
 
 //TIP: http://stackoverflow.com/questions/15739263/phantomjs-click-an-element
 function click(page, context, selector) {
   waitFor(page, context, function() { return isUniqueInteractable(page, selector); }
-    //action
-    , function() {
-      page.evaluate(function(theSelector) {
-        document.querySelector(theSelector).click();
-      }, selector);
-    },
-    function() { return describeFailure(page, selector); }
+    , function() { page.evaluate(function(theSelector) { document.querySelector(theSelector).click(); }, selector); }
+    , function() { return describeFailure(page, selector); }
   );
 }
 
-//TODO: consider casper ... http://docs.casperjs.org/en/latest/modules/casper.html#options
 function enter(page, context, selector, value) {
   waitFor(page, context, function() { return isUniqueInteractable(page, selector); }
-      //action
-      , function() {
+      , function() { //action
         page.evaluate(function(theSelector, theValue) {
           e = document.querySelector(theSelector);
 
@@ -180,8 +167,7 @@ function assert(page, context, description, selector, condition, expected) {
 }
 
 function assertCondition(page, context, selector, expected, description, conditionFunc) {
-  waitFor(page, context,
-    function() { //condition
+  waitFor(page, context, function() { //condition
       return page.evaluate(function(theSelector, theExpected, theDescription, theConditionFunc) {
         return theConditionFunc(document.querySelectorAll(theSelector), theExpected);
       }, selector, expected, description, conditionFunc); }
@@ -204,8 +190,7 @@ function isUniqueInteractable(page, selector) {
 
 function describeFailure(page, selector) {
   return page.evaluate(function(theSelector) {
-    var e = document.querySelectorAll(theSelector);
-    return "expected 1 element for " + theSelector + " found " + e.length;
+    return "expected 1 element for " + theSelector + " found " + document.querySelectorAll(theSelector).length;
   }, selector);
 }
 
