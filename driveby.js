@@ -6,6 +6,7 @@ var webpage = require('webpage')
 var numberOfBrowsers = 4;
 var nextPort = 9000;
 var surpressPageErrors = true;
+var screenshotAllSteps = true;
 
 var started = new Date().getTime();
 var pages = [];
@@ -78,10 +79,10 @@ function respond(page, context, failures) {
   var x = y.toString()
 //  console.log(x)
   var response = { context:context, failures:failures, updated:x }
-  //TODO: make screenshotEveryStep and screenshotFailures be config option ...
+  //TODO: make screenshotAllSteps and screenshotFailures be config option ...
   //TODO: and actually this is probably the wrong place for it. because some commmands don't want it...
   //TODO: should we include the port ... because we could continue to serve it actually, might be interesting for debugging test failures ...
-  if (page != null) page.render(started + '/' + context.scriptId + '/' + context.stepId + '.png')
+  if (screenshotAllSteps && page != null) page.render(started + '/' + context.scriptId + '/' + context.stepId + '.png')
   app.ports.responses.send(response);
 }
 
@@ -107,39 +108,10 @@ function click(page, context, selector) {
 
 function enter(page, context, selector, value) {
   waitFor(page, context, function() { return isUniqueInteractable(page, selector); }
-      , function() { //action
-        page.evaluate(function(theSelector, theValue) {
-          e = document.querySelector(theSelector);
-
-        //TODO: if clear .. but not firing events properly .. backspace maybe
-//        e.val("");
-
-        //TODO: struggling to put cursor in correct place .. why is that?
-//        e.setCursorPosition(e.val().length);
-//        e.setSelectionRange(10, 20);
-//TODO: consider e.click() too ...
-          e.focus();
-
-//        e.selectionStart = 10;
-//        e.selectionEndt = 20;
-//        var range = e.createTextRange();
-//                    range.collapse(true);
-//                    range.moveEnd('character', 10);
-//                    range.moveStart('character', 10);
-//                    range.select();
-
-//        $(theSelector).val("");
-//        $(theSelector).change();
-//        console.log(theValue);
-//        thePage.sendEvent('keypress', theValue);
-//        console.log($(theSelector).val);
-        }, selector, value);
-
-      //TODO: this does seem to work if it is not empty ...
-//      page.sendEvent('keypress', page.event.key.Backspace);
-        page.sendEvent('keypress', value);
-    },
-    function() { return describeFailure(page, selector); }
+    , function() { //action
+        page.evaluate(function(theSelector, theValue) { document.querySelector(theSelector).focus(); }, selector, value);
+        page.sendEvent('keypress', value); }
+    , function() { return describeFailure(page, selector); }
   );
 }
 
