@@ -92,7 +92,7 @@ app.ports.requests.subscribe(function(request) {
   else if (name == "enter") { enter(page, context, id, command.args[0], command.args[1]); }
   else if (name == "goto") { goto(page, context, id, command.args[0]); }
   else if (name == "gotoLocal") { goto(page, context, id, "http://localhost:" + context.localPort + command.args[0]); }
-  else if (name == "assert") { assert(page, context, id, command.args[0], command.args[2], command.args[1], command.args[3]); }
+  else if (name == "assert") { assert(page, context, id, command.args[0], command.args[1], command.args[2], command.args[3]); }
   else if (name == "close") { close(page, context, id); }
   else if (name == "serve") { serve(context, id, command.args[0], context.localPort); }
   else if (name == "stub") { stub(context, id, command.args[0], command.args[1], context.localPort); }

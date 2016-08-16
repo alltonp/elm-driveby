@@ -80,7 +80,7 @@ textContains id expected =
     selector = "#" ++ id
     name = "textContains"
   in
-    Condition (selector ++ " " ++ name ++ " '" ++ expected ++ "'") [ name, selector, expected]
+    Condition (selector ++ " " ++ name ++ " '" ++ expected ++ "'") [ selector, name, expected]
 
 
 textEquals : String -> String -> Condition
@@ -89,7 +89,7 @@ textEquals id expected =
       selector = "#" ++ id
       name = "textEquals"
   in
-    Condition (selector ++ " " ++ name ++ " '" ++ expected ++ "'") [ name, selector, expected]
+    Condition (selector ++ " " ++ name ++ " '" ++ expected ++ "'") [ selector, name, expected]
 
 
 ----------
