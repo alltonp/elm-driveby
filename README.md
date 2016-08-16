@@ -2,6 +2,6 @@
 
 opinionated browser testing in elm
 
-first stab - experimental, best avoided for a bit
+first stab - very experimental, best avoided for a bit
 
 * elm-package install alltonpa/elm-driveby
