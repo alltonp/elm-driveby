@@ -1,7 +1,7 @@
 {
     "version": "1.0.0",
     "summary": "Opinionated browser testing in elm",
-    "repository": "https://github.com/alltonp/driveby.git",
+    "repository": "https://github.com/alltonp/elm-driveby.git",
     "license": "BSD3",
     "source-directories": [
         "."
