@@ -243,37 +243,35 @@ function describeFailure(page, selector) {
 }
 
 function close(page, context, id) {
-  respond(page, context, id, [])
-  page.close()
+  respond(page, context, id, []);
+  page.close();
   //TODO: pull out a separate exit
   console.log("Done " + (new Date().getTime() - started) + "ms.");
-  phantom.exit()
+  phantom.exit();
 }
 
 function stub(context, id, path, content, port) {
   stubs[(port + ":" + path)] = content;
-  respond(null, context, id, [])
+  respond(null, context, id, []);
 }
 
+//TODO: content-type c/should probably be passed in for stubs (or based on extension)
+//TODO: should better handle fqn?queryString
 function serve(context, id, path, port) {
   var service = server.create().listen(port, { keepAlive: true }, function (request, response) {
     var fqn = path + request.url;
-    var key = port + ":" + request.url
+    var key = port + ":" + request.url;
 
-    //TODO: better handle fqn?queryString
     if (stubs[key] !== undefined) {
-      r = {body: stubs[key], code: 200}
+      r = {body: stubs[key], code: 200};
     } else if (fs.exists(fqn)) {
-      r = {body: fs.read(fqn), code: 200}
+      r = {body: fs.read(fqn), code: 200};
     } else {
-      r = {body: "", code: 404}
+      r = {body: "", code: 404};
     }
 
     response.statusCode = r.code;
-    response.headers = {
-        'Cache': 'no-cache', 'Content-Length': r.body.length,
-        'Content-Type': 'text/html' //TODO: c/should probably base this on filetype ..
-    };
+    response.headers = { 'Cache': 'no-cache', 'Content-Length': r.body.length, 'Content-Type': 'text/html' };
     response.write(r.body);
     response.close();
   });
