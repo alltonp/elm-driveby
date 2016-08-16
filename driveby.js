@@ -169,20 +169,12 @@ function enter(page, context, selector, value) {
   );
 }
 
-//TIP: these will be useful for asserts - https://api.jquery.com/category/selectors/
-//TIP: and performance - https://api.jquery.com/filter/
-//TODO: factor out duplication
-//TODO: can we do more of this in elm land?
-//TODO: make main function return a true/false and an error message, or a function for the error instead ...
-//TODO: move description building to elm side
 function assert(page, context, description, selector, condition, expected) {
-  if (condition == "textContains") {
-    return assertCondition(page, context, selector, expected, description,
-      function(e, theExpected) { return e.length == 1 && e[0].textContent.indexOf(theExpected) >= 0; });
+  if (condition == "textContains") { return assertCondition(page, context, selector, expected, description,
+    function(e, theExpected) { return e.length == 1 && e[0].textContent.indexOf(theExpected) >= 0; });
   }
-  else if (condition == "textEquals") {
-    return assertCondition(page, context, selector, expected, description,
-      function(e, theExpected) { return e.length == 1 && e[0].textContent == theExpected; });
+  else if (condition == "textEquals") { return assertCondition(page, context, selector, expected, description,
+    function(e, theExpected) { return e.length == 1 && e[0].textContent == theExpected; });
   }
   else { respond(page, context, [ "sorry, I don't know how to assert condition: " + JSON.stringify(condition) ]); }
 }
@@ -203,9 +195,8 @@ function assertCondition(page, context, selector, expected, description, conditi
   );
 }
 
-//TIP: http://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
 function isUniqueInteractable(page, selector) {
-  return page.evaluate(function(theSelector) {
+  return page.evaluate(function(theSelector) { //TIP: http://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
     var e = document.querySelectorAll(theSelector)
     return e.length == 1 && !!( e[0].offsetWidth || e[0].offsetHeight || e[0].getClientRects().length ); // aka visible
   }, selector);
