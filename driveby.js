@@ -215,7 +215,7 @@ function assertCondition(page, context, id, selector, expected, description, con
         return page.evaluate(function(theSelector, theDescription) {
           var e = document.querySelectorAll(theSelector);
           if (e.length != 1) { return "expected 1 element for " + theSelector + " but found " + e.length; }
-          else { return "expected " + theDescription + " but was " + e[0].textContent; }
+          else { return "expected " + theDescription + " but was: '" + e[0].textContent + "'"; }
         }, selector, description); }
   );
 }
