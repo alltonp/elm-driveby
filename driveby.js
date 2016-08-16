@@ -38,7 +38,7 @@ for (var i = 0; i < numberOfBrowsers; i+=1) {
 //TODO: consider running this as a daemon
 //TODO: this waiting could be in elm ... would possibly need to subscribe to time
 //TODO: changes to this file should also trigger autotest.sh
-function waitFor(page, context, id, testFx, onReady, onFail, timeOutMillis) {
+function waitFor(page, context, testFx, onReady, onFail, timeOutMillis) {
     var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //TODO: make this a config option
         start = new Date().getTime(),
         condition = false,
@@ -48,11 +48,11 @@ function waitFor(page, context, id, testFx, onReady, onFail, timeOutMillis) {
             } else {
                 if (!condition) {
                     clearInterval(interval);
-                    respond(page, context, id, [onFail()]);
+                    respond(page, context, [onFail()]);
                 } else {
                     onReady();
                     clearInterval(interval);
-                    respond(page, context, id, []);
+                    respond(page, context, []);
                 }
             }
         }, 1); //TODO: make this a config option
@@ -84,25 +84,25 @@ var app = Elm.DrivebyTest.embed(unused, flags);
 app.ports.requests.subscribe(function(request) {
   var command = request.step.command
   var name = command.name
-  var id = request.step.id
+  //var id = request.step.id
   var context = request.context
   var page = pages[context.browserId]
 
-  if (name == "click") { click(page, context, id, command.args[0]); }
-  else if (name == "enter") { enter(page, context, id, command.args[0], command.args[1]); }
-  else if (name == "goto") { goto(page, context, id, command.args[0]); }
-  else if (name == "gotoLocal") { goto(page, context, id, "http://localhost:" + context.localPort + command.args[0]); }
-  else if (name == "assert") { assert(page, context, id, command.args[0], command.args[1], command.args[2], command.args[3]); }
-  else if (name == "close") { close(page, context, id); }
-  else if (name == "serve") { serve(context, id, command.args[0], context.localPort); }
-  else if (name == "stub") { stub(context, id, command.args[0], command.args[1], context.localPort); }
-  else if (name == "init") { init(context, id); }
-  else { respond(page, context, id, ["don't know how to process request: " + JSON.stringify(request) ]); }
+  if (name == "click") { click(page, context, command.args[0]); }
+  else if (name == "enter") { enter(page, context, command.args[0], command.args[1]); }
+  else if (name == "goto") { goto(page, context, command.args[0]); }
+  else if (name == "gotoLocal") { goto(page, context, "http://localhost:" + context.localPort + command.args[0]); }
+  else if (name == "assert") { assert(page, context, command.args[0], command.args[1], command.args[2], command.args[3]); }
+  else if (name == "close") { close(page, context); }
+  else if (name == "serve") { serve(context, command.args[0], context.localPort); }
+  else if (name == "stub") { stub(context, command.args[0], command.args[1], context.localPort); }
+  else if (name == "init") { init(context); }
+  else { respond(page, context, ["don't know how to process request: " + JSON.stringify(request) ]); }
 });
 
 //TODO: add start time, to capture duration ...
 //TODO: rename to notifyElm or something ...
-function respond(page, context, id, failures) {
+function respond(page, context, failures) {
   var y = Date.now()
 //  console.log(y)
   var x = y.toString()
@@ -116,25 +116,25 @@ function respond(page, context, id, failures) {
   app.ports.responses.send(response);
 }
 
-function init(context, id) {
+function init(context) {
   context.localPort = nextPort;
   nextPort = nextPort + 1;
-  respond(null, context, id, [])
+  respond(null, context, []);
 }
 
-function goto(page, context, id, url) {
+function goto(page, context, url) {
   page.open(url, function(status) {
     if (status !== 'success') {
-      respond(page, context, id, ['Unable to access network'])
+      respond(page, context, ['Unable to access network'])
     } else {
-      respond(page, context, id, [])
+      respond(page, context, [])
     }
   });
 }
 
 //TIP: http://stackoverflow.com/questions/15739263/phantomjs-click-an-element
-function click(page, context, id, selector) {
-  waitFor(page, context, id, function() { return isUniqueInteractable(page, selector); }
+function click(page, context, selector) {
+  waitFor(page, context, function() { return isUniqueInteractable(page, selector); }
     //action
     , function() {
       page.evaluate(function(theSelector) {
@@ -146,8 +146,8 @@ function click(page, context, id, selector) {
 }
 
 //TODO: consider casper ... http://docs.casperjs.org/en/latest/modules/casper.html#options
-function enter(page, context, id, selector, value) {
-  waitFor(page, context, id, function() { return isUniqueInteractable(page, selector); }
+function enter(page, context, selector, value) {
+  waitFor(page, context, function() { return isUniqueInteractable(page, selector); }
       //action
       , function() {
         page.evaluate(function(theSelector, theValue) {
@@ -191,21 +191,21 @@ function enter(page, context, id, selector, value) {
 //TODO: can we do more of this in elm land?
 //TODO: make main function return a true/false and an error message, or a function for the error instead ...
 //TODO: move description building to elm side
-function assert(page, context, id, description, selector, condition, expected) {
+function assert(page, context, description, selector, condition, expected) {
   if (condition == "textContains") {
-    return assertCondition(page, context, id, selector, expected, description,
+    return assertCondition(page, context, selector, expected, description,
       function(e, theExpected) { return e.length == 1 && e[0].textContent.indexOf(theExpected) >= 0; });
   }
   else if (condition == "textEquals") {
-    return assertCondition(page, context, id, selector, expected, description,
+    return assertCondition(page, context, selector, expected, description,
       function(e, theExpected) { return e.length == 1 && e[0].textContent == theExpected; });
   }
-  else { respond(page, context, id, ["don't know how to process condition: " + JSON.stringify(condition) ]); }
+  else { respond(page, context, ["don't know how to process condition: " + JSON.stringify(condition) ]); }
 }
 
 //TODO: need to generate the butWas ...
-function assertCondition(page, context, id, selector, expected, description, conditionFunc) {
-  waitFor(page, context, id,
+function assertCondition(page, context, selector, expected, description, conditionFunc) {
+  waitFor(page, context,
     function() { //condition
       return page.evaluate(function(theSelector, theExpected, theDescription, theConditionFunc) {
         return theConditionFunc(document.querySelectorAll(theSelector), theExpected);
@@ -236,22 +236,22 @@ function describeFailure(page, selector) {
   }, selector);
 }
 
-function close(page, context, id) {
-  respond(page, context, id, []);
+function close(page, context) {
+  respond(page, context, []);
   page.close();
   //TODO: pull out a separate exit
   console.log("Done " + (new Date().getTime() - started) + "ms.");
   phantom.exit();
 }
 
-function stub(context, id, path, content, port) {
+function stub(context, path, content, port) {
   stubs[(port + ":" + path)] = content;
-  respond(null, context, id, []);
+  respond(null, context, []);
 }
 
 //TODO: content-type c/should probably be passed in for stubs (or based on extension)
 //TODO: should better handle fqn?queryString
-function serve(context, id, path, port) {
+function serve(context, path, port) {
   var service = server.create().listen(port, { keepAlive: true }, function (request, response) {
     var fqn = path + request.url;
     var key = port + ":" + request.url;
@@ -267,5 +267,5 @@ function serve(context, id, path, port) {
   });
 
   if (!service) { console.log('Error: Could not create web server listening on port ' + port); phantom.exit(); }
-  respond(null, context, id, [])
+  respond(null, context, [])
 }
