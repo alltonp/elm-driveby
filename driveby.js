@@ -207,8 +207,8 @@ function assertCondition(page, context, id, selector, description, conditionFunc
     function() { //condition
       return page.evaluate(function(theSelector, theDescription, theConditionFunc) {
         return theConditionFunc(document.querySelectorAll(theSelector), theDescription);
-      }, selector, description, conditionFunc);
-    }, function() { } //action
+      }, selector, description, conditionFunc); }
+    , function() { } //action
     , function() { //failure
       return page.evaluate(function(theSelector, theDescription) {
         //TODO:  de-dupe with unique ...
@@ -220,8 +220,7 @@ function assertCondition(page, context, id, selector, description, conditionFunc
           //TODO: and generate the butWas ...
           return "expected " + theDescription + " but was " + e[0].textContent;
         }
-      }, selector, description);
-    }
+      }, selector, description); }
   );
 }
 
