@@ -1,3 +1,7 @@
+var server = require('webserver');
+var fs = require('fs');
+var webpage = require('webpage')
+
 //TODO: put this in arg[] to this script ..
 //TODO: make this the main script https://github.com/ariya/phantomjs/blob/master/examples/arguments.js
 var numberOfBrowsers = 4;
@@ -9,7 +13,7 @@ var pages = [];
 var stubs = {};
 
 for (var i = 0; i < numberOfBrowsers; i+=1) {
-  var p = require('webpage').create();
+  var p = webpage.create();
 
   //TODO: make this a config option - surpressCommandLogging
   p.onConsoleMessage = function(msg, lineNum, sourceId) {
@@ -252,10 +256,7 @@ function stub(context, id, path, content, port) {
 }
 
 function serve(context, id, path, port) {
-  var server = require('webserver').create();
-  var fs = require('fs')
-
-  var service = server.listen(port, { keepAlive: true }, function (request, response) {
+  var service = server.create().listen(port, { keepAlive: true }, function (request, response) {
     var fqn = path + request.url;
     var key = port + ":" + request.url
 
