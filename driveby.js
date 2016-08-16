@@ -105,9 +105,9 @@ app.ports.requests.subscribe(function(request) {
 function respond(page, context, id, failures) {
   var y = Date.now()
 //  console.log(y)
-//  var x = y.toISOString()
+  var x = y.toString()
 //  console.log(x)
-  var response = { context:context, failures:failures, updated:y }
+  var response = { context:context, failures:failures, updated:x }
   //TODO: make screenshotEveryStep and screenshotFailures be config option ...
   //TODO: and actually this is probably the wrong place for it. because some commmands don't want it...
   //TODO: should we include the port ... because we could continue to serve it actually, might be interesting for debugging test failures ...

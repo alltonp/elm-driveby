@@ -115,6 +115,7 @@ update requestsPort msg model =
                 cmd = case nextStepToRun executableScript of
                     Just step ->
                       let
+                        --TODO: keep this in on the elm side and have an debugTrace flag
 --                        d = Debug.log ("Driveby " ++ ( (toString context.localPort) ++ " " ++ (toString context.browserId) ++ " " ++ (toString step.id) ++ ": " ++ step.command.name ++ " " ++ (toString step.command.args) )) ""
                         a = ""
                       in
@@ -145,6 +146,7 @@ update requestsPort msg model =
         case currentScript response.context model of
             Just executableScript ->
               let
+--                d = Debug.log "Process" (toString response)
                 --used? debug only?
 --                currentStep = List.filter (\s -> s.id == response.context.stepId) executableScript.steps
 
