@@ -256,13 +256,9 @@ function serve(context, id, path, port) {
     var fqn = path + request.url;
     var key = port + ":" + request.url;
 
-    if (stubs[key] !== undefined) {
-      r = {body: stubs[key], code: 200};
-    } else if (fs.exists(fqn)) {
-      r = {body: fs.read(fqn), code: 200};
-    } else {
-      r = {body: "", code: 404};
-    }
+    if (stubs[key] !== undefined) { r = {body: stubs[key], code: 200}; }
+    else if (fs.exists(fqn)) { r = {body: fs.read(fqn), code: 200}; }
+    else { r = {body: "", code: 404}; }
 
     response.statusCode = r.code;
     response.headers = { 'Cache': 'no-cache', 'Content-Length': r.body.length, 'Content-Type': 'text/html' };
