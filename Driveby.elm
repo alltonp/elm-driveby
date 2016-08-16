@@ -71,7 +71,7 @@ enter id value =
 
 assert : Condition -> Command
 assert condition =
-  Command "assert" condition.args
+  Command "assert" (List.append ["description"] condition.args)
 
 
 textContains : String -> String -> Condition

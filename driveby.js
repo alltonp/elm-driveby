@@ -92,7 +92,7 @@ app.ports.requests.subscribe(function(request) {
   else if (name == "enter") { enter(page, context, id, command.args[0], command.args[1]); }
   else if (name == "goto") { goto(page, context, id, command.args[0]); }
   else if (name == "gotoLocal") { goto(page, context, id, "http://localhost:" + context.localPort + command.args[0]); }
-  else if (name == "assert") { assert(page, context, id, command.args[1], command.args[0], command.args[2]); }
+  else if (name == "assert") { assert(page, context, id, command.args[0], command.args[2], command.args[1], command.args[3]); }
   else if (name == "close") { close(page, context, id); }
   else if (name == "serve") { serve(context, id, command.args[0], context.localPort); }
   else if (name == "stub") { stub(context, id, command.args[0], command.args[1], context.localPort); }
@@ -191,13 +191,13 @@ function enter(page, context, id, selector, value) {
 //TODO: can we do more of this in elm land?
 //TODO: make main function return a true/false and an error message, or a function for the error instead ...
 //TODO: move description building to elm side
-function assert(page, context, id, selector, condition, expected) {
+function assert(page, context, id, description, selector, condition, expected) {
   if (condition == "textContains") {
-    return assertCondition(page, context, id, selector, expected, (selector + ' ' + condition + " '" + expected + "'"),
+    return assertCondition(page, context, id, selector, expected, description,
       function(e, theExpected) { return e.length == 1 && e[0].textContent.indexOf(theExpected) >= 0; });
   }
   else if (condition == "textEquals") {
-    return assertCondition(page, context, id, selector, expected, (selector + ' ' + condition + " '" + expected + "'"),
+    return assertCondition(page, context, id, selector, expected, description,
       function(e, theExpected) { return e.length == 1 && e[0].textContent == theExpected; });
   }
   else { respond(page, context, id, ["don't know how to process condition: " + JSON.stringify(condition) ]); }
