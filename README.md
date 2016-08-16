@@ -30,7 +30,7 @@ allTests =
 test1 : Script
 test1 =
   script "elm-architecture-tutorial 1-button"
-    [ serve "../elm-architecture-tutorial/examples"
+    [ serve "examples/elm-architecture-tutorial/1-button"
     , gotoLocal "/1-button.html"
     , assert <| textEquals "count" "0"
     , click "increment"
