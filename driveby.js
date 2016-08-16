@@ -2,8 +2,7 @@ var server = require('webserver');
 var fs = require('fs');
 var webpage = require('webpage')
 
-//TODO: put this in arg[] to this script ..
-//TODO: make this the main script https://github.com/ariya/phantomjs/blob/master/examples/arguments.js
+//TODO: put this in arg[] to this script .. see https://github.com/ariya/phantomjs/blob/master/examples/arguments.js
 var numberOfBrowsers = 4;
 var nextPort = 9000;
 var surpressPageErrors = true;
@@ -48,23 +47,11 @@ function waitFor(page, context, testFx, onReady, onFail, timeOutMillis) {
       }, 1); //TODO: make this a config option
 };
 
-//var r = page.injectJs("tests.js") ? "... done injecting tests.js!" : "... fail! Check the PWD?!";
-//console.log(r);
-
-//var x = page.evaluate(function() {
-//  var result = test();
-//  console.log(result);
-//  return result;
-//});
-//
-//console.log(x);
-
 //TODO: make this an argv ... maybe support multiple file inputs .... run if successful ... good for autotesting
 phantom.injectJs("tests.js") ? "... done injecting tests.js!" : "... failed injecting tests.js!";
 
 var flags = { numberOfBrowsers: pages.length };
-var unused = document.createElement('div');
-var app = Elm.DrivebyTest.embed(unused, flags);
+var app = Elm.DrivebyTest.embed(document.createElement('div'), flags);
 
 app.ports.requests.subscribe(function(request) {
   var command = request.step.command
