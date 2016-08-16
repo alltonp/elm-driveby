@@ -205,12 +205,12 @@ function assert(page, context, id, selector, condition, expected) {
 function assertCondition(page, context, id, selector, expected, description, conditionFunc) {
   waitFor(page, context, id,
     function() { //condition
-      return page.evaluate(function(theSelector, theExpected, theDescription, theConditionFunc) {
-        return theConditionFunc(document.querySelectorAll(theSelector), theExpected, theDescription);
-      }, selector, expected, description, conditionFunc);
+      return page.evaluate(function(theSelector, theDescription, theConditionFunc) {
+        return theConditionFunc(document.querySelectorAll(theSelector), theDescription);
+      }, selector, description, conditionFunc);
     }, function() { } //action
     , function() { //failure
-      return page.evaluate(function(theSelector, theExpected, theDescription) {
+      return page.evaluate(function(theSelector, theDescription) {
         //TODO:  de-dupe with unique ...
         var e = document.querySelectorAll(theSelector);
         if (e.length != 1) {
@@ -220,7 +220,7 @@ function assertCondition(page, context, id, selector, expected, description, con
           //TODO: and generate the butWas ...
           return "expected " + theDescription + " but was " + e[0].textContent;
         }
-      }, selector, expected, description);
+      }, selector, description);
     }
   );
 }
