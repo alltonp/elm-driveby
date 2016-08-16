@@ -92,7 +92,7 @@ test4 =
 
 test5 : Script
 test5 =
-  script "Missing click"
+  script "click with missing element"
     [ serve "../shoreditch-ui-chrome/chrome"
     , gotoLocal "/elm.html"
     , assert <| textEquals "messageList" "Auto Loading Metadata ..."
@@ -102,7 +102,7 @@ test5 =
 
 test6 : Script
 test6 =
-  script "Missing enter"
+  script "enter with missing element"
     [ serve "../shoreditch-ui-chrome/chrome"
     , gotoLocal "/elm.html"
     , assert <| textEquals "messageList" "Auto Loading Metadata ..."
@@ -112,7 +112,7 @@ test6 =
 
 test7 : Script
 test7 =
-  script "Failed textEquals"
+  script "textEquals when it does not"
     [ serve "../shoreditch-ui-chrome/chrome"
     , gotoLocal "/elm.html"
     , assert <| textEquals "messageList" "Auto Loading Metadata ...."
@@ -121,7 +121,7 @@ test7 =
 
 test8 : Script
 test8 =
-  script "Failed textContains"
+  script "textContains when it does not"
     [ serve "../shoreditch-ui-chrome/chrome"
     , gotoLocal "/elm.html"
     , assert <| textContains "messageList" "Auto Loading Metadata ...."
