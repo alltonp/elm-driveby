@@ -3,7 +3,7 @@ port module DrivebyTest exposing (requests)
 
 import Driveby exposing (..)
 import Driveby.Runner exposing (..)
-
+import ButtonTest
 
 port requests : Request -> Cmd msg
 port responses : (Response -> msg) -> Sub msg
@@ -29,7 +29,7 @@ main =
 
 allTests : Suite
 allTests =
-  suite "All" [test1, test2, test3, test4, test5, test6, test7, test8, test9, test10, testNonLocal]
+  suite "All" [test1, test2, test3, test4, test5, test6, test7, test8, ButtonTest.test1, test10, testNonLocal]
 
 
 test1 : Script
@@ -125,19 +125,6 @@ test8 =
     [ serve "../shoreditch-ui-chrome/chrome"
     , gotoLocal "/elm.html"
     , assert <| textContains "messageList" "Auto Loading Metadata ...."
-    ]
-
-
-test9 : Script
-test9 =
-  script "elm-architecture-tutorial 1-button"
-    [ serve "../elm-architecture-tutorial/examples"
-    , gotoLocal "/1-button.html"
-    , assert <| textEquals "count" "0"
-    , click "increment"
-    , assert <| textEquals "count" "1"
-    , click "decrement"
-    , assert <| textEquals "count" "0"
     ]
 
 
