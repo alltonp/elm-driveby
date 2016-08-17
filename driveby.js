@@ -3,6 +3,7 @@ var fs = require('fs');
 var webpage = require('webpage')
 
 //TODO: put this in arg[] to this script .. see https://github.com/ariya/phantomjs/blob/master/examples/arguments.js
+//TODO: or loading it from a file (and creating if doesnot exist) driveby.json
 var numberOfBrowsers = 4;
 var nextPort = 9000;
 var surpressPageErrors = true;
@@ -96,7 +97,7 @@ function init(context) {
 
 function goto(page, context, url) {
   page.open(url, function(status) {
-    if (status !== 'success') { respond(page, context, ['Unable to access network']) }
+    if (status !== 'success') { respond(page, context, [status + ' for ' + url]) }
     else { respond(page, context, []) }
   });
 }
