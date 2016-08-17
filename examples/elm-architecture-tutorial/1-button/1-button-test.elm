@@ -4,8 +4,8 @@ module ButtonTest exposing (..)
 import Driveby exposing (..)
 
 
-allTests : Suite
-allTests =
+all : Suite
+all =
   suite "All" [test1]
 
 
