@@ -1,6 +1,7 @@
 module Driveby.Runner.Model exposing (..)
 
 import Driveby exposing (..)
+import Driveby.Model exposing (..)
 import Date exposing (..)
 import Dict exposing (..)
 

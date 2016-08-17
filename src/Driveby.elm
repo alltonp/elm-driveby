@@ -3,12 +3,14 @@ module Driveby exposing (..)
 {-| This library is for defining scripts to test simple elm web applications using phantomjs
 
 # Definition
-@docs Suite, Script, Request, Response, Command, Condition, Context, Step
+@docs Suite, Script, Request, Response
 
 # Common Helpers
 @docs suite, script, serve, stub, goto, gotoLocal, click, enter, assert, textContains, textEquals
 
 -}
+
+import Driveby.Model exposing (..)
 
 {-| A Suite of Scripts -}
 type alias Suite =
@@ -113,40 +115,3 @@ textEquals id expected =
       name = "textEquals"
   in
     Condition (selector ++ " " ++ name ++ " '" ++ expected ++ "'") [ selector, name, expected]
-
-
-----------
-
-{-| A Step holding a Command to execute -}
-type alias Step =
-  { id : Int
-  , command : Command
-  , executed : Bool
-  }
-
-
---TODO: consider id/selector being a a first class thing, at least a Maybe ...
---TODO: consider value being a a first class thing, at least a Maybe ...
---TODO: consider expected being a a first class thing, at least a Maybe ...
-{-| A Command to execute -}
-type alias Command =
-  { name : String
-  , args : List String
-  }
-
-
-{-| A Condition to check -}
-type alias Condition =
-  { description : String
-  , args : List String
-  }
-
-
-{-| The Context of an executing Script -}
-type alias Context =
-  { localPort : Int
-  , browserId : Int
-  , scriptId : Int
-  , stepId : Int
-  , updated : String
-  }

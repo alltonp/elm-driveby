@@ -2,6 +2,7 @@ module Driveby.Runner exposing (run)
 
 
 import Driveby exposing (..)
+import Driveby.Model exposing (..)
 import Driveby.Runner.Model exposing (..)
 import Date exposing (..)
 import Task

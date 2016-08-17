@@ -37,7 +37,7 @@ test1 : Script
 test1 =
   script "Auto loads metadata on visiting"
     [ serve "../shoreditch-ui-chrome/chrome"
-    , stub "/reservations/metadata" "meh"
+    --, stub "/reservations/metadata" "meh"
     , gotoLocal "/elm.html"
     , assert <| textEquals "messageList" "Auto Loading Metadata ..."
     --TODO: I should work when messaging fixed
