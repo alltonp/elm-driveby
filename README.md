@@ -2,12 +2,12 @@
 
 opinionated browser testing in elm - usable but experimental
 
-#### Setup ####
-1. elm-package install alltonpa/elm-driveby
+### Setup ###
+1. ```elm-package install alltonpa/elm-driveby```
 2. [download phantomjs](http://phantomjs.org/download.html)
 3. That's it!
 
-#### Writing a Script ####
+### Writing a Script ###
 
 1. Create a Script - ExampleTest.elm
 
@@ -44,7 +44,7 @@ opinionated browser testing in elm - usable but experimental
 
 
  import Driveby.Runner exposing (..)
- import ButtonTest
+ import ExampleTest
 
 
  port requests : Request -> Cmd msg
@@ -57,9 +57,11 @@ opinionated browser testing in elm - usable but experimental
 
 3. Compile
 
-```elm-make Example.elm --output tests.js```
+```
+elm-make Example.elm --output tests.js
+```
 
 
 #### Run ###
 1. phantomjs elm-stuff/packages/alltonp/elm-driveby/x.x.x/driveby.js tests.js
-(make tests.js a config option ...)
+(PA: make tests.js a config option ...)
