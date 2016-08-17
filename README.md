@@ -52,7 +52,7 @@ opinionated browser testing in elm - usable but experimental
 
 
  main =
-   run ButtonTest.all requests responses
+   run ExampleTest.all requests responses
 ```
 
 3. Compile
