@@ -1,6 +1,6 @@
 # elm-driveby
 
-opinionated browser testing in elm - usable but experimental
+opinionated browser testing in elm - experimental, but definitely usable
 
 ### Setup ###
 1. ```elm-package install alltonpa/elm-driveby```
@@ -8,6 +8,10 @@ opinionated browser testing in elm - usable but experimental
 3. That's it!
 
 ### Writing a Script ###
+
+
+```elm-make 1-button.elm --output 1-button.html```
+
 
 1. Create a Script - ExampleTest.elm
 
@@ -63,7 +67,13 @@ elm-make Example.elm --output tests.js
 
 
 ### Run ###
-1. phantomjs elm-stuff/packages/alltonp/elm-driveby/x.x.x/driveby.js tests.js
+1. compile the application - ```elm-make elm-stuff/packages/alltonp/elm-driveby/x.x.x/1-button.elm --output 1-button.html```
+2. compile the tests - ```elm-make elm-stuff/packages/alltonp/elm-driveby/x.x.x/1-button-test.elm --output tests.js```
+3. phantomjs elm-stuff/packages/alltonp/elm-driveby/x.x.x/driveby.js tests.js
+
+1. compile the application - ```elm-make examples/elm-architecture-tutorial/1-button/1-button.elm --output 1-button.html```
+2. compile the tests - ```elm-make examples/elm-architecture-tutorial/1-button/1-button-test.elm --output tests.js```
+3. ./phantomjs driveby.js tests.js
 
 TODO:
 - make tests.js a config option ...
