@@ -87,6 +87,7 @@ function respond(page, context, failures) {
   //TODO: just need a stayOpenOnFailure
   var screenshot = page != null && (screenshotAllSteps || (screenshotFailures && failures.length > 0) )
   if (screenshot) page.render(started + '/' + context.scriptId + '/' + context.stepId + '.png')
+//  if (screenshot) console.log(page.plainText)
   app.ports.responses.send(response);
 }
 

@@ -30,7 +30,8 @@ main =
 
 all : Suite
 all =
-  suite "All" [test1, test2, test3, test4, test5, test6, test7, test8, ButtonTest.test1, FieldTest.test1, testNonLocal]
+--  suite "All" [test1, test2, test3, test4, test5, test6, test7, test8, ButtonTest.test1, FieldTest.test1, testNonLocal]
+  suite "All" [testNonLocal]
 
 
 test1 : Script
@@ -132,7 +133,8 @@ test8 =
 testNonLocal : Script
 testNonLocal =
   script "non local"
-    [ goto "https://www.google.co.uk/"
+    [ goto "https://www.google.co.uk/flights/#search;f=arn;t=dxb;d=2016-10-04;r=2016-10-09;sc=b;a=ONEWORLD"
+--    [ goto "http://matrix.itasoftware.com/#view-flights:research=ARNDXB-DXBARN"
     , enter "lst-ib" "hello"
     , click "btnK"
     ]
