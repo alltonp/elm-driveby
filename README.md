@@ -3,7 +3,7 @@
 opinionated browser testing in elm - experimental, but definitely usable
 
 ### Setup ###
-1. ```elm-package install alltonpa/elm-driveby```
+1. ```elm-package install alltonp/elm-driveby```
 2. [download a phantomjs executable](http://phantomjs.org/download.html)
 3. That's it!
 
