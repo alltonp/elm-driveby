@@ -9,10 +9,14 @@ opinionated browser testing in elm - experimental, but definitely usable
 
 
 ### Running example Scripts ###
-
+1. cd elm-stuff/packages/alltonp/elm-driveby/x.x.x
+2. build example apps
 ```elm-make examples/src/01-button.elm --output examples/build/01-button.html```
 ```elm-make examples/src/02-field.elm --output examples/build/02-field.html```
-
+3. build all the tests
+```elm-make examples/tests/AllTests.elm --output examples/build/tests.js```
+4. run the tests
+```{path-to-phantom}/phantomjs driveby.js examples/build/tests.js```
 
 ### Writing a Script ###
 
