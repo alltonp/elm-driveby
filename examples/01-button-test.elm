@@ -11,8 +11,8 @@ all =
 test1 : Script
 test1 =
     script "TEA 1-button"
-        [ serve "examples/elm-architecture-tutorial/1-button"
-        , gotoLocal "/1-button.html"
+        [ serve "examples"
+        , gotoLocal "/01-button.html"
         , assert <| textEquals "count" "0"
         , click "increment"
         , assert <| textEquals "count" "1"

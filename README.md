@@ -10,8 +10,8 @@ opinionated browser testing in elm - experimental, but definitely usable
 
 ### Running example Scripts ###
 
-```elm-make examples/elm-architecture-tutorial/1-button/1-button.elm --output examples/elm-architecture-tutorial/1-button/1-button.html```
-```elm-make examples/elm-architecture-tutorial/2-field/2-field.elm --output examples/elm-architecture-tutorial/2-field/2-field.html```
+```elm-make examples/01-button.elm --output examples/01-button.html```
+```elm-make examples/02-field.elm --output examples/02-field.html```
 
 
 ### Writing a Script ###
