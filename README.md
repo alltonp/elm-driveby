@@ -2,10 +2,12 @@
 
 opinionated browser testing in elm - experimental work in progress, but usable
 
+
 ### Why? ###
 1. light touch - just depends on phantomjs and embedded driveby.js
 2. implicit waiting
 3. parallel execution
+
 
 ### Setup ###
 1. ```elm-package install alltonp/elm-driveby```
