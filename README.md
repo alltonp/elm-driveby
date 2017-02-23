@@ -19,7 +19,7 @@ opinionated browser testing in elm - experimental work in progress, but usable
 ```elm-make examples/src/01-button.elm --output examples/build/01-button.html```
 ```elm-make examples/src/02-field.elm --output examples/build/02-field.html```
 3. build the tests
-```elm-make examples/test/*.elm --output examples/build/tests.js```
+```elm-make examples/test/*.elm --output tests.js```
 4. run the tests
-```{path-to-phantom}/phantomjs driveby.js examples/build/tests.js```
+```{path-to-phantom}/phantomjs driveby.js```
 
