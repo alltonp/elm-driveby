@@ -10,8 +10,8 @@ all =
 
 test1 : Script
 test1 =
-    script "TEA 1-button"
-        [ serve "examples"
+    script "TEA 01-button"
+        [ serve "examples/build"
         , gotoLocal "/01-button.html"
         , assert <| textEquals "count" "0"
         , click "increment"

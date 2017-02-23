@@ -10,8 +10,8 @@ allTests =
 
 test1 : Script
 test1 =
-    script "TEA 2-field"
-        [ serve "examples"
+    script "TEA 02-field"
+        [ serve "examples/build"
         , gotoLocal "/02-field.html"
         , assert <| textEquals "reversed" ""
         , enter "text" "barry"
