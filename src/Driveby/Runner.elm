@@ -7,7 +7,10 @@ import Date exposing (..)
 import Task
 import Dict exposing (..)
 import Html exposing (..)
-import Html.App as App
+
+
+--import Html.App as App
+
 import Maybe.Extra as MaybeExtra
 
 
@@ -15,9 +18,9 @@ import Maybe.Extra as MaybeExtra
 --TODO: think about a test suite for ourselves, could stub the html coming back (just like in scala driveby)
 
 
-run : Suite -> (Request -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Flags
+run : Suite -> (Request -> Cmd Msg) -> ((Response -> Msg) -> Sub Msg) -> Program Flags Model Msg
 run suite requestsPort responsesPort =
-    App.programWithFlags
+    Html.programWithFlags
         { init = init suite
         , view = view
         , update = update requestsPort
@@ -82,7 +85,7 @@ update requestsPort msg model =
             case nextUnstartedScript model of
                 Just executableScript ->
                     let
-                        model' =
+                        updatedModel =
                             { model
                                 | -- aka start script -- (need a corresponding stop script)
                                   -- mark browser as running this script
@@ -94,7 +97,7 @@ update requestsPort msg model =
                                         model.scriptIdToExecutableScript
                             }
                     in
-                        ( model', asFx (RunNextStep (Context -1 browserId executableScript.id 0 theDate)) )
+                        ( updatedModel, asFx (RunNextStep (Context -1 browserId executableScript.id 0 theDate)) )
 
                 Nothing ->
                     ( model, Cmd.none )
@@ -136,11 +139,11 @@ update requestsPort msg model =
                                     let
                                         --TODO: this is redundant in the failure case case
                                         --aka: mark script as finished
-                                        executableScript' =
+                                        updatedExecutableScript =
                                             { executableScript | finished = Just context.updated }
 
-                                        scriptIdToExecutableScript' =
-                                            Dict.update executableScript.id (\e -> Just executableScript') model.scriptIdToExecutableScript
+                                        updatedScriptIdToExecutableScript =
+                                            Dict.update executableScript.id (\e -> Just updatedExecutableScript) model.scriptIdToExecutableScript
 
                                         --TODO: this should be in MainLoop
                                         cmd =
@@ -153,7 +156,7 @@ update requestsPort msg model =
                                                         context
                                                     )
                                     in
-                                        ( { model | scriptIdToExecutableScript = scriptIdToExecutableScript' }, cmd )
+                                        ( { model | scriptIdToExecutableScript = updatedScriptIdToExecutableScript }, cmd )
                     in
                         cmd
 
@@ -168,7 +171,7 @@ update requestsPort msg model =
                         --used? debug only?
                         --                currentStep = List.filter (\s -> s.id == response.context.stepId) executableScript.steps
                         -- aka: all of this mark this step as executed ... and aka: mark script as finished
-                        steps' =
+                        updatedSteps =
                             List.map
                                 (\s ->
                                     if s.id == response.context.stepId then
@@ -179,29 +182,29 @@ update requestsPort msg model =
                                 executableScript.steps
 
                         --TODO: this might be the wrong place to do this now ... also in RNS
-                        finished' =
+                        updatedFinished =
                             if List.isEmpty response.failures then
                                 Nothing
                             else
                                 Just response.context.updated
 
-                        executableScript' =
-                            { executableScript | steps = steps', finished = finished', failures = response.failures }
+                        updatedExecutableScript =
+                            { executableScript | steps = updatedSteps, finished = updatedFinished, failures = response.failures }
 
                         scriptId =
                             response.context.scriptId
 
-                        scriptIdToExecutableScript' =
-                            Dict.update scriptId (\e -> Just executableScript') model.scriptIdToExecutableScript
+                        updatedScriptIdToExecutableScript =
+                            Dict.update scriptId (\e -> Just updatedExecutableScript) model.scriptIdToExecutableScript
 
-                        model' =
-                            { model | scriptIdToExecutableScript = scriptIdToExecutableScript' }
+                        updatedModel =
+                            { model | scriptIdToExecutableScript = updatedScriptIdToExecutableScript }
 
                         --                TODO: send ScriptFailed if response has failures - seems like a good place to do this ... (if we need it ..)
                         --                2011-10-05T14:48:00.000Z
                         --                clearlyWrongDate = unsafeFromString "2016-06-17T11:15:00+0200"
                     in
-                        ( model', asFx (MainLoop response.context) )
+                        ( updatedModel, asFx (MainLoop response.context) )
 
                 --TODO: feels like this should be debug.crash because how could we get here, programming error?
                 Nothing ->
@@ -281,7 +284,14 @@ close =
 
 asFx : msg -> Cmd msg
 asFx msg =
-    Task.perform (\_ -> Debug.crash "This failure cannot happen.") identity (Task.succeed msg)
+    --    Task.perform (\_ -> Debug.crash "This failure cannot happen.")
+    --        identity
+    --        (Task.succeed msg)
+    Task.perform
+        --        (\_ -> Debug.crash "This failure cannot happen.")
+        (\_ -> identity)
+        --        identity
+        (Task.succeed msg)
 
 
 
@@ -290,4 +300,10 @@ asFx msg =
 
 runAllScripts : Cmd Msg
 runAllScripts =
-    Task.perform (\_ -> Debug.crash "This failure cannot happen.") RunAllScripts Date.now
+    --    Task.perform (\_ -> Debug.crash "This failure cannot happen.")
+    --        RunAllScripts
+    --        Date.now
+    Task.perform
+        --        (\_ -> Debug.crash "This failure cannot happen.")
+        RunAllScripts
+        Date.now
