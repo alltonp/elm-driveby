@@ -1,9 +1,9 @@
---TIP: https://github.com/evancz/elm-architecture-tutorial/blob/master/examples/2-field.elm
+--TIP: https://github.com/evancz/elm-architecture-tutorial/blob/master/examples/02-field.elm
 
 
 module Main exposing (..)
 
-import Html exposing (Html, Attribute, div, input, text)
+import Html exposing (Html, div, input, text)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
 import Html.Attributes exposing (id)
