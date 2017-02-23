@@ -289,7 +289,7 @@ asFx msg =
     --        (Task.succeed msg)
     Task.perform
         --        (\_ -> Debug.crash "This failure cannot happen.")
-        (\_ -> identity)
+        (\_ -> msg)
         --        identity
         (Task.succeed msg)
 

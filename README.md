@@ -12,6 +12,9 @@ opinionated browser testing in elm - experimental, but definitely usable
 
 ```elm-make 1-button.elm --output 1-button.html```
 
+```elm-make examples/elm-architecture-tutorial/1-button/1-button.elm --output examples/elm-architecture-tutorial/1-button/1-button.html```
+```elm-make examples/elm-architecture-tutorial/2-field/2-field.elm --output examples/elm-architecture-tutorial/2-field/2-field.html```
+
 
 1. Create a Script - ExampleTest.elm
 

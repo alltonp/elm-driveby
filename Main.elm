@@ -36,8 +36,12 @@ main =
 
 all : Suite
 all =
-    --  suite "All" [test1, test2, test3, test4, test5, test6, test7, test8, ButtonTest.test1, FieldTest.test1, testNonLocal]
-    suite "All" [ testNonLocal ]
+    suite "All" [ ButtonTest.test1, FieldTest.test1 ]
+
+
+
+--    suite "All" [ test1, test2, test3, test4, test5, test6, test7, test8, ButtonTest.test1, FieldTest.test1, testNonLocal ]
+--    suite "All" [ testNonLocal ]
 
 
 test1 : Script
