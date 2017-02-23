@@ -1,4 +1,4 @@
---TIP: https://github.com/evancz/elm-architecture-tutorial/blob/master/examples/1-button.elm
+--TIP: https://github.com/evancz/elm-architecture-tutorial/blob/master/examples/01-button.elm
 
 
 module Main exposing (..)
