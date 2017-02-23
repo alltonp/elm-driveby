@@ -7,13 +7,14 @@ opinionated browser testing in elm - experimental, but definitely usable
 2. [download a phantomjs executable](http://phantomjs.org/download.html)
 3. That's it!
 
-### Writing a Script ###
 
-
-```elm-make 1-button.elm --output 1-button.html```
+### Running example Scripts ###
 
 ```elm-make examples/elm-architecture-tutorial/1-button/1-button.elm --output examples/elm-architecture-tutorial/1-button/1-button.html```
 ```elm-make examples/elm-architecture-tutorial/2-field/2-field.elm --output examples/elm-architecture-tutorial/2-field/2-field.html```
+
+
+### Writing a Script ###
 
 
 1. Create a Script - ExampleTest.elm

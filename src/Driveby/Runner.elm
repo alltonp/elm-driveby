@@ -7,10 +7,6 @@ import Date exposing (..)
 import Task
 import Dict exposing (..)
 import Html exposing (..)
-
-
---import Html.App as App
-
 import Maybe.Extra as MaybeExtra
 
 
@@ -284,13 +280,8 @@ close =
 
 asFx : msg -> Cmd msg
 asFx msg =
-    --    Task.perform (\_ -> Debug.crash "This failure cannot happen.")
-    --        identity
-    --        (Task.succeed msg)
     Task.perform
-        --        (\_ -> Debug.crash "This failure cannot happen.")
         (\_ -> msg)
-        --        identity
         (Task.succeed msg)
 
 
@@ -300,10 +291,6 @@ asFx msg =
 
 runAllScripts : Cmd Msg
 runAllScripts =
-    --    Task.perform (\_ -> Debug.crash "This failure cannot happen.")
-    --        RunAllScripts
-    --        Date.now
     Task.perform
-        --        (\_ -> Debug.crash "This failure cannot happen.")
         RunAllScripts
         Date.now
